@@ -9,12 +9,40 @@ description = "Mutation-guided test quality agent: LLM generates tests, mutation
 readme = "README.md"
 requires-python = ">=3.10"
 license = { text = "MIT" }
+authors = [{ name = "Luz7818" }]
+keywords = [
+    "llm",
+    "mutation-testing",
+    "test-generation",
+    "software-testing",
+    "pytest",
+    "deepseek",
+    "ai-agent",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Quality Assurance",
+    "Topic :: Software Development :: Testing",
+]
 dependencies = [
     "pytest>=8.0",
     "coverage>=7.4",
     "openai>=1.30",
     "matplotlib>=3.8",
 ]
+
+[project.urls]
+Homepage = "https://github.com/Luz7818/testforge"
+Repository = "https://github.com/Luz7818/testforge"
+Issues = "https://github.com/Luz7818/testforge/issues"
+
+[tool.setuptools.packages.find]
+include = ["testforge*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

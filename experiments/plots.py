@@ -107,6 +107,35 @@ def gate_rejections(rows: list[dict], out: Path) -> None:
     plt.close(fig)
 
 
+def ms_heatmap(rows: list[dict], out: Path) -> None:
+    """Per-target x variant mutation-score matrix: the whole grid at a glance."""
+    by = {(r["target_id"], r["variant"]): r["ms_all"] for r in rows if "error" not in r}
+    variants = [v for v in VARIANT_ORDER if any((t, v) in by for t in {k[0] for k in by})]
+    targets = sorted({k[0] for k in by})
+    data = [[by.get((t, v), float("nan")) for v in variants] for t in targets]
+
+    fig, ax = plt.subplots(figsize=(7.0, 7.6))
+    im = ax.imshow(data, cmap="RdYlGn", vmin=0.0, vmax=1.0, aspect="auto")
+    ax.set_xticks(range(len(variants)), variants)
+    ax.set_yticks(range(len(targets)), targets)
+    ax.tick_params(axis="x", top=True, labeltop=True, bottom=False, labelbottom=False)
+    for i in range(len(targets)):
+        for j in range(len(variants)):
+            v = data[i][j]
+            if v == v:  # skip NaN
+                ax.text(
+                    j, i, f"{v:.0%}",
+                    ha="center", va="center", fontsize=8,
+                    color="black" if 0.25 < v < 0.85 else "white",
+                )
+    ax.set_title("Mutation score per target x variant (mock grid)")
+    ax.set_xlabel("Variant")
+    fig.colorbar(im, ax=ax, shrink=0.7, label="MS (all mutants)")
+    fig.tight_layout()
+    fig.savefig(out, dpi=160)
+    plt.close(fig)
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--exp", required=True)
@@ -116,6 +145,7 @@ def main() -> None:
     plot_dir = exp_dir / "plots"
     plot_dir.mkdir(parents=True, exist_ok=True)
     ms_by_variant(rows, plot_dir / "ms_by_variant.png")
+    ms_heatmap(rows, plot_dir / "ms_heatmap.png")
     uplift_vs_cost(rows, plot_dir / "uplift_vs_cost.png")
     gate_rejections(rows, plot_dir / "gate_rejections.png")
     print(f"plots -> {plot_dir}")

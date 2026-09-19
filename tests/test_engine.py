@@ -40,7 +40,6 @@ def test_sampling_caps_mutant_count():
 def test_sampling_is_deterministic_per_seed():
     a = [m.mid for m in generate_mutants(SRC, "top", max_mutants=4, seed=1)]
     b = [m.mid for m in generate_mutants(SRC, "top", max_mutants=4, seed=1)]
-    c = [m.mid for m in generate_mutants(SRC, "top", max_mutants=4, seed=2)]
     assert a == b  # same seed -> identical selection
     assert len(a) == 4
 

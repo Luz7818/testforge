@@ -220,7 +220,6 @@ class MockLLMClient:
     # -- main entry ----------------------------------------------------------
     def generate(self, system: str, prompt: str, purpose: str = "") -> LLMResponse:
         module_source = self._block(prompt, "MODULE_SOURCE")
-        function_source = self._block(prompt, "FUNCTION")
         module_name = self._block(prompt, "MODULE_NAME").strip()
         function_name = self._block(prompt, "FUNCTION_NAME").strip()
         count = self._scalar(prompt, "CANDIDATE_COUNT", 1)

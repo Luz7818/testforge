@@ -117,6 +117,10 @@ TestForge 用**变异测试（mutation testing）**作为验收标准构建闭�
 | B3 完整方案 | **85.5%** | 90.3% | 87.2% | **0.56** |
 | B4 覆盖反馈消融 | **85.5%** | 90.3% | 87.2% | **0.56** |
 
+![全网格热力图：18 目标 × 5 变体的变异分数](../results/exp_mock_full/plots/ms_heatmap.png)
+
+热力图中 B0 列明显偏浅（检出力不足）而在生成后被填深的行（chunk、moving_average、parse_kv_pairs、integer_sqrt、validate_port 等）即 RQ1 的提升来源；整行保持浅色的行（flatten、validate_username、parse_version 等）即 Mock 平台期所在的语义型存活区间。
+
 ### 6.2 RQ 结论
 
 **RQ1（生成 vs 基线）— 显著**：B1 相对 B0 的配对变异分数提升 **+7.8 个百分点**（中位 +3.1pp）；18 目标 **9 胜 / 9 平 / 0 负**；Wilcoxon 符号秩检验 p = 0.0076；bootstrap 95% CI [+4.0pp, +11.8pp]。提升集中在边界敏感的函数（integer_sqrt 56%→75%、validate_port 60%→80%、chunk 80%→100%、moving_average 82%→100%）。
@@ -136,9 +140,32 @@ TestForge 用**变异测试（mutation testing）**作为验收标准构建闭�
 
 所有被门禁接受的测试在最终联合评估中均保持通过（`final_suite_passes` 全绿）；B3/B4 的反馈轮多产生了 2×18 个候选，全部因"无法证明新杀伤"被拒——反馈回路的成本被门禁约束在"有证据才验收"的边界内。
 
+![门禁拒绝原因分布](../results/exp_mock_full/plots/gate_rejections.png)
+
 ### 6.4 单目标案例
 
-`parsers.parse_csv_line`：B0 既有测试已达到 93.8% 的变异分数，唯一存活的变异体是引号转义边界上的 `i + 1 → i + 2`——杀死它需要构造"以 `""` 结尾的输入"，这需要理解转义语义而非更多采样。Mock 的特征化测试无法发明该预言机，门禁因此诚实拒绝全部候选（`falsifiable` ×4）。这正是反馈回路的价值所在：真实 LLM 在看到该 diff 后，能定向构造边界用例。
+**`parsers.parse_csv_line`（门禁诚实拒绝）**：B0 既有测试已达到 93.8% 的变异分数，唯一存活的变异体是引号转义边界上的 `i + 1 → i + 2`——杀死它需要构造"以 `""` 结尾的输入"，这需要理解转义语义而非更多采样。Mock 的特征化测试无法发明该预言机，门禁因此诚实拒绝全部候选（`falsifiable` ×4）。这正是反馈回路的价值所在：真实 LLM 在看到该 diff 后，能定向构造边界用例。
+
+**`numeric.integer_sqrt`（验收测试实例）**：Mock 生成的以下测试通过全部三道门禁（稳定通过 ×3、各杀死 ≥1 个 B0 未杀死的变异体），使该目标变异分数 56% → 75%：
+
+```python
+import pytest
+from numeric import integer_sqrt
+
+
+def test_integer_sqrt_16089():
+    assert integer_sqrt(0) == 0
+
+
+def test_integer_sqrt_11030():
+    assert integer_sqrt(3) == 1
+
+
+def test_integer_sqrt_42941():
+    assert integer_sqrt(100) == 10
+```
+
+杀伤归因（来自实验记录的杀伤矩阵）：`integer_sqrt(0) == 0` 杀死 `if n < 0` 的 `0 → 1` 常量变异（原代码返回 0，变异后抛 ValueError）与 `n < 2` 分支的 `return n → return None`（原返回 0，变异后返回 None）；`integer_sqrt(3) == 1` 杀死二分初始化 `lo, hi = 1, n // 2 + 1` 的 `lo = 1 → 2` 常量变异（变异后二分区间坍缩，返回 2 而非 1）。残余存活变异体（`// → /`、`+ → -` 等）需要更小的步长语义才能区分——即真实 LLM 反馈回路的目标区间。
 
 ### 6.5 如何获得真实 LLM 数字
 

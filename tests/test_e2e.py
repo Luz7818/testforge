@@ -1,6 +1,4 @@
 """End-to-end pipeline test (mock mode, reduced settings) on one target."""
-from pathlib import Path
-
 from testforge.agent import ForgeAgent
 from testforge.benchmarks import PROJECT_ROOT, load_targets
 from testforge.config import ForgeConfig

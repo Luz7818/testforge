@@ -202,7 +202,6 @@ def analyze(rows: list[dict], out_dir: Path) -> None:
             "bootstrap_ci": ci,
         }
         if rq == "RQ2":
-            cost_pairs = paired(rows, treat, base, "cost_usd") if "cost_usd" in rows[0] else []
             costs = [r.get("cost", {}).get("cost_usd", 0.0) for r in rows if r.get("variant") == treat and "error" not in r]
             lines.append(f"Cost of {treat}: total ${sum(costs):.4f} over {n_targets} targets "
                          f"(mean ${_mean(costs) if costs else 0:.4f}/target; token counts are exact in the ledger, price is configurable).\n")

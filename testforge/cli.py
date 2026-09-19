@@ -76,7 +76,13 @@ def _cmd_report(args) -> None:
 
 
 def main(argv=None) -> None:
-    parser = argparse.ArgumentParser(prog="testforge", description="Mutation-guided test quality agent")
+    from . import __version__
+
+    parser = argparse.ArgumentParser(
+        prog="testforge",
+        description="Mutation-guided test quality agent: LLM generates tests, mutation testing proves they catch bugs",
+    )
+    parser.add_argument("--version", action="version", version=f"testforge {__version__}")
     sub = parser.add_subparsers(dest="cmd", required=True)
 
     sub.add_parser("targets").set_defaults(func=_cmd_targets)

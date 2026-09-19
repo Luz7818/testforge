@@ -1,6 +1,13 @@
 # TestForge — 变异测试引导的 AI 测试质量智能体
 
+![CI](https://github.com/Luz7818/testforge/actions/workflows/ci.yml/badge.svg)
+![Python](https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12-blue)
+![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20Linux-lightgrey)
+![License](https://img.shields.io/badge/license-MIT-green)
+
 **LLM 生成的单元测试"能通过"，不等于"能抓住 Bug"。TestForge 用变异测试（mutation testing）作为验收标准，构建了一个生成→门禁→反馈→验收的闭环智能体，让 AI 测试的质量变得可证明、可量化、可审计。**
+
+> *Generated tests that pass are not tests that catch bugs. TestForge is an agent loop that only accepts AI-written tests that provably kill seeded faults — an open-source reproduction and extension of Meta's ACH (FSE 2025).*
 
 > 面向面试的完整工程项目：真实工业痛点 + 顶会论文背书（Meta ACH, FSE 2025）+ 可复现实验 + 严格统计检验。
 > 技术报告见 [docs/report.md](docs/report.md)，面试准备手册见 [docs/interview.md](docs/interview.md)。
@@ -19,22 +26,23 @@
 
 ## 2. 方案：把"质量"做成门禁，把"漏洞"变成反馈
 
-```
-                    ┌────────────────────────────────────────────────┐
-                    │                  ForgeAgent                    │
-                    │                                                │
-  target function   │   ┌──────────┐   ┌──────────┐   ┌──────────┐   │
- ───────────────────►  │ 静态分析  │──►│ LLM 生成  │──►│ 质量门禁  │   │
-  (module + B0 tests)   └──────────┘   │ K 候选/轮 │   └────┬─────┘   │
-                    │                  └────▲─────┘        │全过      │
-                    │                       │              ▼          │
-                    │              ┌────────┴─────┐  ┌──────────────┐ │
-                    │              │ 反馈回路      │◄─│ 变异执行引擎  │ │
-                    │              │ 存活变异体diff │  │ 杀伤矩阵(并行)│ │
-                    │              └──────────────┘  └──────────────┘ │
-                    └───────────────────────┬────────────────────────┘
-                                            ▼
-                              验收测试套件 + 质量报告 + 成本账单
+```mermaid
+flowchart LR
+    IN["目标函数<br/>module + B0 测试"] --> SA["静态分析<br/>AST 签名/文档/行号"]
+    SA --> GEN["LLM 生成<br/>K 候选 / 轮"]
+    GEN --> GATE{"质量门禁"}
+    GATE -->|"拒绝"| FB["存活变异体<br/>最小语义 diff"]
+    FB -->|"反馈强化"| GEN
+    GATE -->|"有证据才验收"| ACC["验收合并"]
+    ACC --> OUT["测试套件<br/>报告 + 成本账单"]
+    MUT["变异引擎<br/>7 算子 · 杀伤矩阵并行"] -.->|"杀伤归因"| GATE
+    MUT -.->|"存活集合"| FB
+    classDef llm fill:#e3f2fd,stroke:#5b8db8,color:#0d47a1;
+    classDef mut fill:#fff3e0,stroke:#e2b93b,color:#795548;
+    classDef agent fill:#e8f5e9,stroke:#4c8f5c,color:#1b5e20;
+    class GEN,FB llm;
+    class MUT mut;
+    class SA,GATE,ACC,OUT,IN agent;
 ```
 
 **质量门禁（全过才验收）**
@@ -116,15 +124,40 @@ testforge/
 - **成本工程**：prompt 磁盘缓存（同 prompt 重跑零 API 成本）、单次响应携带 K 个候选、token/费用逐笔记账、变异体分层采样上限。
 - **可复现性**：变异采样与 Mock 输入采样全部种子化（crc32 而非内置 hash，规避 PYTHONHASHSEED 随机化）；LLM 响应缓存；每格实验崩溃安全的增量落盘。
 - **诚实工程**：Mock 模式是真实的"特征化测试"生成器（捕获-重放），能杀掉大量值/算子类变异体但**不会伪装**杀掉需要语义理解的变异体——门禁会诚实地拒绝它，演示了系统不是靠作弊达标。
-- **测试系统本身**：29 个单元/集成测试覆盖算子、拼接、门禁、Mock 确定性、杀伤矩阵与端到端管线。
+- **测试系统本身**：29 个单元/集成测试覆盖算子、拼接、门禁、Mock 确定性、杀伤矩阵与端到端管线，由 GitHub Actions 在 ubuntu（3.10/3.11/3.12）+ windows（3.12）矩阵上持续验证，并通过 `pip install -e .` 校验打包配置。
 
 ## 6. 结果快照（Mock 全网格，90/90 格零错误）
 
-> 完整分析与统计检验见 [results/exp_mock_full/analysis.md](results/exp_mock_full/analysis.md)，图表见 [results/exp_mock_full/plots/](results/exp_mock_full/plots/)。
+| 全网格一览（18 目标 × 5 变体） | 变体均值对比 |
+|---|---|
+| ![heatmap](results/exp_mock_full/plots/ms_heatmap.png) | ![bar](results/exp_mock_full/plots/ms_by_variant.png) |
+
+> 完整分析与统计检验见 [results/exp_mock_full/analysis.md](results/exp_mock_full/analysis.md)。
 
 - **生成有效**：单次生成（B1）相对既有套件（B0）变异分数 **+7.8pp**（9 胜/9 平/0 负，Wilcoxon p=0.0076，bootstrap 95% CI [+4.0, +11.8]）；
 - **门禁反冗余**：B1 与 B2/B3 变异分数相同（85.5%），但验收测试数 2.50 → 0.56/目标（**4.5× 更少**）；B1 冗余测试推高覆盖率 4.3pp 却零检出增益——**覆盖率与故障检出力的解耦实证**；
 - **诚实平台期**：Mock 杀不动的存活变异体（如引号转义边界）被门禁全部拒绝（53 次 `falsifiable` 拒绝），系统不在无法证明价值时声称价值——这正是留给真实 LLM 反馈回路的区间（`--mode api` 一键复现）。
+
+**验收测试长什么样**（`numeric.integer_sqrt` 的真实生成产物，Mock 运行）：
+
+```python
+import pytest
+from numeric import integer_sqrt
+
+
+def test_integer_sqrt_16089():
+    assert integer_sqrt(0) == 0
+
+
+def test_integer_sqrt_11030():
+    assert integer_sqrt(3) == 1
+
+
+def test_integer_sqrt_42941():
+    assert integer_sqrt(100) == 10
+```
+
+三个边界断言各杀死一个 B0 杀不死的变异体，使该目标的变异分数从 56% 提升到 75%：`integer_sqrt(0) == 0` 抓住 `if n < 0` 的 `0 → 1` 常量变异（变异后对 0 抛 ValueError）与 `n < 2` 分支的 `return n → return None`；`integer_sqrt(3) == 1` 抓住二分初始化 `lo, hi = 1, ...` 的 `lo = 1 → 2` 常量变异（变异后 `integer_sqrt(3)` 返回 2）。
 
 ## 7. 引用与依据
 
