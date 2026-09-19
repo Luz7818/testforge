@@ -38,11 +38,14 @@ def render_target_report(res: VariantResult, cost_summary: dict | None = None) -
     lines.append("| ID | Operator | Line | Killed by B0 | Killed by final | Description |")
     lines.append("|---|---|---|---|---|---|")
     for m in res.mutant_summary:
+        # escape pipes for the markdown table outside the f-string: backslashes
+        # inside f-string expressions are a syntax error before Python 3.12
+        desc = m["description"].replace("|", "\\|")
         lines.append(
             f"| {m['mid']} | {m['operator']} | {m['line']} "
             f"| {'yes' if m['killed_by_b0'] else 'no'} "
             f"| {('yes' if m['killed_by_final'] else 'no') if m['killed_by_final'] is not None else '-'} "
-            f"| {m['description'].replace('|', '\\|')} |"
+            f"| {desc} |"
         )
     lines.append("")
 
