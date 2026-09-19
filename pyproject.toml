@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "testforge"
+version = "0.1.0"
+description = "Mutation-guided test quality agent: LLM generates tests, mutation testing proves they catch bugs"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+dependencies = [
+    "pytest>=8.0",
+    "coverage>=7.4",
+    "openai>=1.30",
+    "matplotlib>=3.8",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"

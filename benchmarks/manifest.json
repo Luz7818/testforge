@@ -1,0 +1,23 @@
+{
+  "description": "TestForge benchmark: 18 target functions in 6 modules. Each target has an existing (deliberately partial) pytest suite as baseline B0.",
+  "targets": [
+    { "id": "string_utils.slugify", "module": "string_utils", "function": "slugify" },
+    { "id": "string_utils.mask_email", "module": "string_utils", "function": "mask_email" },
+    { "id": "string_utils.truncate_with_ellipsis", "module": "string_utils", "function": "truncate_with_ellipsis" },
+    { "id": "numeric.clamp", "module": "numeric", "function": "clamp" },
+    { "id": "numeric.integer_sqrt", "module": "numeric", "function": "integer_sqrt" },
+    { "id": "numeric.moving_average", "module": "numeric", "function": "moving_average" },
+    { "id": "date_utils.is_leap_year", "module": "date_utils", "function": "is_leap_year" },
+    { "id": "date_utils.days_in_month", "module": "date_utils", "function": "days_in_month" },
+    { "id": "date_utils.age_in_days", "module": "date_utils", "function": "age_in_days" },
+    { "id": "containers.flatten", "module": "containers", "function": "flatten" },
+    { "id": "containers.chunk", "module": "containers", "function": "chunk" },
+    { "id": "containers.most_frequent", "module": "containers", "function": "most_frequent" },
+    { "id": "parsers.parse_csv_line", "module": "parsers", "function": "parse_csv_line" },
+    { "id": "parsers.parse_version", "module": "parsers", "function": "parse_version" },
+    { "id": "parsers.parse_kv_pairs", "module": "parsers", "function": "parse_kv_pairs" },
+    { "id": "validators.validate_username", "module": "validators", "function": "validate_username" },
+    { "id": "validators.validate_port", "module": "validators", "function": "validate_port" },
+    { "id": "validators.normalize_hex_color", "module": "validators", "function": "normalize_hex_color" }
+  ]
+}

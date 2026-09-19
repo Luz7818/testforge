@@ -1,0 +1,15 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.coverage
+.env
+llm_cache/
+results/**
+!results/**/
+!results/exp_*/results.json
+!results/exp_*/analysis.md
+!results/exp_*/analysis.json
+!results/exp_*/summary.md
+!results/exp_*/plots/
+!results/exp_*/plots/*.png
