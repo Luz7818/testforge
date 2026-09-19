@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 import os
 from dataclasses import dataclass, field
 
@@ -28,6 +29,11 @@ class ForgeConfig:
     max_tokens: int = 2048
     llm_timeout_sec: float = 120.0
     llm_retries: int = 3
+    # Extra JSON merged into each chat-completions request body (openai SDK
+    # ``extra_body``). Use for provider-specific knobs, e.g. Qwen3 thinking
+    # mode: '{"enable_thinking": false}' (DashScope-style top level) or
+    # '{"chat_template_kwargs": {"enable_thinking": false}}' (vLLM native).
+    extra_body: str = ""
 
     # Agent loop.
     candidates_per_round: int = 4
@@ -68,12 +74,22 @@ class ForgeConfig:
         cfg.api_key = os.environ.get("DEEPSEEK_API_KEY")
         cfg.model = os.environ.get("TESTFORGE_MODEL", cfg.model)
         cfg.api_base = os.environ.get("TESTFORGE_API_BASE", cfg.api_base)
+        cfg.extra_body = os.environ.get("TESTFORGE_EXTRA_BODY", "")
         if mode == "api" and not cfg.api_key:
             raise SystemExit(
-                "mode=api requires DEEPSEEK_API_KEY (see .env.example). "
+                "mode=api requires DEEPSEEK_API_KEY (any non-empty string for "
+                "unauthenticated internal endpoints, see .env.example). "
                 "Or run with mode=mock for the offline pipeline."
             )
         return cfg
+
+    def extra_body_dict(self) -> dict:
+        if not self.extra_body.strip():
+            return {}
+        parsed = json.loads(self.extra_body)
+        if not isinstance(parsed, dict):
+            raise ValueError("TESTFORGE_EXTRA_BODY must be a JSON object")
+        return parsed
 
     def validate(self) -> None:
         if self.mode not in ("mock", "api"):

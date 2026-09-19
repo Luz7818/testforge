@@ -40,6 +40,14 @@ SYSTEM_PROMPT = (
     "tests. Output must follow the requested format exactly."
 )
 
+# Reasoning models (Qwen3 etc.) may emit a thinking block before the answer;
+# it must be stripped before the candidate-marker parsing.
+_THINK_RE = re.compile(r"<think>.*?</think>\s*", re.S)
+
+
+def strip_think(text: str) -> str:
+    return _THINK_RE.sub("", text).lstrip()
+
 
 @dataclass
 class LLMResponse:
@@ -100,6 +108,7 @@ class OpenAICompatClient:
                 model=self._cfg.model,
             )
         last_err: Exception | None = None
+        extra = self._cfg.extra_body_dict()
         for attempt in range(self._cfg.llm_retries):
             try:
                 resp = self._client.chat.completions.create(
@@ -110,8 +119,9 @@ class OpenAICompatClient:
                     ],
                     temperature=self._cfg.temperature,
                     max_tokens=self._cfg.max_tokens,
+                    **({"extra_body": extra} if extra else {}),
                 )
-                text = resp.choices[0].message.content or ""
+                text = strip_think(resp.choices[0].message.content or "")
                 usage = resp.usage
                 tokens_in = getattr(usage, "prompt_tokens", 0) or 0
                 tokens_out = getattr(usage, "completion_tokens", 0) or 0

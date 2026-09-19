@@ -81,7 +81,17 @@ cp .env.example .env        # 填入 DEEPSEEK_API_KEY
 .venv/Scripts/python experiments/analyze.py --exp results/exp_api_<stamp>   # 统计检验 + RQ 分析
 .venv/Scripts/python experiments/plots.py   --exp results/exp_api_<stamp>   # 图表
 
-# ③ TestForge 自身测试（29 个）
+# ③ 任意自建 OpenAI 兼容端点（校内 vLLM / Ollama / one-api 等，无需改代码）
+# 在 .env 中设置四项即可切换，例如东南大学 aicloud（需校园网可达）：
+#   DEEPSEEK_API_KEY=EMPTY                                  # 无鉴权服务填任意非空串
+#   TESTFORGE_API_BASE=http://aicloud.seu.edu.cn:20082/v1
+#   TESTFORGE_MODEL=qwen3-vl-8b
+#   TESTFORGE_EXTRA_BODY={"enable_thinking": false}         # Qwen3 关思考模式；vLLM 原生格式见 .env.example
+# 注意：小模型（≤8B）格式违规率与门禁拒绝率会显著升高、变异分数提升幅度预计低于
+# DeepSeek-V3 级别——这本身是"模型规模 × 反馈收益"的天然实验素材；成本列按
+# DeepSeek 价格折算，免费内部端点请忽略。
+
+# ④ TestForge 自身测试（35 个）
 .venv/Scripts/python -m pytest tests/ -q
 ```
 
@@ -113,7 +123,7 @@ testforge/
 │   └── cli.py                 #   命令行入口
 ├── benchmarks/                # 6 模块 × 18 目标函数 + B0 既有测试
 ├── experiments/               # 实验网格 / 统计分析 / 图表
-├── tests/                     # TestForge 自身测试（29 个）
+├── tests/                     # TestForge 自身测试（35 个）
 ├── docs/report.md             # 技术报告（问题/相关工作/设计/实验/局限）
 └── docs/interview.md          # 面试手册（电梯稿/STAR/追问 Q&A）
 ```
@@ -124,7 +134,7 @@ testforge/
 - **成本工程**：prompt 磁盘缓存（同 prompt 重跑零 API 成本）、单次响应携带 K 个候选、token/费用逐笔记账、变异体分层采样上限。
 - **可复现性**：变异采样与 Mock 输入采样全部种子化（crc32 而非内置 hash，规避 PYTHONHASHSEED 随机化）；LLM 响应缓存；每格实验崩溃安全的增量落盘。
 - **诚实工程**：Mock 模式是真实的"特征化测试"生成器（捕获-重放），能杀掉大量值/算子类变异体但**不会伪装**杀掉需要语义理解的变异体——门禁会诚实地拒绝它，演示了系统不是靠作弊达标。
-- **测试系统本身**：29 个单元/集成测试覆盖算子、拼接、门禁、Mock 确定性、杀伤矩阵与端到端管线，由 GitHub Actions 在 ubuntu（3.10/3.11/3.12）+ windows（3.12）矩阵上持续验证，并通过 `pip install -e .` 校验打包配置。
+- **测试系统本身**：35 个单元/集成测试覆盖算子、拼接、门禁、Mock 确定性、杀伤矩阵与端到端管线，由 GitHub Actions 在 ubuntu（3.10/3.11/3.12）+ windows（3.12）矩阵上持续验证，并通过 `pip install -e .` 校验打包配置。
 
 ## 6. 结果快照（Mock 全网格，90/90 格零错误）
 
