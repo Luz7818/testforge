@@ -160,6 +160,22 @@ def analyze(rows: list[dict], out_dir: Path) -> None:
         )
     lines.append("")
 
+    # ---- LLM usage per variant -------------------------------------------
+    gen_variants = [v for v in variants if any(
+        r.get("variant") == v and r.get("cost", {}).get("calls", 0) for r in rows
+    )]
+    if gen_variants:
+        lines.append("## LLM usage per variant\n")
+        lines.append("| Variant | LLM calls | tokens in | tokens out |")
+        lines.append("|---|---|---|---|")
+        for v in gen_variants:
+            rs = [r for r in rows if r.get("variant") == v and "error" not in r]
+            calls = sum(r.get("cost", {}).get("calls", 0) for r in rs)
+            t_in = sum(r.get("cost", {}).get("tokens_in", 0) for r in rs)
+            t_out = sum(r.get("cost", {}).get("tokens_out", 0) for r in rs)
+            lines.append(f"| {v} | {calls} | {t_in:,} | {t_out:,} |")
+        lines.append("")
+
     # ---- per-target table ----------------------------------------------
     lines.append("## Per-target mutation score (all mutants)\n")
     lines.append("| Target | " + " | ".join(variants) + " |")
@@ -172,6 +188,17 @@ def analyze(rows: list[dict], out_dir: Path) -> None:
             cells.append(fmt_pct(r["ms_all"]) if r else "-")
         lines.append(f"| {t} | " + " | ".join(cells) + " |")
     lines.append("")
+
+    # ---- per-target uplift (generation vs baseline) -----------------------
+    if "B0" in variants and "B1" in variants:
+        pairs = paired(rows, "B1", "B0", "ms_all")
+        pairs.sort(key=lambda p: -p["diff"])
+        lines.append("## Per-target uplift (B1 minus B0), sorted\n")
+        lines.append("| Target | B0 | B1 | uplift |")
+        lines.append("|---|---|---|---|")
+        for p in pairs:
+            lines.append(f"| {p['target']} | {fmt_pct(p['b'])} | {fmt_pct(p['a'])} | {p['diff']:+.1%} |")
+        lines.append("")
 
     # ---- research questions ----------------------------------------------
     lines.append("## Research questions\n")

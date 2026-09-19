@@ -2,6 +2,7 @@
 
     python -m testforge.cli targets
     python -m testforge.cli run --target string_utils.slugify --variant B3 --mode mock
+    python -m testforge.cli run --module path/to/mod.py --function foo --tests path/to/test_mod.py
     python -m testforge.cli run --all --variant B3 --mode api
     python -m testforge.cli report --results results/runs/xxx.json --out report.md
 """
@@ -16,7 +17,7 @@ from .benchmarks import PROJECT_ROOT, get_target, load_targets, result_to_dict
 from .config import ForgeConfig
 from .llm import make_client
 from .report import render_summary, render_target_report
-from .types import CostLedger
+from .types import CostLedger, TargetSpec
 from .utils import write_json
 from .variants import get_variant
 
@@ -24,6 +25,34 @@ from .variants import get_variant
 def _cmd_targets(_args) -> None:
     for spec in load_targets():
         print(f"{spec.target_id:40s} module={spec.module_name}")
+
+
+def _spec_from_args(args) -> TargetSpec:
+    """Resolve a TargetSpec either from the benchmark manifest (--target)
+    or from user-supplied paths (--module/--function, optionally --tests)."""
+    if args.target:
+        return get_target(args.target)
+    if not (args.module and args.function):
+        raise SystemExit("provide either --target <benchmark-id> or --module <path> --function <name>")
+    module_path = Path(args.module).resolve()
+    if not module_path.exists():
+        raise SystemExit(f"module file not found: {module_path}")
+    module_name = module_path.stem
+    if not module_name.isidentifier():
+        raise SystemExit(
+            f"module file name {module_name!r} is not a valid Python identifier; "
+            "rename the file so tests can import it"
+        )
+    tests_path = Path(args.tests).resolve() if args.tests else None
+    if args.tests and not (tests_path and tests_path.exists()):
+        raise SystemExit(f"existing test file not found: {args.tests}")
+    return TargetSpec(
+        target_id=f"{module_name}.{args.function}",
+        module_path=str(module_path),
+        module_name=module_name,
+        function_name=args.function,
+        existing_test_path=str(tests_path) if tests_path else None,
+    )
 
 
 def _cmd_run(args) -> None:
@@ -37,7 +66,7 @@ def _cmd_run(args) -> None:
     cfg.validate()
     variant = get_variant(args.variant)
 
-    specs = load_targets() if args.all else [get_target(args.target)]
+    specs = load_targets() if args.all else [_spec_from_args(args)]
     out_dir = PROJECT_ROOT / args.out
     out_dir.mkdir(parents=True, exist_ok=True)
 
@@ -89,6 +118,9 @@ def main(argv=None) -> None:
 
     p_run = sub.add_parser("run")
     p_run.add_argument("--target", help="benchmark target id, e.g. string_utils.slugify")
+    p_run.add_argument("--module", help="path to a Python module with the function under test")
+    p_run.add_argument("--function", help="function name to test")
+    p_run.add_argument("--tests", help="optional path to the existing pytest file for this module (baseline B0)")
     p_run.add_argument("--all", action="store_true", help="run every benchmark target")
     p_run.add_argument("--variant", default="B3", help="B0 | B1 | B2 | B3 | B4")
     p_run.add_argument("--mode", default="mock", choices=["mock", "api"])

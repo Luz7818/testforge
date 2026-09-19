@@ -136,6 +136,59 @@ def ms_heatmap(rows: list[dict], out: Path, label: str = "mock grid") -> None:
     plt.close(fig)
 
 
+def uplift_per_target(rows: list[dict], out: Path, base: str = "B0", treat: str = "B1") -> None:
+    """Horizontal bars of per-target MS uplift (treat minus base), sorted."""
+    by = {(r["target_id"], r["variant"]): r for r in rows if "error" not in r}
+    targets = sorted({r["target_id"] for r in rows if "error" not in r})
+    pairs = [
+        (t, by[(t, treat)]["ms_all"] - by[(t, base)]["ms_all"])
+        for t in targets
+        if (t, base) in by and (t, treat) in by
+    ]
+    if not pairs:
+        return
+    pairs.sort(key=lambda p: p[1])
+    names = [p[0] for p in pairs]
+    vals = [p[1] for p in pairs]
+    fig, ax = plt.subplots(figsize=(7.5, 0.30 * len(pairs) + 1.6))
+    ax.barh(names, vals, color=["#4c8f5c" if v > 1e-9 else "#c4b39a" for v in vals], alpha=0.9)
+    for i, (_n, v) in enumerate(pairs):
+        ax.text(v + 0.008, i, f"{v:+.0%}", va="center", fontsize=8)
+    ax.set_xlim(0, max(0.30, max(vals) + 0.08))
+    ax.axvline(0, color="#999", lw=0.8)
+    ax.set_xlabel(f"Mutation-score uplift, {treat} minus {base}")
+    ax.set_title(f"Where generation helps: per-target uplift ({treat} vs {base})")
+    ax.spines[["top", "right"]].set_visible(False)
+    fig.tight_layout()
+    fig.savefig(out, dpi=160)
+    plt.close(fig)
+
+
+def tokens_by_variant(rows: list[dict], out: Path) -> None:
+    """Total LLM tokens per variant (from the per-cell cost ledger)."""
+    variants = [v for v in VARIANT_ORDER if any(r.get("variant") == v for r in rows)]
+    tin = [sum(r.get("cost", {}).get("tokens_in", 0) for r in rows if r.get("variant") == v) for v in variants]
+    tout = [sum(r.get("cost", {}).get("tokens_out", 0) for r in rows if r.get("variant") == v) for v in variants]
+    if not any(tin) and not any(tout):
+        return
+    x = range(len(variants))
+    width = 0.38
+    fig, ax = plt.subplots(figsize=(7.0, 4.0))
+    ax.bar([i - width / 2 for i in x], tin, width, label="input tokens", color="#5b8db8", alpha=0.9)
+    ax.bar([i + width / 2 for i in x], tout, width, label="output tokens", color="#e2b93b", alpha=0.9)
+    for i, (a, b) in enumerate(zip(tin, tout)):
+        ax.text(i - width / 2, a, f"{a/1000:.1f}k", ha="center", va="bottom", fontsize=8)
+        ax.text(i + width / 2, b, f"{b/1000:.1f}k", ha="center", va="bottom", fontsize=8)
+    ax.set_xticks(list(x), variants)
+    ax.set_ylabel("tokens (total over grid)")
+    ax.set_title("LLM usage per variant")
+    ax.legend(fontsize=8)
+    ax.spines[["top", "right"]].set_visible(False)
+    fig.tight_layout()
+    fig.savefig(out, dpi=160)
+    plt.close(fig)
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--exp", required=True)
@@ -155,6 +208,8 @@ def main() -> None:
     plot_dir.mkdir(parents=True, exist_ok=True)
     ms_by_variant(rows, plot_dir / "ms_by_variant.png")
     ms_heatmap(rows, plot_dir / "ms_heatmap.png", label=label)
+    uplift_per_target(rows, plot_dir / "uplift_per_target.png")
+    tokens_by_variant(rows, plot_dir / "tokens_by_variant.png")
     uplift_vs_cost(rows, plot_dir / "uplift_vs_cost.png")
     gate_rejections(rows, plot_dir / "gate_rejections.png")
     print(f"plots -> {plot_dir}")

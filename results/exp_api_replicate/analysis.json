@@ -1,0 +1,548 @@
+{
+  "aggregate": {
+    "B0": {
+      "ms_all": 0.7762833333333333,
+      "ms_covered": 0.801088888888889,
+      "ms_all_median": 0.80625,
+      "cov": 83.13333333333334,
+      "acc": 0.0,
+      "cost": 0
+    },
+    "B1": {
+      "ms_all": 0.8944777777777778,
+      "ms_covered": 0.9088666666666667,
+      "ms_all_median": 0.9271,
+      "cov": 92.71666666666667,
+      "acc": 1.0555555555555556,
+      "cost": 0.0235
+    },
+    "B2": {
+      "ms_all": 0.8944777777777778,
+      "ms_covered": 0.9088666666666667,
+      "ms_all_median": 0.9271,
+      "cov": 92.71666666666667,
+      "acc": 0.6111111111111112,
+      "cost": 0.0235
+    },
+    "B3": {
+      "ms_all": 0.9055888888888889,
+      "ms_covered": 0.9199777777777778,
+      "ms_all_median": 0.96875,
+      "cov": 92.71666666666667,
+      "acc": 0.6666666666666666,
+      "cost": 0.0315
+    },
+    "B4": {
+      "ms_all": 0.9055888888888889,
+      "ms_covered": 0.9199777777777778,
+      "ms_all_median": 0.96875,
+      "cov": 92.71666666666667,
+      "acc": 0.6666666666666666,
+      "cost": 0.0304
+    }
+  },
+  "RQ1": {
+    "base": "B0",
+    "treatment": "B1",
+    "pairs": [
+      {
+        "target": "containers.chunk",
+        "a": 1.0,
+        "b": 0.8,
+        "diff": 0.19999999999999996
+      },
+      {
+        "target": "containers.flatten",
+        "a": 0.8333,
+        "b": 0.3333,
+        "diff": 0.5
+      },
+      {
+        "target": "containers.most_frequent",
+        "a": 0.7143,
+        "b": 0.5714,
+        "diff": 0.14290000000000003
+      },
+      {
+        "target": "date_utils.age_in_days",
+        "a": 1.0,
+        "b": 1.0,
+        "diff": 0.0
+      },
+      {
+        "target": "date_utils.days_in_month",
+        "a": 1.0,
+        "b": 0.8889,
+        "diff": 0.11109999999999998
+      },
+      {
+        "target": "date_utils.is_leap_year",
+        "a": 1.0,
+        "b": 0.875,
+        "diff": 0.125
+      },
+      {
+        "target": "numeric.clamp",
+        "a": 1.0,
+        "b": 1.0,
+        "diff": 0.0
+      },
+      {
+        "target": "numeric.integer_sqrt",
+        "a": 0.8125,
+        "b": 0.5625,
+        "diff": 0.25
+      },
+      {
+        "target": "numeric.moving_average",
+        "a": 1.0,
+        "b": 0.8182,
+        "diff": 0.18179999999999996
+      },
+      {
+        "target": "parsers.parse_csv_line",
+        "a": 0.9375,
+        "b": 0.9375,
+        "diff": 0.0
+      },
+      {
+        "target": "parsers.parse_kv_pairs",
+        "a": 0.8571,
+        "b": 0.8571,
+        "diff": 0.0
+      },
+      {
+        "target": "parsers.parse_version",
+        "a": 1.0,
+        "b": 0.75,
+        "diff": 0.25
+      },
+      {
+        "target": "string_utils.mask_email",
+        "a": 0.8125,
+        "b": 0.8125,
+        "diff": 0.0
+      },
+      {
+        "target": "string_utils.slugify",
+        "a": 0.75,
+        "b": 0.75,
+        "diff": 0.0
+      },
+      {
+        "target": "string_utils.truncate_with_ellipsis",
+        "a": 0.9167,
+        "b": 0.75,
+        "diff": 0.16669999999999996
+      },
+      {
+        "target": "validators.normalize_hex_color",
+        "a": 1.0,
+        "b": 1.0,
+        "diff": 0.0
+      },
+      {
+        "target": "validators.validate_port",
+        "a": 0.8,
+        "b": 0.6,
+        "diff": 0.20000000000000007
+      },
+      {
+        "target": "validators.validate_username",
+        "a": 0.6667,
+        "b": 0.6667,
+        "diff": 0.0
+      }
+    ],
+    "mean_uplift": 0.11819444444444444,
+    "median_uplift": 0.11804999999999999,
+    "wilcoxon": {
+      "n": 10,
+      "W_plus": 55.0,
+      "z": 2.805,
+      "p": 0.005
+    },
+    "bootstrap_ci": {
+      "lo": 0.0621,
+      "hi": 0.1828
+    }
+  },
+  "RQ2": {
+    "base": "B1",
+    "treatment": "B3",
+    "pairs": [
+      {
+        "target": "containers.chunk",
+        "a": 1.0,
+        "b": 1.0,
+        "diff": 0.0
+      },
+      {
+        "target": "containers.flatten",
+        "a": 0.8333,
+        "b": 0.8333,
+        "diff": 0.0
+      },
+      {
+        "target": "containers.most_frequent",
+        "a": 0.7143,
+        "b": 0.7143,
+        "diff": 0.0
+      },
+      {
+        "target": "date_utils.age_in_days",
+        "a": 1.0,
+        "b": 1.0,
+        "diff": 0.0
+      },
+      {
+        "target": "date_utils.days_in_month",
+        "a": 1.0,
+        "b": 1.0,
+        "diff": 0.0
+      },
+      {
+        "target": "date_utils.is_leap_year",
+        "a": 1.0,
+        "b": 1.0,
+        "diff": 0.0
+      },
+      {
+        "target": "numeric.clamp",
+        "a": 1.0,
+        "b": 1.0,
+        "diff": 0.0
+      },
+      {
+        "target": "numeric.integer_sqrt",
+        "a": 0.8125,
+        "b": 0.8125,
+        "diff": 0.0
+      },
+      {
+        "target": "numeric.moving_average",
+        "a": 1.0,
+        "b": 1.0,
+        "diff": 0.0
+      },
+      {
+        "target": "parsers.parse_csv_line",
+        "a": 0.9375,
+        "b": 0.9375,
+        "diff": 0.0
+      },
+      {
+        "target": "parsers.parse_kv_pairs",
+        "a": 0.8571,
+        "b": 0.8571,
+        "diff": 0.0
+      },
+      {
+        "target": "parsers.parse_version",
+        "a": 1.0,
+        "b": 1.0,
+        "diff": 0.0
+      },
+      {
+        "target": "string_utils.mask_email",
+        "a": 0.8125,
+        "b": 0.8125,
+        "diff": 0.0
+      },
+      {
+        "target": "string_utils.slugify",
+        "a": 0.75,
+        "b": 0.75,
+        "diff": 0.0
+      },
+      {
+        "target": "string_utils.truncate_with_ellipsis",
+        "a": 0.9167,
+        "b": 0.9167,
+        "diff": 0.0
+      },
+      {
+        "target": "validators.normalize_hex_color",
+        "a": 1.0,
+        "b": 1.0,
+        "diff": 0.0
+      },
+      {
+        "target": "validators.validate_port",
+        "a": 1.0,
+        "b": 0.8,
+        "diff": 0.19999999999999996
+      },
+      {
+        "target": "validators.validate_username",
+        "a": 0.6667,
+        "b": 0.6667,
+        "diff": 0.0
+      }
+    ],
+    "mean_uplift": 0.011111111111111108,
+    "median_uplift": 0.0,
+    "wilcoxon": {
+      "n": 1,
+      "W_plus": 1.0,
+      "z": 1.0,
+      "p": 0.3173
+    },
+    "bootstrap_ci": {
+      "lo": 0.0,
+      "hi": 0.0333
+    }
+  },
+  "RQ3": {
+    "base": "B1",
+    "treatment": "B2",
+    "pairs": [
+      {
+        "target": "containers.chunk",
+        "a": 1.0,
+        "b": 1.0,
+        "diff": 0.0
+      },
+      {
+        "target": "containers.flatten",
+        "a": 0.8333,
+        "b": 0.8333,
+        "diff": 0.0
+      },
+      {
+        "target": "containers.most_frequent",
+        "a": 0.7143,
+        "b": 0.7143,
+        "diff": 0.0
+      },
+      {
+        "target": "date_utils.age_in_days",
+        "a": 1.0,
+        "b": 1.0,
+        "diff": 0.0
+      },
+      {
+        "target": "date_utils.days_in_month",
+        "a": 1.0,
+        "b": 1.0,
+        "diff": 0.0
+      },
+      {
+        "target": "date_utils.is_leap_year",
+        "a": 1.0,
+        "b": 1.0,
+        "diff": 0.0
+      },
+      {
+        "target": "numeric.clamp",
+        "a": 1.0,
+        "b": 1.0,
+        "diff": 0.0
+      },
+      {
+        "target": "numeric.integer_sqrt",
+        "a": 0.8125,
+        "b": 0.8125,
+        "diff": 0.0
+      },
+      {
+        "target": "numeric.moving_average",
+        "a": 1.0,
+        "b": 1.0,
+        "diff": 0.0
+      },
+      {
+        "target": "parsers.parse_csv_line",
+        "a": 0.9375,
+        "b": 0.9375,
+        "diff": 0.0
+      },
+      {
+        "target": "parsers.parse_kv_pairs",
+        "a": 0.8571,
+        "b": 0.8571,
+        "diff": 0.0
+      },
+      {
+        "target": "parsers.parse_version",
+        "a": 1.0,
+        "b": 1.0,
+        "diff": 0.0
+      },
+      {
+        "target": "string_utils.mask_email",
+        "a": 0.8125,
+        "b": 0.8125,
+        "diff": 0.0
+      },
+      {
+        "target": "string_utils.slugify",
+        "a": 0.75,
+        "b": 0.75,
+        "diff": 0.0
+      },
+      {
+        "target": "string_utils.truncate_with_ellipsis",
+        "a": 0.9167,
+        "b": 0.9167,
+        "diff": 0.0
+      },
+      {
+        "target": "validators.normalize_hex_color",
+        "a": 1.0,
+        "b": 1.0,
+        "diff": 0.0
+      },
+      {
+        "target": "validators.validate_port",
+        "a": 0.8,
+        "b": 0.8,
+        "diff": 0.0
+      },
+      {
+        "target": "validators.validate_username",
+        "a": 0.6667,
+        "b": 0.6667,
+        "diff": 0.0
+      }
+    ],
+    "mean_uplift": 0.0,
+    "median_uplift": 0.0,
+    "wilcoxon": {
+      "n": 0,
+      "W_plus": 0.0,
+      "z": 0.0,
+      "p": 1.0
+    },
+    "bootstrap_ci": {
+      "lo": 0.0,
+      "hi": 0.0
+    }
+  },
+  "RQ4": {
+    "base": "B3",
+    "treatment": "B4",
+    "pairs": [
+      {
+        "target": "containers.chunk",
+        "a": 1.0,
+        "b": 1.0,
+        "diff": 0.0
+      },
+      {
+        "target": "containers.flatten",
+        "a": 0.8333,
+        "b": 0.8333,
+        "diff": 0.0
+      },
+      {
+        "target": "containers.most_frequent",
+        "a": 0.7143,
+        "b": 0.7143,
+        "diff": 0.0
+      },
+      {
+        "target": "date_utils.age_in_days",
+        "a": 1.0,
+        "b": 1.0,
+        "diff": 0.0
+      },
+      {
+        "target": "date_utils.days_in_month",
+        "a": 1.0,
+        "b": 1.0,
+        "diff": 0.0
+      },
+      {
+        "target": "date_utils.is_leap_year",
+        "a": 1.0,
+        "b": 1.0,
+        "diff": 0.0
+      },
+      {
+        "target": "numeric.clamp",
+        "a": 1.0,
+        "b": 1.0,
+        "diff": 0.0
+      },
+      {
+        "target": "numeric.integer_sqrt",
+        "a": 0.8125,
+        "b": 0.8125,
+        "diff": 0.0
+      },
+      {
+        "target": "numeric.moving_average",
+        "a": 1.0,
+        "b": 1.0,
+        "diff": 0.0
+      },
+      {
+        "target": "parsers.parse_csv_line",
+        "a": 0.9375,
+        "b": 0.9375,
+        "diff": 0.0
+      },
+      {
+        "target": "parsers.parse_kv_pairs",
+        "a": 0.8571,
+        "b": 0.8571,
+        "diff": 0.0
+      },
+      {
+        "target": "parsers.parse_version",
+        "a": 1.0,
+        "b": 1.0,
+        "diff": 0.0
+      },
+      {
+        "target": "string_utils.mask_email",
+        "a": 0.8125,
+        "b": 0.8125,
+        "diff": 0.0
+      },
+      {
+        "target": "string_utils.slugify",
+        "a": 0.75,
+        "b": 0.75,
+        "diff": 0.0
+      },
+      {
+        "target": "string_utils.truncate_with_ellipsis",
+        "a": 0.9167,
+        "b": 0.9167,
+        "diff": 0.0
+      },
+      {
+        "target": "validators.normalize_hex_color",
+        "a": 1.0,
+        "b": 1.0,
+        "diff": 0.0
+      },
+      {
+        "target": "validators.validate_port",
+        "a": 1.0,
+        "b": 1.0,
+        "diff": 0.0
+      },
+      {
+        "target": "validators.validate_username",
+        "a": 0.6667,
+        "b": 0.6667,
+        "diff": 0.0
+      }
+    ],
+    "mean_uplift": 0.0,
+    "median_uplift": 0.0,
+    "wilcoxon": {
+      "n": 0,
+      "W_plus": 0.0,
+      "z": 0.0,
+      "p": 1.0
+    },
+    "bootstrap_ci": {
+      "lo": 0.0,
+      "hi": 0.0
+    }
+  }
+}
