@@ -142,13 +142,15 @@ def main() -> None:
     ap.add_argument("--label", default=None, help="grid label for plot titles (default: derived from dir name)")
     args = ap.parse_args()
     exp_dir = Path(args.exp)
+    rows = load(exp_dir)
     if args.label:
         label = args.label
-    elif "api" in exp_dir.name:
-        label = "real LLM: Qwen3-VL-8B"
     else:
-        label = "mock backend"
-    rows = load(exp_dir)
+        model = next(
+            (r.get("cost", {}).get("model", "") for r in rows if r.get("cost")),
+            "",
+        )
+        label = "mock backend" if not model or model == "mock" else f"LLM: {model}"
     plot_dir = exp_dir / "plots"
     plot_dir.mkdir(parents=True, exist_ok=True)
     ms_by_variant(rows, plot_dir / "ms_by_variant.png")
