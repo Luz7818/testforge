@@ -107,7 +107,7 @@ def gate_rejections(rows: list[dict], out: Path) -> None:
     plt.close(fig)
 
 
-def ms_heatmap(rows: list[dict], out: Path) -> None:
+def ms_heatmap(rows: list[dict], out: Path, label: str = "mock grid") -> None:
     """Per-target x variant mutation-score matrix: the whole grid at a glance."""
     by = {(r["target_id"], r["variant"]): r["ms_all"] for r in rows if "error" not in r}
     variants = [v for v in VARIANT_ORDER if any((t, v) in by for t in {k[0] for k in by})]
@@ -128,7 +128,7 @@ def ms_heatmap(rows: list[dict], out: Path) -> None:
                     ha="center", va="center", fontsize=8,
                     color="black" if 0.25 < v < 0.85 else "white",
                 )
-    ax.set_title("Mutation score per target x variant (mock grid)")
+    ax.set_title(f"Mutation score per target x variant ({label})")
     ax.set_xlabel("Variant")
     fig.colorbar(im, ax=ax, shrink=0.7, label="MS (all mutants)")
     fig.tight_layout()
@@ -139,13 +139,20 @@ def ms_heatmap(rows: list[dict], out: Path) -> None:
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--exp", required=True)
+    ap.add_argument("--label", default=None, help="grid label for plot titles (default: derived from dir name)")
     args = ap.parse_args()
     exp_dir = Path(args.exp)
+    if args.label:
+        label = args.label
+    elif "api" in exp_dir.name:
+        label = "real LLM: Qwen3-VL-8B"
+    else:
+        label = "mock backend"
     rows = load(exp_dir)
     plot_dir = exp_dir / "plots"
     plot_dir.mkdir(parents=True, exist_ok=True)
     ms_by_variant(rows, plot_dir / "ms_by_variant.png")
-    ms_heatmap(rows, plot_dir / "ms_heatmap.png")
+    ms_heatmap(rows, plot_dir / "ms_heatmap.png", label=label)
     uplift_vs_cost(rows, plot_dir / "uplift_vs_cost.png")
     gate_rejections(rows, plot_dir / "gate_rejections.png")
     print(f"plots -> {plot_dir}")

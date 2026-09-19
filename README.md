@@ -136,38 +136,66 @@ testforge/
 - **诚实工程**：Mock 模式是真实的"特征化测试"生成器（捕获-重放），能杀掉大量值/算子类变异体但**不会伪装**杀掉需要语义理解的变异体——门禁会诚实地拒绝它，演示了系统不是靠作弊达标。
 - **测试系统本身**：35 个单元/集成测试覆盖算子、拼接、门禁、Mock 确定性、杀伤矩阵与端到端管线，由 GitHub Actions 在 ubuntu（3.10/3.11/3.12）+ windows（3.12）矩阵上持续验证，并通过 `pip install -e .` 校验打包配置。
 
-## 6. 结果快照（Mock 全网格，90/90 格零错误）
+## 6. 结果快照
+
+### 6.1 真实 LLM 实验（Qwen3-VL-8B @ 校内 vLLM，18 目标 × 5 变体，90/90 格零错误）
 
 | 全网格一览（18 目标 × 5 变体） | 变体均值对比 |
 |---|---|
-| ![heatmap](results/exp_mock_full/plots/ms_heatmap.png) | ![bar](results/exp_mock_full/plots/ms_by_variant.png) |
+| ![heatmap](results/exp_api_full/plots/ms_heatmap.png) | ![bar](results/exp_api_full/plots/ms_by_variant.png) |
 
-> 完整分析与统计检验见 [results/exp_mock_full/analysis.md](results/exp_mock_full/analysis.md)。
+> 完整分析与统计检验见 [results/exp_api_full/analysis.md](results/exp_api_full/analysis.md)（Mock 网格对照见 [results/exp_mock_full/analysis.md](results/exp_mock_full/analysis.md)）。
 
-- **生成有效**：单次生成（B1）相对既有套件（B0）变异分数 **+7.8pp**（9 胜/9 平/0 负，Wilcoxon p=0.0076，bootstrap 95% CI [+4.0, +11.8]）；
-- **门禁反冗余**：B1 与 B2/B3 变异分数相同（85.5%），但验收测试数 2.50 → 0.56/目标（**4.5× 更少**）；B1 冗余测试推高覆盖率 4.3pp 却零检出增益——**覆盖率与故障检出力的解耦实证**；
-- **诚实平台期**：Mock 杀不动的存活变异体（如引号转义边界）被门禁全部拒绝（53 次 `falsifiable` 拒绝），系统不在无法证明价值时声称价值——这正是留给真实 LLM 反馈回路的区间（`--mode api` 一键复现）。
+- **RQ1 生成有效（显著）**：单次生成（B1）相对既有套件（B0）变异分数 **+13.6pp**（11 胜/7 平/**0 负**，Wilcoxon p=0.0033，bootstrap 95% CI [+7.8, +19.7]）；**10/18 个目标达到 100% 变异分数**；
+- **RQ3 门禁反冗余**：B1 与 B2/B3 变异分数相同（91.3%），但验收测试数 23 → 11（**2.1× 更少**）；门禁还拦下了 8B 模型产生的 12 个"在原代码上就失败"的坏候选；
+- **RQ2 诚实记录**：在本基准 + 8B 模型 + 3 候选设置下，反馈回路未带来额外变异分数（单次生成已饱和易杀变异体，剩余存活体是语义难点）；但全强度设置的对照冒烟（24 变异体、4 候选）中，反馈轮产出了杀死 **5 个** B0 杀不死变异体（含 Mock 杀不动的 `+ → -` 算子变异）的验收测试——回路机制有效，增量收益取决于剩余存活体的语义难度，报告 §6 有完整讨论；
+- **成本**：全网格仅 68 次 LLM 调用、tokens 79.9k 进 / 76.1k 出（校内端点免费；按 DeepSeek 牌价折算约 $0.03）。
 
-**验收测试长什么样**（`numeric.integer_sqrt` 的真实生成产物，Mock 运行）：
+**验收测试长什么样**（`numeric.integer_sqrt`，真实模型生成、门禁验收、杀伤归因经杀伤矩阵核验）：
 
 ```python
 import pytest
+
 from numeric import integer_sqrt
 
 
-def test_integer_sqrt_16089():
+def test_integer_sqrt_negative():
+    with pytest.raises(ValueError, match="n must be non-negative"):
+        integer_sqrt(-1)
+
+
+def test_integer_sqrt_zero():
     assert integer_sqrt(0) == 0
 
 
-def test_integer_sqrt_11030():
+def test_integer_sqrt_one():
+    assert integer_sqrt(1) == 1
+
+
+def test_integer_sqrt_small_positive():
+    assert integer_sqrt(2) == 1
     assert integer_sqrt(3) == 1
+    assert integer_sqrt(4) == 2
 
 
-def test_integer_sqrt_42941():
+def test_integer_sqrt_large_perfect_square():
     assert integer_sqrt(100) == 10
+    assert integer_sqrt(10000) == 100
+
+
+def test_integer_sqrt_large_non_perfect_square():
+    assert integer_sqrt(99) == 9
+    assert integer_sqrt(1000) == 31
+    assert integer_sqrt(1000000) == 1000
 ```
 
-三个边界断言各杀死一个 B0 杀不死的变异体，使该目标的变异分数从 56% 提升到 75%：`integer_sqrt(0) == 0` 抓住 `if n < 0` 的 `0 → 1` 常量变异（变异后对 0 抛 ValueError）与 `n < 2` 分支的 `return n → return None`；`integer_sqrt(3) == 1` 抓住二分初始化 `lo, hi = 1, ...` 的 `lo = 1 → 2` 常量变异（变异后 `integer_sqrt(3)` 返回 2）。
+杀伤归因：`integer_sqrt(0) == 0` 抓住 `n < 0` 的 `0 → 1` 与 `return n → None`；`integer_sqrt(2) == 1` 抓住 `n < 2` 的 `2 → 3`（变异后返回 2）；`integer_sqrt(3) == 1` 抓住 `lo = 1 → 2`（变异后二分区间坍缩返回 2）；`integer_sqrt(4) == 2` 抓住 `n // 2 + 1` 的 `+ → -`。该目标变异分数 56% → 81%。
+
+### 6.2 Mock 全网格（机制验证，90/90 格零错误）
+
+- **生成有效**：B1 相对 B0 **+7.8pp**（9 胜/9 平/0 负，p=0.0076，CI [+4.0, +11.8]）；
+- **覆盖率与检出力解耦**：Mock 冗余测试把覆盖率推高 4.3pp 却零检出增益；
+- **诚实平台期**：Mock 杀不动的语义型存活变异体被门禁全部拒绝（53 次 `falsifiable`），系统不在无法证明价值时声称价值——完整分析见 [results/exp_mock_full/analysis.md](results/exp_mock_full/analysis.md)。
 
 ## 7. 引用与依据
 
