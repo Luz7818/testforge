@@ -1,0 +1,106 @@
+{
+  "aggregate": {
+    "B0": {
+      "ms_all": 0.68201,
+      "ms_covered": 0.7239099999999999,
+      "ms_all_median": 0.70835,
+      "cov": 84.45,
+      "acc": 0.0,
+      "cost": 0
+    },
+    "B2": {
+      "ms_all": 0.8226100000000001,
+      "ms_covered": 0.85483,
+      "ms_all_median": 0.86605,
+      "cov": 92.75,
+      "acc": 0.8,
+      "cost": 0.0137
+    },
+    "B5": {
+      "ms_all": 0.8892900000000001,
+      "ms_covered": 0.8892900000000001,
+      "ms_all_median": 0.93455,
+      "cov": 98.08,
+      "acc": 1.2,
+      "cost": 0.0566
+    }
+  },
+  "RQ5": {
+    "base": "B2",
+    "treatment": "B5",
+    "pairs": [
+      {
+        "target": "containers.flatten",
+        "a": 0.6667,
+        "b": 0.3333,
+        "diff": 0.3334
+      },
+      {
+        "target": "containers.most_frequent",
+        "a": 0.7143,
+        "b": 0.7143,
+        "diff": 0.0
+      },
+      {
+        "target": "numeric.integer_sqrt",
+        "a": 0.8095,
+        "b": 0.8095,
+        "diff": 0.0
+      },
+      {
+        "target": "parsers.parse_csv_line",
+        "a": 0.9583,
+        "b": 0.9583,
+        "diff": 0.0
+      },
+      {
+        "target": "parsers.parse_kv_pairs",
+        "a": 1.0,
+        "b": 0.8571,
+        "diff": 0.14290000000000003
+      },
+      {
+        "target": "string_utils.mask_email",
+        "a": 0.9524,
+        "b": 0.7619,
+        "diff": 0.1905
+      },
+      {
+        "target": "string_utils.slugify",
+        "a": 0.875,
+        "b": 0.875,
+        "diff": 0.0
+      },
+      {
+        "target": "string_utils.truncate_with_ellipsis",
+        "a": 0.9167,
+        "b": 0.9167,
+        "diff": 0.0
+      },
+      {
+        "target": "validators.validate_port",
+        "a": 1.0,
+        "b": 1.0,
+        "diff": 0.0
+      },
+      {
+        "target": "validators.validate_username",
+        "a": 1.0,
+        "b": 1.0,
+        "diff": 0.0
+      }
+    ],
+    "mean_uplift": 0.06668,
+    "median_uplift": 0.0,
+    "wilcoxon": {
+      "n": 3,
+      "W_plus": 6.0,
+      "z": 1.604,
+      "p": 0.1088
+    },
+    "bootstrap_ci": {
+      "lo": 0.0,
+      "hi": 0.1381
+    }
+  }
+}

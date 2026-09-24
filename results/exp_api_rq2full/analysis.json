@@ -1,0 +1,154 @@
+{
+  "aggregate": {
+    "B0": {
+      "ms_all": 0.7722611111111112,
+      "ms_covered": 0.8000833333333334,
+      "ms_all_median": 0.78095,
+      "cov": 83.13333333333334,
+      "acc": 0.0,
+      "cost": 0
+    },
+    "B2": {
+      "ms_all": 0.8916444444444446,
+      "ms_covered": 0.9095444444444445,
+      "ms_all_median": 0.97915,
+      "cov": 92.24444444444445,
+      "acc": 0.7222222222222222,
+      "cost": 0.0233
+    },
+    "B5": {
+      "ms_all": 0.9384944444444445,
+      "ms_covered": 0.9384944444444445,
+      "ms_all_median": 1.0,
+      "cov": 95.20555555555556,
+      "acc": 1.0,
+      "cost": 0.069
+    }
+  },
+  "RQ5": {
+    "base": "B2",
+    "treatment": "B5",
+    "pairs": [
+      {
+        "target": "containers.chunk",
+        "a": 1.0,
+        "b": 1.0,
+        "diff": 0.0
+      },
+      {
+        "target": "containers.flatten",
+        "a": 0.6667,
+        "b": 0.3333,
+        "diff": 0.3334
+      },
+      {
+        "target": "containers.most_frequent",
+        "a": 0.7143,
+        "b": 0.7143,
+        "diff": 0.0
+      },
+      {
+        "target": "date_utils.age_in_days",
+        "a": 1.0,
+        "b": 1.0,
+        "diff": 0.0
+      },
+      {
+        "target": "date_utils.days_in_month",
+        "a": 1.0,
+        "b": 1.0,
+        "diff": 0.0
+      },
+      {
+        "target": "date_utils.is_leap_year",
+        "a": 1.0,
+        "b": 0.8235,
+        "diff": 0.1765
+      },
+      {
+        "target": "numeric.clamp",
+        "a": 1.0,
+        "b": 1.0,
+        "diff": 0.0
+      },
+      {
+        "target": "numeric.integer_sqrt",
+        "a": 0.8095,
+        "b": 0.8095,
+        "diff": 0.0
+      },
+      {
+        "target": "numeric.moving_average",
+        "a": 1.0,
+        "b": 1.0,
+        "diff": 0.0
+      },
+      {
+        "target": "parsers.parse_csv_line",
+        "a": 0.9583,
+        "b": 0.9583,
+        "diff": 0.0
+      },
+      {
+        "target": "parsers.parse_kv_pairs",
+        "a": 1.0,
+        "b": 0.8571,
+        "diff": 0.14290000000000003
+      },
+      {
+        "target": "parsers.parse_version",
+        "a": 1.0,
+        "b": 1.0,
+        "diff": 0.0
+      },
+      {
+        "target": "string_utils.mask_email",
+        "a": 0.9524,
+        "b": 0.7619,
+        "diff": 0.1905
+      },
+      {
+        "target": "string_utils.slugify",
+        "a": 0.875,
+        "b": 0.875,
+        "diff": 0.0
+      },
+      {
+        "target": "string_utils.truncate_with_ellipsis",
+        "a": 0.9167,
+        "b": 0.9167,
+        "diff": 0.0
+      },
+      {
+        "target": "validators.normalize_hex_color",
+        "a": 1.0,
+        "b": 1.0,
+        "diff": 0.0
+      },
+      {
+        "target": "validators.validate_port",
+        "a": 1.0,
+        "b": 1.0,
+        "diff": 0.0
+      },
+      {
+        "target": "validators.validate_username",
+        "a": 1.0,
+        "b": 1.0,
+        "diff": 0.0
+      }
+    ],
+    "mean_uplift": 0.046849999999999996,
+    "median_uplift": 0.0,
+    "wilcoxon": {
+      "n": 4,
+      "W_plus": 10.0,
+      "z": 1.826,
+      "p": 0.0679
+    },
+    "bootstrap_ci": {
+      "lo": 0.0098,
+      "hi": 0.0945
+    }
+  }
+}
