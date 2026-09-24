@@ -61,6 +61,16 @@ def main() -> None:
         import json
 
         rows = json.loads(results_path.read_text(encoding="utf-8"))
+        failed = [r for r in rows if "error" in r]
+        if failed:
+            # An errored cell is not done. Archive its record outside
+            # results.json, then let it be regenerated on this pass.
+            err_path = out_dir / "errors.json"
+            archived = json.loads(err_path.read_text(encoding="utf-8")) if err_path.exists() else []
+            write_json(err_path, archived + failed)
+            rows = [r for r in rows if "error" not in r]
+            write_json(results_path, rows)
+            print(f"retrying {len(failed)} errored cell(s); error rows archived in {err_path}")
     done = {(r["target_id"], r["variant"]) for r in rows}
 
     total_cells = len(specs) * len(vnames)
@@ -80,9 +90,10 @@ def main() -> None:
             base = VARIANTS[vname]
             variant = VariantSpec(
                 name=base.name,
-                rounds=args.rounds if vname in ("B3", "B4") else base.rounds,
+                rounds=args.rounds if vname in ("B3", "B4", "B5") else base.rounds,
                 gate_enabled=base.gate_enabled,
                 feedback_mode=base.feedback_mode,
+                continue_on_zero_accept=base.continue_on_zero_accept,
             )
 
             t0 = time.perf_counter()

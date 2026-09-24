@@ -25,6 +25,7 @@ RQ_MAP = {
     "RQ2": ("B1", "B3", "Does the mutation-feedback loop add fault detection over single-shot generation, and at what cost?"),
     "RQ3": ("B1", "B2", "What does the quality gate contribute on its own (reliability vs raw generation)?"),
     "RQ4": ("B3", "B4", "Ablation: mutant-survivor feedback vs coverage-gap feedback."),
+    "RQ5": ("B2", "B5", "Does spending the feedback-round budget after zero-acceptance rounds recover surviving mutants?"),
 }
 
 

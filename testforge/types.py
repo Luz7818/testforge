@@ -104,6 +104,10 @@ class VariantSpec:
     rounds: int
     gate_enabled: bool
     feedback_mode: str             # mutants | coverage | none
+    # B3 stops as soon as a round accepts nothing. B5 keeps feeding survivors
+    # back until the round budget is spent, which isolates how often the loop
+    # would fire if early exit were not suppressing it.
+    continue_on_zero_accept: bool = False
 
 
 @dataclass

@@ -31,3 +31,28 @@ def test_b3_full_pipeline_improves_or_maintains_ms():
     assert b3.n_generated > 0
     assert b3.ms_all >= b0.ms_all
     assert ledger.n_calls >= 1
+
+
+def test_b5_spends_its_round_budget_when_nothing_is_accepted():
+    """B3 exits on a zero-acceptance round; B5 keeps re-injecting survivors."""
+    from testforge.llm.client import LLMResponse
+
+    class _NoCandidateClient:
+        def generate(self, system, prompt, purpose=""):
+            return LLMResponse(text="nothing usable here")
+
+    cfg = ForgeConfig.from_env(mode="mock")
+    cfg.max_mutants = 16  # B0 leaves exactly one survivor on this target
+    cfg.flaky_runs = 1
+    cfg.test_timeout_sec = 10.0
+    cfg.workers = 2
+    spec = [s for s in load_targets() if s.target_id == "parsers.parse_csv_line"][0]
+
+    def run(name):
+        agent = ForgeAgent(cfg, _NoCandidateClient(), CostLedger(model=cfg.model))
+        return agent.run_target(spec, VARIANTS[name])
+
+    b3, b5 = run("B3"), run("B5")
+    assert b3.n_generated == b5.n_generated == 0
+    assert b3.rounds_used == 1
+    assert b5.rounds_used == VARIANTS["B5"].rounds

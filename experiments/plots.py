@@ -17,8 +17,8 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
-VARIANT_ORDER = ["B0", "B1", "B2", "B3", "B4"]
-COLORS = {"B0": "#9aa0a6", "B1": "#d9776b", "B2": "#e2b93b", "B3": "#4c8f5c", "B4": "#5b8db8"}
+VARIANT_ORDER = ["B0", "B1", "B2", "B3", "B4", "B5"]
+COLORS = {"B0": "#9aa0a6", "B1": "#d9776b", "B2": "#e2b93b", "B3": "#4c8f5c", "B4": "#5b8db8", "B5": "#7e57c2"}
 
 
 def load(exp_dir: Path) -> list[dict]:

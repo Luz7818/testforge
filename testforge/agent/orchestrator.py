@@ -241,7 +241,7 @@ class ForgeAgent:
                         {"cid": cand.cid, "accepted": False, "reasons": verdict.reject_reasons}
                     )
 
-            if accepted_this_round == 0:
+            if accepted_this_round == 0 and not variant.continue_on_zero_accept:
                 break
 
         # -- 4. final joint evaluation (shared across variants) ------------

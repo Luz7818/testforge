@@ -122,7 +122,7 @@ def main(argv=None) -> None:
     p_run.add_argument("--function", help="function name to test")
     p_run.add_argument("--tests", help="optional path to the existing pytest file for this module (baseline B0)")
     p_run.add_argument("--all", action="store_true", help="run every benchmark target")
-    p_run.add_argument("--variant", default="B3", help="B0 | B1 | B2 | B3 | B4")
+    p_run.add_argument("--variant", default="B3", help="B0 | B1 | B2 | B3 | B4 | B5")
     p_run.add_argument("--mode", default="mock", choices=["mock", "api"])
     p_run.add_argument("--rounds", type=int, default=None, help="override max feedback rounds")
     p_run.add_argument("--candidates", type=int, default=None, help="override candidates per round")

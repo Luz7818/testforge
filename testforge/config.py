@@ -75,6 +75,13 @@ class ForgeConfig:
         cfg.model = os.environ.get("TESTFORGE_MODEL", cfg.model)
         cfg.api_base = os.environ.get("TESTFORGE_API_BASE", cfg.api_base)
         cfg.extra_body = os.environ.get("TESTFORGE_EXTRA_BODY", "")
+        mt = os.environ.get("TESTFORGE_MAX_TOKENS")
+        if mt:
+            cfg.max_tokens = int(mt)
+        # Point at a different directory to force fresh LLM samples: an
+        # unchanged cache replays responses bit-for-bit, which is exactly what
+        # a replication run must avoid.
+        cfg.cache_dir = os.environ.get("TESTFORGE_CACHE_DIR", "")
         if mode == "api" and not cfg.api_key:
             raise SystemExit(
                 "mode=api requires DEEPSEEK_API_KEY (any non-empty string for "

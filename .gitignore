@@ -11,5 +11,6 @@ results/**
 !results/exp_*/analysis.md
 !results/exp_*/analysis.json
 !results/exp_*/summary.md
+!results/exp_*/compare.md
 !results/exp_*/plots/
 !results/exp_*/plots/*.png
