@@ -30,7 +30,7 @@ from pathlib import Path
 
 from ..config import ForgeConfig
 
-CANDIDATE_MARKER = re.compile(r"^# ==== CANDIDATE \d+ ====\s*$", re.M)
+CANDIDATE_MARKER = re.compile(r"^# ==== CANDIDATE \d+ ====\s*$", re.MULTILINE)
 
 SYSTEM_PROMPT = (
     "You are a meticulous Python test engineer. You write pytest unit tests "
@@ -42,7 +42,7 @@ SYSTEM_PROMPT = (
 
 # Reasoning models (Qwen3 etc.) may emit a thinking block before the answer;
 # it must be stripped before the candidate-marker parsing.
-_THINK_RE = re.compile(r"<think>.*?</think>\s*", re.S)
+_THINK_RE = re.compile(r"<think>.*?</think>\s*", re.DOTALL)
 
 
 def strip_think(text: str) -> str:
@@ -193,12 +193,12 @@ class MockLLMClient:
     # -- prompt parsing ----------------------------------------------------
     @staticmethod
     def _block(prompt: str, name: str) -> str:
-        m = re.search(rf"^=== {name} ===\s*\n(.*?)(?=^=== |\Z)", prompt, re.S | re.M)
+        m = re.search(rf"^=== {name} ===\s*\n(.*?)(?=^=== |\Z)", prompt, re.DOTALL | re.MULTILINE)
         return m.group(1).rstrip("\n") if m else ""
 
     @staticmethod
     def _scalar(prompt: str, name: str, default: int) -> int:
-        m = re.search(rf"^=== {name} ===\s*\n(\d+)", prompt, re.M)
+        m = re.search(rf"^=== {name} ===\s*\n(\d+)", prompt, re.MULTILINE)
         return int(m.group(1)) if m else default
 
     # -- input synthesis ---------------------------------------------------
@@ -276,7 +276,7 @@ class MockLLMClient:
     # -- helpers -------------------------------------------------------------
     @staticmethod
     def _parse_params(sig_line: str) -> list[dict]:
-        m = re.search(r"def \w+\((.*?)\)", sig_line, re.S)
+        m = re.search(r"def \w+\((.*?)\)", sig_line, re.DOTALL)
         if not m:
             return []
         raw = m.group(1).strip()

@@ -30,9 +30,22 @@ from pathlib import Path
 
 from ..analysis import inspect_target
 from ..config import ForgeConfig
-from ..gate import GatePolicy, coverage_pct, evaluate_candidate, measure_coverage, run_tests_once
+from ..gate import (
+    GatePolicy,
+    coverage_pct,
+    evaluate_candidate,
+    measure_coverage,
+    run_tests_once,
+)
 from ..mutation import evaluate_mutants, generate_mutants
-from ..types import Candidate, CostLedger, Outcome, TargetSpec, VariantResult, VariantSpec
+from ..types import (
+    Candidate,
+    CostLedger,
+    Outcome,
+    TargetSpec,
+    VariantResult,
+    VariantSpec,
+)
 from . import prompts
 
 
@@ -332,8 +345,7 @@ class ForgeAgent:
         # strip a possible markdown fence
         if text.startswith("```"):
             text = text.strip("`")
-            if text.startswith("python"):
-                text = text[len("python") :]
+            text = text.removeprefix("python")
         if _parses(text):
             return text, True
         return None, True

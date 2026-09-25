@@ -1,4 +1,6 @@
 """Tests for config extra-body handling and reasoning-output stripping."""
+import json
+
 import pytest
 
 from testforge.config import ForgeConfig
@@ -20,7 +22,7 @@ def test_extra_body_rejects_non_object():
 
 
 def test_extra_body_invalid_json_raises():
-    with pytest.raises(Exception):
+    with pytest.raises(json.JSONDecodeError):
         ForgeConfig(extra_body="{not json").extra_body_dict()
 
 

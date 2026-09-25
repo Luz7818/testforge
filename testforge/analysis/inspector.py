@@ -9,6 +9,7 @@ function only).
 from __future__ import annotations
 
 import ast
+from pathlib import Path
 
 from ..types import TargetInfo, TargetSpec
 
@@ -58,7 +59,7 @@ def _signature_line(node: ast.FunctionDef) -> str:
 
 
 def inspect_target(spec: TargetSpec) -> TargetInfo:
-    source = open(spec.module_path, encoding="utf-8").read()
+    source = Path(spec.module_path).read_text(encoding="utf-8")
     tree = ast.parse(source)
     node = None
     for child in ast.walk(tree):

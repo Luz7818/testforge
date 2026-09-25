@@ -68,7 +68,7 @@ class ForgeConfig:
     cache_dir: str = ""  # empty -> <project>/llm_cache when mode == "api"
 
     @classmethod
-    def from_env(cls, mode: str | None = None) -> "ForgeConfig":
+    def from_env(cls, mode: str | None = None) -> ForgeConfig:
         mode = mode or os.environ.get("TESTFORGE_MODE", "mock")
         cfg = cls(mode=mode)
         cfg.api_key = os.environ.get("DEEPSEEK_API_KEY")

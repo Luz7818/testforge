@@ -5,8 +5,7 @@ import sys
 import tempfile
 from pathlib import Path
 
-from testforge.llm.client import MockLLMClient
-from testforge.llm.client import split_candidates
+from testforge.llm.client import MockLLMClient, split_candidates
 
 MODULE = '''\
 def add(a: int, b: int) -> int:

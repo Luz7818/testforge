@@ -8,6 +8,8 @@ failed to catch, as minimal before/after diffs.
 
 from __future__ import annotations
 
+from pathlib import Path
+
 from ..types import Mutant, TargetInfo
 
 _TASK_RULES = """Requirements:
@@ -49,7 +51,7 @@ def build_initial_prompt(info: TargetInfo, module_name: str, k: int) -> str:
     existing = "(no existing tests)"
     if info.spec.existing_test_path:
         try:
-            existing = open(info.spec.existing_test_path, encoding="utf-8").read()
+            existing = Path(info.spec.existing_test_path).read_text(encoding="utf-8")
         except OSError:
             existing = "(no existing tests)"
     return (

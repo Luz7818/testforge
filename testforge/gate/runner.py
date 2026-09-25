@@ -6,9 +6,9 @@ from __future__ import annotations
 
 import json
 
+from ..mutation.runner import classify_rc
 from ..types import Outcome
 from ..utils import run_cmd, workspace
-from ..mutation.runner import classify_rc
 
 _COVERAGE_TIMEOUT = 60.0
 

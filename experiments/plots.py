@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import sys
 from pathlib import Path
 
@@ -122,7 +123,7 @@ def ms_heatmap(rows: list[dict], out: Path, label: str = "mock grid") -> None:
     for i in range(len(targets)):
         for j in range(len(variants)):
             v = data[i][j]
-            if v == v:  # skip NaN
+            if not math.isnan(v):
                 ax.text(
                     j, i, f"{v:.0%}",
                     ha="center", va="center", fontsize=8,

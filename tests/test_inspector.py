@@ -13,7 +13,7 @@ def test_all_manifest_targets_resolve():
 
 
 def test_signature_includes_annotations():
-    spec = [s for s in load_targets() if s.target_id == "numeric.clamp"][0]
+    spec = next(s for s in load_targets() if s.target_id == "numeric.clamp")
     info = inspect_target(spec)
     assert "low: float" in info.signature
     assert "-> float" in info.signature
@@ -21,6 +21,6 @@ def test_signature_includes_annotations():
 
 
 def test_docstring_extracted():
-    spec = [s for s in load_targets() if s.target_id == "string_utils.slugify"][0]
+    spec = next(s for s in load_targets() if s.target_id == "string_utils.slugify")
     info = inspect_target(spec)
     assert "URL slug" in (info.docstring or "")

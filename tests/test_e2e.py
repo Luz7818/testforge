@@ -22,7 +22,7 @@ def _run(spec, variant_name):
 
 
 def test_b3_full_pipeline_improves_or_maintains_ms():
-    spec = [s for s in load_targets() if s.target_id == "string_utils.truncate_with_ellipsis"][0]
+    spec = next(s for s in load_targets() if s.target_id == "string_utils.truncate_with_ellipsis")
     b0, _ = _run(spec, "B0")
     b3, ledger = _run(spec, "B3")
     # the loop ran, the final suite passes, and mutation score did not drop
@@ -46,7 +46,7 @@ def test_b5_spends_its_round_budget_when_nothing_is_accepted():
     cfg.flaky_runs = 1
     cfg.test_timeout_sec = 10.0
     cfg.workers = 2
-    spec = [s for s in load_targets() if s.target_id == "parsers.parse_csv_line"][0]
+    spec = next(s for s in load_targets() if s.target_id == "parsers.parse_csv_line")
 
     def run(name):
         agent = ForgeAgent(cfg, _NoCandidateClient(), CostLedger(model=cfg.model))
