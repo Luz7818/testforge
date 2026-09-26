@@ -1,0 +1,12 @@
+# 本仓库特有的产物目录：不要求板块说明，也不参与链接与禁用词扫描。
+# 检查脚本内置已跳过 .venv、__pycache__、.pytest_cache、.ruff_cache、docs、build、dist 等。
+# 每行一个相对仓库根的路径，结尾斜杠可有可无。
+
+# 实验产物：跑一次就变，只有 exp_* 的 JSON/MD/PNG 进版本库（见 .gitignore 白名单）
+results/
+
+# LLM prompt 缓存：文件名是 prompt 的 sha256，内容是从端点重放回来的响应
+llm_cache/
+
+# 兜底：本机 Python 直接写在根上的字节码缓存目录（检查脚本也内置跳过它）
+__pycache__
