@@ -1,10 +1,53 @@
-"""Run configuration, loaded from defaults + environment variables."""
+"""Run configuration, loaded from defaults + a local .env + environment variables."""
 
 from __future__ import annotations
 
 import json
 import os
 from dataclasses import dataclass, field
+from pathlib import Path
+
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+ENV_FILE = PROJECT_ROOT / ".env"
+
+
+def _load_dotenv(env_file: Path | None = None) -> int:
+    """Seed ``os.environ`` from a local ``.env``, without overriding what is
+    already set. Returns the number of variables actually applied.
+
+    Zero dependencies, and deliberately the same format and precedence as the
+    other projects in this workspace: ``KEY=VALUE`` per line, ``#`` for whole-line
+    comments, surrounding whitespace and one layer of matching quotes stripped.
+    Inline comments are *not* stripped because a value may legitimately contain
+    ``#``; keep comments on their own line.
+
+    Precedence is shell export > .env > dataclass default, so an exported key
+    always wins and ``.env`` only fills gaps. A missing file is not an error:
+    CI runs with no ``.env`` at all and the mock backend needs no key.
+    """
+    path = ENV_FILE if env_file is None else env_file
+    try:
+        text = path.read_text(encoding="utf-8")
+    except OSError:
+        return 0
+    applied = 0
+    for raw in text.splitlines():
+        line = raw.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        key, _, value = line.partition("=")
+        key = key.strip()
+        value = value.strip()
+        if len(value) >= 2 and value[0] == value[-1] and value[0] in "\"'":
+            value = value[1:-1].strip()
+        if not key or key in os.environ:
+            continue
+        os.environ[key] = value
+        applied += 1
+    return applied
+
+
+_load_dotenv()
 
 
 def _default_workers() -> int:

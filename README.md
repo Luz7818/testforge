@@ -234,7 +234,7 @@ Mock 后端是捕获-重放式特征化测试生成器：执行目标函数并�
 
 **重复运行实验会得到相同结果吗？** prompt 缓存（`llm_cache/`）命中时逐位一致——这可用于验证评估管线的确定性；清除缓存后重新运行 `--mode api`，真实 LLM 后端将产生独立采样的新网格，而 Mock 后端因种子化设计始终一致。
 
-**如何接入新的 LLM 服务？** 任意 OpenAI 兼容端点只需 `.env` 中四个变量（见 `.env.example`）；`TESTFORGE_EXTRA_BODY` 可透传服务端专属参数（如 Qwen3 的 `enable_thinking`）。
+**如何接入新的 LLM 服务？** 任意 OpenAI 兼容端点只需 `.env` 中四个变量（见 `.env.example`）；仓库根目录的 `.env` 在导入 `testforge.config` 时自动加载，优先级为 shell 导出 > `.env` > `config.py` 默认值。`TESTFORGE_EXTRA_BODY` 可透传服务端专属参数（如 Qwen3 的 `enable_thinking`）。
 
 ## 8. 目录结构
 
