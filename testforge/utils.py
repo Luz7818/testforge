@@ -88,7 +88,3 @@ def write_json(path: Path, data) -> None:
         json.dumps(data, ensure_ascii=False, indent=2, default=str),
         encoding="utf-8",
     )
-
-
-def read_json(path: Path):
-    return json.loads(path.read_text(encoding="utf-8"))
