@@ -7,6 +7,34 @@
 本包不依赖任何服务，也不写数据库：所有中间产物是临时目录里的一次性文件，只有 `--out` 指定的
 JSON/Markdown 和 `llm_cache/` 里的 prompt 缓存会留在磁盘上。
 
+## 文件清单
+
+顶层 `.py` 共 7 个（复核，在仓库根：`ls testforge/*.py | wc -l`）。这张表只是索引，
+每个文件的行为细节与坑见下面「顶层文件」一节。
+
+| 文件 | 干什么 | 备注 |
+|---|---|---|
+| `__init__.py` | 包 docstring + `__version__ = "0.1.0"` | `--version` 打印 `testforge 0.1.0`（复核：`.venv/Scripts/python.exe -m testforge.cli --version`） |
+| `cli.py` | argparse 入口，三个子命令 `targets` / `run` / `report` | 参数表见 `.venv/Scripts/python.exe -m testforge.cli --help` |
+| `config.py` | `ForgeConfig`：全部旋钮的唯一出处 + 零依赖 `.env` 读取 | `_load_dotenv()` 在模块顶层被调用，先于任何 `from_env()` |
+| `variants.py` | `VARIANTS` 字典（B0–B5 六个实验条件）+ `get_variant()` | 未知名字抛 `SystemExit` 并列出全部合法值 |
+| `types.py` | 10 个共享数据结构（`Outcome` … `CostLedger`，复核：`grep -cE "^class " testforge/types.py`） | 被全部子包读取，改它等于改契约 |
+| `benchmarks.py` | 读 `benchmarks/manifest.json` 拼出 18 个 `TargetSpec` | `load_targets()` / `get_target()` / `result_to_dict()` |
+| `utils.py` | `workspace()` 临时工作区、`run_cmd()` 子进程、`mini_diff()`、`write_json()` | `run_cmd()` 超时返回 -9，被杀伤矩阵与门禁共用 |
+
+## 子目录
+
+| 子目录 | 负责 |
+|---|---|
+| `agent/` | 回路编排与 prompt：`ForgeAgent.run_target()` 串基线 → 变异 → 生成/门禁/反馈 → 联合评估；`prompts.py` 的三个 builder 用 `=== BLOCK ===` 分节 |
+| `analysis/` | 目标函数静态解析：`inspect_target()` 给出签名、docstring、参数表、源码与起止行号 |
+| `gate/` | 验收判定与原代码执行：`evaluate_candidate()`、`run_tests_once()`、`measure_coverage()`、`coverage_pct()` |
+| `llm/` | 两个可换后端：`OpenAICompatClient`（磁盘缓存/重试/记账）与 `MockLLMClient`（离线确定性），`make_client()` 按 `cfg.mode` 路由 |
+| `mutation/` | 变异体生成与杀伤矩阵：`find_mutation_candidates()`（7 类算子）→ `generate_mutants()`（拼接/分层采样/编号）→ `evaluate_mutants()`（进程池 + `pytest -x`） |
+| `report/` | Markdown 渲染：`render_target_report()` 单目标报告、`render_summary()` 多目标汇总 |
+
+各子包逐文件的细节见下面同名分节（`## agent/` 至 `## report/`）。
+
 ## 顶层文件
 
 | 文件 | 干什么 | 备注 |

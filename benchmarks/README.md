@@ -29,6 +29,17 @@ benchmarks/
 
 一个模块的 B0 会同时用于该模块下的三个目标函数，所以“既有套件”在同一模块的三个目标之间是同一份。
 
+## 子目录
+
+| 子目录 | 负责 |
+|---|---|
+| `targets/` | 被测源码本体，6 个模块 × 每模块 3 个函数，共 18 个目标函数（复核，在仓库根：`.venv/Scripts/python.exe -m testforge.cli targets \| wc -l` 输出 18） |
+| `existing_tests/` | B0 基线测试，一个模块一份 `test_<模块>.py`，共 6 个文件、34 个测试函数（复核，在仓库根：`ls benchmarks/existing_tests/*.py \| wc -l` 与 `grep -c "^def test_" benchmarks/existing_tests/*.py`） |
+
+**`manifest.json` 是目标清单的唯一来源**：函数要被测必须在它里面登记一条 `{id, module, function}`，
+只往 `targets/*.py` 里加函数不会进任何网格；B0 文件路径也不写在 manifest 里，而是由
+`testforge/benchmarks.py` 按 `existing_tests/test_{module}.py` 的命名约定拼出来。
+
 ## 每个函数能注入多少变异体
 
 不做采样上限时的全量候选数（复核：`.venv/Scripts/python.exe -c "from testforge.benchmarks import load_targets; from testforge.analysis import inspect_target; from testforge.mutation import generate_mutants; [print(s.target_id, len(generate_mutants(inspect_target(s).module_source, s.function_name, max_mutants=10**6))) for s in load_targets()]"`）：
@@ -72,6 +83,10 @@ benchmarks/
 
 ## 别动
 
+- `existing_tests/test_*.py` 不被 `testforge/` import、也不被本仓库 pytest 收集（`testpaths = ["tests"]`），
+  静态引用扫描会误判这 6 个文件没人用；它们是 B0 对照组，删掉就没有“相对既有套件提升多少”可算。
+- 在仓库根跑 `.venv/Scripts/python.exe -m pytest benchmarks/existing_tests` 报 6 个收集错误属正常：
+  文件里 `from numeric import ...` 这种裸导入只在临时工作目录（模块与测试文件同级）才成立。
 - 不要让 `targets/*.py` 与 `existing_tests/test_*.py` 的模块名不一致：路径是按
   `test_{module}.py` 拼出来的，拼错时 B0 会读成 `# no existing tests`，基线悄悄变成空集。
 - 不要往函数里加随机、时钟、网络或文件 IO：门禁要在原代码上连跑 5 次，非确定的函数会被判成 flaky。

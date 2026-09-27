@@ -49,6 +49,26 @@
    `testforge/agent/prompts.py` 里写出来的保持一致。
 4. 验证：`.venv/Scripts/python.exe -m pytest`，然后确认总数变化写进了仓库根 `AGENTS.md` 的状态表。
 
+## 和谁打交道
+
+- **上游**：被测的就两样——`testforge/**`（9 个文件从各文件顶部直接 `import`）与 `benchmarks/`
+  （经 `test_inspector.py` 与 `test_e2e.py` 的回路间接覆盖）。第三方只有 pytest，全套件离线。
+  复核（在仓库根，无输出即没有任何网络引用；`--include` 不能省，否则这条命令会匹配到本说明自己）：
+  `grep -rEn "requests|urllib|http" tests --include='*.py'`。
+- **下游**：本套件是全仓库唯一的自动化门禁——CI 在 push/PR 时跑 `python -m pytest tests/ -q`
+  （见 `.github/workflows/ci.yml`），仓库根 `AGENTS.md` 的「49 个测试」也取自这里的收集数。
+- **改这里之后要跑**（全部在仓库根执行）：
+  - 改 `testforge/gate/**` → `.venv/Scripts/python.exe -m pytest tests/test_gate.py`（5 项）
+  - 改 `testforge/mutation/**` → `.venv/Scripts/python.exe -m pytest tests/test_operators.py tests/test_engine.py tests/test_matrix.py`（17 项）
+  - 改 `testforge/agent/**` 或 `testforge/llm/**` → `.venv/Scripts/python.exe -m pytest tests/test_e2e.py tests/test_mock_client.py`（5 项）
+  - 改 `testforge/config.py` → `.venv/Scripts/python.exe -m pytest tests/test_dotenv.py tests/test_config_client.py`（19 项）
+  - 改 `testforge/**` 其余文件或不确定波及面 → 全量 `.venv/Scripts/python.exe -m pytest`（49 项，
+    通过数与耗时看末行；别在命令尾再加 `-q`，会成 `-qq` 吞掉数字行）
+
+改 `benchmarks/`（增删目标函数）会让 `test_inspector.py::test_all_manifest_targets_resolve` 当场失败，
+它的断言是 `len(specs) == 18`。这是有意的登记闸门，与 `benchmarks/README.md`「加一个目标函数」
+第 4 步配对：动基准必须同步改这条断言，才能保证各文档与已发表网格的「18 个目标」口径一起更新。
+
 ## 别动
 
 - `test_dotenv.py` 的 `clean_env` fixture 是自动生效的，它清掉 7 个被管理的环境变量，
