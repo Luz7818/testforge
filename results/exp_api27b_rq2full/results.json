@@ -4789,5 +4789,3915 @@
       "cost_usd": null,
       "price_source": ""
     }
+  },
+  {
+    "target_id": "containers.flatten",
+    "variant": "B5",
+    "mutants_total": 6,
+    "killed_final": 2,
+    "mutants_covered": 6,
+    "killed_covered": 2,
+    "b0_killed_final": 2,
+    "n_generated": 16,
+    "n_accepted": 0,
+    "n_repaired": 9,
+    "rejection_reasons": {
+      "failing_on_original": 13,
+      "syntax_error": 3
+    },
+    "flaky_rejects": 0,
+    "rounds_used": 4,
+    "n_final_tests": 0,
+    "final_suite_passes": true,
+    "coverage_pct": 88.9,
+    "b0_coverage_pct": 88.9,
+    "llm_calls": 4,
+    "tokens_in": 4710,
+    "tokens_out": 14574,
+    "cost_usd": null,
+    "price_source": "",
+    "wall_sec": 534.1,
+    "accepted_codes": [],
+    "mutant_summary": [
+      {
+        "mid": "M001",
+        "operator": "CRN",
+        "line": 4,
+        "description": "CRN @ line 4: numeric 8 -> 9",
+        "killed_by_b0": false,
+        "killed_by_final": false,
+        "covered": true
+      },
+      {
+        "mid": "M002",
+        "operator": "ROR",
+        "line": 14,
+        "description": "ROR @ line 14: relational operator LtE -> Gt",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M003",
+        "operator": "CRN",
+        "line": 14,
+        "description": "CRN @ line 14: numeric 0 -> 1",
+        "killed_by_b0": false,
+        "killed_by_final": false,
+        "covered": true
+      },
+      {
+        "mid": "M004",
+        "operator": "AOR",
+        "line": 16,
+        "description": "AOR @ line 16: arithmetic operator Sub -> Add",
+        "killed_by_b0": false,
+        "killed_by_final": false,
+        "covered": true
+      },
+      {
+        "mid": "M005",
+        "operator": "CRN",
+        "line": 16,
+        "description": "CRN @ line 16: numeric 1 -> 2",
+        "killed_by_b0": false,
+        "killed_by_final": false,
+        "covered": true
+      },
+      {
+        "mid": "M006",
+        "operator": "RTN",
+        "line": 19,
+        "description": "RTN @ line 19: return value -> None",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      }
+    ],
+    "gate_log": [
+      {
+        "cid": "R0C1",
+        "accepted": false,
+        "reason": "correctness",
+        "runs": [
+          "fail"
+        ]
+      },
+      {
+        "cid": "R0C2",
+        "accepted": false,
+        "reason": "correctness",
+        "runs": [
+          "fail"
+        ]
+      },
+      {
+        "cid": "R0C3",
+        "accepted": false,
+        "reason": "correctness",
+        "runs": [
+          "fail"
+        ]
+      },
+      {
+        "cid": "R0C4",
+        "accepted": false,
+        "reason": "correctness",
+        "runs": [
+          "fail"
+        ]
+      },
+      {
+        "cid": "R1C2",
+        "accepted": false,
+        "reason": "correctness",
+        "runs": [
+          "fail"
+        ]
+      },
+      {
+        "cid": "R2C1",
+        "accepted": false,
+        "reason": "correctness",
+        "runs": [
+          "fail"
+        ]
+      },
+      {
+        "cid": "R2C2",
+        "accepted": false,
+        "reason": "correctness",
+        "runs": [
+          "fail"
+        ]
+      },
+      {
+        "cid": "R2C3",
+        "accepted": false,
+        "reason": "correctness",
+        "runs": [
+          "fail"
+        ]
+      },
+      {
+        "cid": "R2C4",
+        "accepted": false,
+        "reason": "correctness",
+        "runs": [
+          "fail"
+        ]
+      },
+      {
+        "cid": "R3C1",
+        "accepted": false,
+        "reason": "correctness",
+        "runs": [
+          "fail"
+        ]
+      },
+      {
+        "cid": "R3C2",
+        "accepted": false,
+        "reason": "correctness",
+        "runs": [
+          "fail"
+        ]
+      },
+      {
+        "cid": "R3C3",
+        "accepted": false,
+        "reason": "correctness",
+        "runs": [
+          "fail"
+        ]
+      },
+      {
+        "cid": "R3C4",
+        "accepted": false,
+        "reason": "correctness",
+        "runs": [
+          "fail"
+        ]
+      }
+    ],
+    "ms_all": 0.3333,
+    "ms_covered": 0.3333,
+    "cost": {
+      "model": "qwen3.8-27b",
+      "calls": 4,
+      "tokens_in": 4710,
+      "tokens_out": 14574,
+      "cost_usd": null,
+      "price_source": ""
+    }
+  },
+  {
+    "target_id": "containers.chunk",
+    "variant": "B0",
+    "mutants_total": 5,
+    "killed_final": 4,
+    "mutants_covered": 5,
+    "killed_covered": 4,
+    "b0_killed_final": 4,
+    "n_generated": 0,
+    "n_accepted": 0,
+    "n_repaired": 0,
+    "rejection_reasons": {},
+    "flaky_rejects": 0,
+    "rounds_used": 0,
+    "n_final_tests": 0,
+    "final_suite_passes": true,
+    "coverage_pct": 75.0,
+    "b0_coverage_pct": 75.0,
+    "llm_calls": 0,
+    "tokens_in": 0,
+    "tokens_out": 0,
+    "cost_usd": null,
+    "price_source": "",
+    "wall_sec": 12.5,
+    "accepted_codes": [],
+    "mutant_summary": [
+      {
+        "mid": "M001",
+        "operator": "ROR",
+        "line": 27,
+        "description": "ROR @ line 27: relational operator Lt -> GtE",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M002",
+        "operator": "CRN",
+        "line": 27,
+        "description": "CRN @ line 27: numeric 1 -> 2",
+        "killed_by_b0": false,
+        "killed_by_final": false,
+        "covered": true
+      },
+      {
+        "mid": "M003",
+        "operator": "RTN",
+        "line": 29,
+        "description": "RTN @ line 29: return value -> None",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M004",
+        "operator": "AOR",
+        "line": 29,
+        "description": "AOR @ line 29: arithmetic operator Add -> Sub",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M005",
+        "operator": "CRN",
+        "line": 29,
+        "description": "CRN @ line 29: numeric 0 -> 1",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      }
+    ],
+    "gate_log": [],
+    "ms_all": 0.8,
+    "ms_covered": 0.8,
+    "cost": {
+      "model": "qwen3.8-27b",
+      "calls": 0,
+      "tokens_in": 0,
+      "tokens_out": 0,
+      "cost_usd": null,
+      "price_source": ""
+    }
+  },
+  {
+    "target_id": "containers.chunk",
+    "variant": "B2",
+    "mutants_total": 5,
+    "killed_final": 5,
+    "mutants_covered": 5,
+    "killed_covered": 5,
+    "b0_killed_final": 4,
+    "n_generated": 4,
+    "n_accepted": 1,
+    "n_repaired": 0,
+    "rejection_reasons": {
+      "failing_on_original": 1,
+      "falsifiable": 2
+    },
+    "flaky_rejects": 0,
+    "rounds_used": 1,
+    "n_final_tests": 1,
+    "final_suite_passes": true,
+    "coverage_pct": 100.0,
+    "b0_coverage_pct": 75.0,
+    "llm_calls": 1,
+    "tokens_in": 1121,
+    "tokens_out": 1485,
+    "cost_usd": null,
+    "price_source": "",
+    "wall_sec": 62.1,
+    "accepted_codes": [
+      "import pytest\n\nfrom containers import chunk\n\n\ndef test_chunk_empty_items():\n    assert chunk([], 3) == []\n\n\ndef test_chunk_size_larger_than_items():\n    assert chunk([1, 2, 3], 10) == [[1, 2, 3]]\n\n\ndef test_chunk_size_one():\n    assert chunk([1, 2, 3, 4], 1) == [[1], [2], [3], [4]]\n\n\ndef test_chunk_size_zero_raises():\n    with pytest.raises(ValueError, match=\"size must be >= 1\"):\n        chunk([1, 2, 3], 0)\n\n\ndef test_chunk_negative_size_raises():\n    with pytest.raises(ValueError, match=\"size must be >= 1\"):\n        chunk([1, 2, 3], -1)\n\n\ndef test_chunk_preserves_order_and_content():\n    result = chunk(['a', 'b', 'c', 'd', 'e'], 2)\n    assert result == [['a', 'b'], ['c', 'd'], ['e']]\n\n\ndef test_chunk_size_equals_length():\n    assert chunk([10, 20, 30], 3) == [[10, 20, 30]]"
+    ],
+    "mutant_summary": [
+      {
+        "mid": "M001",
+        "operator": "ROR",
+        "line": 27,
+        "description": "ROR @ line 27: relational operator Lt -> GtE",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M002",
+        "operator": "CRN",
+        "line": 27,
+        "description": "CRN @ line 27: numeric 1 -> 2",
+        "killed_by_b0": false,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M003",
+        "operator": "RTN",
+        "line": 29,
+        "description": "RTN @ line 29: return value -> None",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M004",
+        "operator": "AOR",
+        "line": 29,
+        "description": "AOR @ line 29: arithmetic operator Add -> Sub",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M005",
+        "operator": "CRN",
+        "line": 29,
+        "description": "CRN @ line 29: numeric 0 -> 1",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      }
+    ],
+    "gate_log": [
+      {
+        "cid": "R0C1",
+        "accepted": true,
+        "new_kills": 1
+      },
+      {
+        "cid": "R0C2",
+        "accepted": false,
+        "reason": "correctness",
+        "runs": [
+          "fail"
+        ]
+      },
+      {
+        "cid": "R0C3",
+        "accepted": false,
+        "reasons": [
+          "falsifiable"
+        ]
+      },
+      {
+        "cid": "R0C4",
+        "accepted": false,
+        "reasons": [
+          "falsifiable"
+        ]
+      }
+    ],
+    "ms_all": 1.0,
+    "ms_covered": 1.0,
+    "cost": {
+      "model": "qwen3.8-27b",
+      "calls": 1,
+      "tokens_in": 1121,
+      "tokens_out": 1485,
+      "cost_usd": null,
+      "price_source": ""
+    }
+  },
+  {
+    "target_id": "containers.chunk",
+    "variant": "B5",
+    "mutants_total": 5,
+    "killed_final": 5,
+    "mutants_covered": 5,
+    "killed_covered": 5,
+    "b0_killed_final": 4,
+    "n_generated": 4,
+    "n_accepted": 1,
+    "n_repaired": 0,
+    "rejection_reasons": {
+      "failing_on_original": 1,
+      "falsifiable": 2
+    },
+    "flaky_rejects": 0,
+    "rounds_used": 1,
+    "n_final_tests": 1,
+    "final_suite_passes": true,
+    "coverage_pct": 100.0,
+    "b0_coverage_pct": 75.0,
+    "llm_calls": 1,
+    "tokens_in": 1121,
+    "tokens_out": 1485,
+    "cost_usd": null,
+    "price_source": "",
+    "wall_sec": 28.9,
+    "accepted_codes": [
+      "import pytest\n\nfrom containers import chunk\n\n\ndef test_chunk_empty_items():\n    assert chunk([], 3) == []\n\n\ndef test_chunk_size_larger_than_items():\n    assert chunk([1, 2, 3], 10) == [[1, 2, 3]]\n\n\ndef test_chunk_size_one():\n    assert chunk([1, 2, 3, 4], 1) == [[1], [2], [3], [4]]\n\n\ndef test_chunk_size_zero_raises():\n    with pytest.raises(ValueError, match=\"size must be >= 1\"):\n        chunk([1, 2, 3], 0)\n\n\ndef test_chunk_negative_size_raises():\n    with pytest.raises(ValueError, match=\"size must be >= 1\"):\n        chunk([1, 2, 3], -1)\n\n\ndef test_chunk_preserves_order_and_content():\n    result = chunk(['a', 'b', 'c', 'd', 'e'], 2)\n    assert result == [['a', 'b'], ['c', 'd'], ['e']]\n\n\ndef test_chunk_size_equals_length():\n    assert chunk([10, 20, 30], 3) == [[10, 20, 30]]"
+    ],
+    "mutant_summary": [
+      {
+        "mid": "M001",
+        "operator": "ROR",
+        "line": 27,
+        "description": "ROR @ line 27: relational operator Lt -> GtE",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M002",
+        "operator": "CRN",
+        "line": 27,
+        "description": "CRN @ line 27: numeric 1 -> 2",
+        "killed_by_b0": false,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M003",
+        "operator": "RTN",
+        "line": 29,
+        "description": "RTN @ line 29: return value -> None",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M004",
+        "operator": "AOR",
+        "line": 29,
+        "description": "AOR @ line 29: arithmetic operator Add -> Sub",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M005",
+        "operator": "CRN",
+        "line": 29,
+        "description": "CRN @ line 29: numeric 0 -> 1",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      }
+    ],
+    "gate_log": [
+      {
+        "cid": "R0C1",
+        "accepted": true,
+        "new_kills": 1
+      },
+      {
+        "cid": "R0C2",
+        "accepted": false,
+        "reason": "correctness",
+        "runs": [
+          "fail"
+        ]
+      },
+      {
+        "cid": "R0C3",
+        "accepted": false,
+        "reasons": [
+          "falsifiable"
+        ]
+      },
+      {
+        "cid": "R0C4",
+        "accepted": false,
+        "reasons": [
+          "falsifiable"
+        ]
+      }
+    ],
+    "ms_all": 1.0,
+    "ms_covered": 1.0,
+    "cost": {
+      "model": "qwen3.8-27b",
+      "calls": 1,
+      "tokens_in": 1121,
+      "tokens_out": 1485,
+      "cost_usd": null,
+      "price_source": ""
+    }
+  },
+  {
+    "target_id": "containers.most_frequent",
+    "variant": "B0",
+    "mutants_total": 7,
+    "killed_final": 4,
+    "mutants_covered": 7,
+    "killed_covered": 4,
+    "b0_killed_final": 4,
+    "n_generated": 0,
+    "n_accepted": 0,
+    "n_repaired": 0,
+    "rejection_reasons": {},
+    "flaky_rejects": 0,
+    "rounds_used": 0,
+    "n_final_tests": 0,
+    "final_suite_passes": true,
+    "coverage_pct": 86.7,
+    "b0_coverage_pct": 86.7,
+    "llm_calls": 0,
+    "tokens_in": 0,
+    "tokens_out": 0,
+    "cost_usd": null,
+    "price_source": "",
+    "wall_sec": 8.6,
+    "accepted_codes": [],
+    "mutant_summary": [
+      {
+        "mid": "M001",
+        "operator": "UOR",
+        "line": 37,
+        "description": "UOR @ line 37: unary '' removed",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M002",
+        "operator": "ROR",
+        "line": 42,
+        "description": "ROR @ line 42: relational operator NotIn -> In",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M003",
+        "operator": "CRN",
+        "line": 43,
+        "description": "CRN @ line 43: numeric 0 -> 1",
+        "killed_by_b0": false,
+        "killed_by_final": false,
+        "covered": true
+      },
+      {
+        "mid": "M004",
+        "operator": "CRN",
+        "line": 45,
+        "description": "CRN @ line 45: numeric 1 -> 2",
+        "killed_by_b0": false,
+        "killed_by_final": false,
+        "covered": true
+      },
+      {
+        "mid": "M005",
+        "operator": "CRN",
+        "line": 46,
+        "description": "CRN @ line 46: numeric 0 -> 1",
+        "killed_by_b0": false,
+        "killed_by_final": false,
+        "covered": true
+      },
+      {
+        "mid": "M006",
+        "operator": "ROR",
+        "line": 48,
+        "description": "ROR @ line 48: relational operator Gt -> LtE",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M007",
+        "operator": "RTN",
+        "line": 50,
+        "description": "RTN @ line 50: return value -> None",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      }
+    ],
+    "gate_log": [],
+    "ms_all": 0.5714,
+    "ms_covered": 0.5714,
+    "cost": {
+      "model": "qwen3.8-27b",
+      "calls": 0,
+      "tokens_in": 0,
+      "tokens_out": 0,
+      "cost_usd": null,
+      "price_source": ""
+    }
+  },
+  {
+    "target_id": "containers.most_frequent",
+    "variant": "B2",
+    "mutants_total": 7,
+    "killed_final": 5,
+    "mutants_covered": 7,
+    "killed_covered": 5,
+    "b0_killed_final": 4,
+    "n_generated": 4,
+    "n_accepted": 1,
+    "n_repaired": 0,
+    "rejection_reasons": {
+      "falsifiable": 3
+    },
+    "flaky_rejects": 0,
+    "rounds_used": 1,
+    "n_final_tests": 1,
+    "final_suite_passes": true,
+    "coverage_pct": 100.0,
+    "b0_coverage_pct": 86.7,
+    "llm_calls": 1,
+    "tokens_in": 1146,
+    "tokens_out": 1437,
+    "cost_usd": null,
+    "price_source": "",
+    "wall_sec": 67.8,
+    "accepted_codes": [
+      "import pytest\n\nfrom containers import most_frequent\n\n\ndef test_most_frequent_empty_raises_valueerror():\n    with pytest.raises(ValueError, match=\"empty input\"):\n        most_frequent([])\n\n\ndef test_most_frequent_single_element():\n    assert most_frequent([42]) == 42\n\n\ndef test_most_frequent_unique_elements_tie_first_occurrence():\n    # All elements appear exactly once; first occurrence wins\n    assert most_frequent([1, 2, 3]) == 1\n\n\ndef test_most_frequent_tie_breaking_by_first_occurrence():\n    # \"a\" and \"b\" both appear twice; \"a\" appears first, so it wins\n    assert most_frequent([\"b\", \"a\", \"a\", \"b\"]) == \"b\"  # b appears first in the list\n\n\ndef test_most_frequent_most_frequent_wins_over_earlier():\n    # \"a\" appears first but \"b\" appears more often\n    assert most_frequent([\"a\", \"b\", \"b\", \"b\"]) == \"b\"\n\n\ndef test_most_frequent_integer_elements():\n    assert most_frequent([3, 1, 3, 2, 3]) == 3\n\n\ndef test_most_frequent_mixed_hashable_types():\n    assert most_frequent([1, \"1\", 1, 1, \"1\"]) == 1\n\n\ndef test_most_frequent_two_elements_one_dominates():\n    assert most_frequent([\"x\", \"y\", \"y\", \"y\", \"y\"]) == \"y\""
+    ],
+    "mutant_summary": [
+      {
+        "mid": "M001",
+        "operator": "UOR",
+        "line": 37,
+        "description": "UOR @ line 37: unary '' removed",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M002",
+        "operator": "ROR",
+        "line": 42,
+        "description": "ROR @ line 42: relational operator NotIn -> In",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M003",
+        "operator": "CRN",
+        "line": 43,
+        "description": "CRN @ line 43: numeric 0 -> 1",
+        "killed_by_b0": false,
+        "killed_by_final": false,
+        "covered": true
+      },
+      {
+        "mid": "M004",
+        "operator": "CRN",
+        "line": 45,
+        "description": "CRN @ line 45: numeric 1 -> 2",
+        "killed_by_b0": false,
+        "killed_by_final": false,
+        "covered": true
+      },
+      {
+        "mid": "M005",
+        "operator": "CRN",
+        "line": 46,
+        "description": "CRN @ line 46: numeric 0 -> 1",
+        "killed_by_b0": false,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M006",
+        "operator": "ROR",
+        "line": 48,
+        "description": "ROR @ line 48: relational operator Gt -> LtE",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M007",
+        "operator": "RTN",
+        "line": 50,
+        "description": "RTN @ line 50: return value -> None",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      }
+    ],
+    "gate_log": [
+      {
+        "cid": "R0C1",
+        "accepted": true,
+        "new_kills": 1
+      },
+      {
+        "cid": "R0C2",
+        "accepted": false,
+        "reasons": [
+          "falsifiable"
+        ]
+      },
+      {
+        "cid": "R0C3",
+        "accepted": false,
+        "reasons": [
+          "falsifiable"
+        ]
+      },
+      {
+        "cid": "R0C4",
+        "accepted": false,
+        "reasons": [
+          "falsifiable"
+        ]
+      }
+    ],
+    "ms_all": 0.7143,
+    "ms_covered": 0.7143,
+    "cost": {
+      "model": "qwen3.8-27b",
+      "calls": 1,
+      "tokens_in": 1146,
+      "tokens_out": 1437,
+      "cost_usd": null,
+      "price_source": ""
+    }
+  },
+  {
+    "target_id": "containers.most_frequent",
+    "variant": "B5",
+    "mutants_total": 7,
+    "killed_final": 5,
+    "mutants_covered": 7,
+    "killed_covered": 5,
+    "b0_killed_final": 4,
+    "n_generated": 16,
+    "n_accepted": 1,
+    "n_repaired": 4,
+    "rejection_reasons": {
+      "falsifiable": 15
+    },
+    "flaky_rejects": 0,
+    "rounds_used": 4,
+    "n_final_tests": 1,
+    "final_suite_passes": true,
+    "coverage_pct": 100.0,
+    "b0_coverage_pct": 86.7,
+    "llm_calls": 4,
+    "tokens_in": 4347,
+    "tokens_out": 15586,
+    "cost_usd": null,
+    "price_source": "",
+    "wall_sec": 415.7,
+    "accepted_codes": [
+      "import pytest\n\nfrom containers import most_frequent\n\n\ndef test_most_frequent_empty_raises_valueerror():\n    with pytest.raises(ValueError, match=\"empty input\"):\n        most_frequent([])\n\n\ndef test_most_frequent_single_element():\n    assert most_frequent([42]) == 42\n\n\ndef test_most_frequent_unique_elements_tie_first_occurrence():\n    # All elements appear exactly once; first occurrence wins\n    assert most_frequent([1, 2, 3]) == 1\n\n\ndef test_most_frequent_tie_breaking_by_first_occurrence():\n    # \"a\" and \"b\" both appear twice; \"a\" appears first, so it wins\n    assert most_frequent([\"b\", \"a\", \"a\", \"b\"]) == \"b\"  # b appears first in the list\n\n\ndef test_most_frequent_most_frequent_wins_over_earlier():\n    # \"a\" appears first but \"b\" appears more often\n    assert most_frequent([\"a\", \"b\", \"b\", \"b\"]) == \"b\"\n\n\ndef test_most_frequent_integer_elements():\n    assert most_frequent([3, 1, 3, 2, 3]) == 3\n\n\ndef test_most_frequent_mixed_hashable_types():\n    assert most_frequent([1, \"1\", 1, 1, \"1\"]) == 1\n\n\ndef test_most_frequent_two_elements_one_dominates():\n    assert most_frequent([\"x\", \"y\", \"y\", \"y\", \"y\"]) == \"y\""
+    ],
+    "mutant_summary": [
+      {
+        "mid": "M001",
+        "operator": "UOR",
+        "line": 37,
+        "description": "UOR @ line 37: unary '' removed",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M002",
+        "operator": "ROR",
+        "line": 42,
+        "description": "ROR @ line 42: relational operator NotIn -> In",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M003",
+        "operator": "CRN",
+        "line": 43,
+        "description": "CRN @ line 43: numeric 0 -> 1",
+        "killed_by_b0": false,
+        "killed_by_final": false,
+        "covered": true
+      },
+      {
+        "mid": "M004",
+        "operator": "CRN",
+        "line": 45,
+        "description": "CRN @ line 45: numeric 1 -> 2",
+        "killed_by_b0": false,
+        "killed_by_final": false,
+        "covered": true
+      },
+      {
+        "mid": "M005",
+        "operator": "CRN",
+        "line": 46,
+        "description": "CRN @ line 46: numeric 0 -> 1",
+        "killed_by_b0": false,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M006",
+        "operator": "ROR",
+        "line": 48,
+        "description": "ROR @ line 48: relational operator Gt -> LtE",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M007",
+        "operator": "RTN",
+        "line": 50,
+        "description": "RTN @ line 50: return value -> None",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      }
+    ],
+    "gate_log": [
+      {
+        "cid": "R0C1",
+        "accepted": true,
+        "new_kills": 1
+      },
+      {
+        "cid": "R0C2",
+        "accepted": false,
+        "reasons": [
+          "falsifiable"
+        ]
+      },
+      {
+        "cid": "R0C3",
+        "accepted": false,
+        "reasons": [
+          "falsifiable"
+        ]
+      },
+      {
+        "cid": "R0C4",
+        "accepted": false,
+        "reasons": [
+          "falsifiable"
+        ]
+      },
+      {
+        "cid": "R1C1",
+        "accepted": false,
+        "reasons": [
+          "falsifiable"
+        ]
+      },
+      {
+        "cid": "R1C2",
+        "accepted": false,
+        "reasons": [
+          "falsifiable"
+        ]
+      },
+      {
+        "cid": "R1C3",
+        "accepted": false,
+        "reasons": [
+          "falsifiable"
+        ]
+      },
+      {
+        "cid": "R1C4",
+        "accepted": false,
+        "reasons": [
+          "falsifiable"
+        ]
+      },
+      {
+        "cid": "R2C1",
+        "accepted": false,
+        "reasons": [
+          "falsifiable"
+        ]
+      },
+      {
+        "cid": "R2C2",
+        "accepted": false,
+        "reasons": [
+          "falsifiable"
+        ]
+      },
+      {
+        "cid": "R2C3",
+        "accepted": false,
+        "reasons": [
+          "falsifiable"
+        ]
+      },
+      {
+        "cid": "R2C4",
+        "accepted": false,
+        "reasons": [
+          "falsifiable"
+        ]
+      },
+      {
+        "cid": "R3C1",
+        "accepted": false,
+        "reasons": [
+          "falsifiable"
+        ]
+      },
+      {
+        "cid": "R3C2",
+        "accepted": false,
+        "reasons": [
+          "falsifiable"
+        ]
+      },
+      {
+        "cid": "R3C3",
+        "accepted": false,
+        "reasons": [
+          "falsifiable"
+        ]
+      },
+      {
+        "cid": "R3C4",
+        "accepted": false,
+        "reasons": [
+          "falsifiable"
+        ]
+      }
+    ],
+    "ms_all": 0.7143,
+    "ms_covered": 0.7143,
+    "cost": {
+      "model": "qwen3.8-27b",
+      "calls": 4,
+      "tokens_in": 4347,
+      "tokens_out": 15586,
+      "cost_usd": null,
+      "price_source": ""
+    }
+  },
+  {
+    "target_id": "parsers.parse_csv_line",
+    "variant": "B0",
+    "mutants_total": 24,
+    "killed_final": 23,
+    "mutants_covered": 24,
+    "killed_covered": 23,
+    "b0_killed_final": 23,
+    "n_generated": 0,
+    "n_accepted": 0,
+    "n_repaired": 0,
+    "rejection_reasons": {},
+    "flaky_rejects": 0,
+    "rounds_used": 0,
+    "n_final_tests": 0,
+    "final_suite_passes": true,
+    "coverage_pct": 100.0,
+    "b0_coverage_pct": 100.0,
+    "llm_calls": 0,
+    "tokens_in": 0,
+    "tokens_out": 0,
+    "cost_usd": null,
+    "price_source": "",
+    "wall_sec": 8.8,
+    "accepted_codes": [],
+    "mutant_summary": [
+      {
+        "mid": "M001",
+        "operator": "BCR",
+        "line": 11,
+        "description": "BCR @ line 11: boolean False -> True",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M002",
+        "operator": "CRN",
+        "line": 12,
+        "description": "CRN @ line 12: numeric 0 -> 1",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M003",
+        "operator": "ROR",
+        "line": 13,
+        "description": "ROR @ line 13: relational operator Lt -> GtE",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M004",
+        "operator": "ROR",
+        "line": 16,
+        "description": "ROR @ line 16: relational operator Eq -> NotEq",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M005",
+        "operator": "CRS",
+        "line": 16,
+        "description": "CRS @ line 16: string '\"' -> '\"X'",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M006",
+        "operator": "ROR",
+        "line": 17,
+        "description": "ROR @ line 17: relational operator Lt -> GtE",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M007",
+        "operator": "AOR",
+        "line": 17,
+        "description": "AOR @ line 17: arithmetic operator Add -> Sub",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M008",
+        "operator": "CRN",
+        "line": 17,
+        "description": "CRN @ line 17: numeric 1 -> 2",
+        "killed_by_b0": false,
+        "killed_by_final": false,
+        "covered": true
+      },
+      {
+        "mid": "M009",
+        "operator": "ROR",
+        "line": 17,
+        "description": "ROR @ line 17: relational operator Eq -> NotEq",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M010",
+        "operator": "AOR",
+        "line": 17,
+        "description": "AOR @ line 17: arithmetic operator Add -> Sub",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M011",
+        "operator": "CRN",
+        "line": 17,
+        "description": "CRN @ line 17: numeric 1 -> 2",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M012",
+        "operator": "CRS",
+        "line": 17,
+        "description": "CRS @ line 17: string '\"' -> '\"X'",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M013",
+        "operator": "CRS",
+        "line": 18,
+        "description": "CRS @ line 18: string '\"' -> '\"X'",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M014",
+        "operator": "CRN",
+        "line": 19,
+        "description": "CRN @ line 19: numeric 1 -> 2",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M015",
+        "operator": "BCR",
+        "line": 21,
+        "description": "BCR @ line 21: boolean False -> True",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M016",
+        "operator": "ROR",
+        "line": 25,
+        "description": "ROR @ line 25: relational operator Eq -> NotEq",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M017",
+        "operator": "CRS",
+        "line": 25,
+        "description": "CRS @ line 25: string '\"' -> '\"X'",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M018",
+        "operator": "BCR",
+        "line": 26,
+        "description": "BCR @ line 26: boolean True -> False",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M019",
+        "operator": "ROR",
+        "line": 27,
+        "description": "ROR @ line 27: relational operator Eq -> NotEq",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M020",
+        "operator": "CRS",
+        "line": 27,
+        "description": "CRS @ line 27: string ',' -> ',X'",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M021",
+        "operator": "CRS",
+        "line": 28,
+        "description": "CRS @ line 28: string '' -> 'X'",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M022",
+        "operator": "CRN",
+        "line": 32,
+        "description": "CRN @ line 32: numeric 1 -> 2",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M023",
+        "operator": "CRS",
+        "line": 33,
+        "description": "CRS @ line 33: string '' -> 'X'",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M024",
+        "operator": "RTN",
+        "line": 34,
+        "description": "RTN @ line 34: return value -> None",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      }
+    ],
+    "gate_log": [],
+    "ms_all": 0.9583,
+    "ms_covered": 0.9583,
+    "cost": {
+      "model": "qwen3.8-27b",
+      "calls": 0,
+      "tokens_in": 0,
+      "tokens_out": 0,
+      "cost_usd": null,
+      "price_source": ""
+    }
+  },
+  {
+    "target_id": "parsers.parse_csv_line",
+    "variant": "B2",
+    "mutants_total": 24,
+    "killed_final": 23,
+    "mutants_covered": 24,
+    "killed_covered": 23,
+    "b0_killed_final": 23,
+    "n_generated": 1,
+    "n_accepted": 0,
+    "n_repaired": 1,
+    "rejection_reasons": {
+      "failing_on_original": 1
+    },
+    "flaky_rejects": 0,
+    "rounds_used": 1,
+    "n_final_tests": 0,
+    "final_suite_passes": true,
+    "coverage_pct": 100.0,
+    "b0_coverage_pct": 100.0,
+    "llm_calls": 1,
+    "tokens_in": 1386,
+    "tokens_out": 8192,
+    "cost_usd": null,
+    "price_source": "",
+    "wall_sec": 223.8,
+    "accepted_codes": [],
+    "mutant_summary": [
+      {
+        "mid": "M001",
+        "operator": "BCR",
+        "line": 11,
+        "description": "BCR @ line 11: boolean False -> True",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M002",
+        "operator": "CRN",
+        "line": 12,
+        "description": "CRN @ line 12: numeric 0 -> 1",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M003",
+        "operator": "ROR",
+        "line": 13,
+        "description": "ROR @ line 13: relational operator Lt -> GtE",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M004",
+        "operator": "ROR",
+        "line": 16,
+        "description": "ROR @ line 16: relational operator Eq -> NotEq",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M005",
+        "operator": "CRS",
+        "line": 16,
+        "description": "CRS @ line 16: string '\"' -> '\"X'",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M006",
+        "operator": "ROR",
+        "line": 17,
+        "description": "ROR @ line 17: relational operator Lt -> GtE",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M007",
+        "operator": "AOR",
+        "line": 17,
+        "description": "AOR @ line 17: arithmetic operator Add -> Sub",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M008",
+        "operator": "CRN",
+        "line": 17,
+        "description": "CRN @ line 17: numeric 1 -> 2",
+        "killed_by_b0": false,
+        "killed_by_final": false,
+        "covered": true
+      },
+      {
+        "mid": "M009",
+        "operator": "ROR",
+        "line": 17,
+        "description": "ROR @ line 17: relational operator Eq -> NotEq",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M010",
+        "operator": "AOR",
+        "line": 17,
+        "description": "AOR @ line 17: arithmetic operator Add -> Sub",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M011",
+        "operator": "CRN",
+        "line": 17,
+        "description": "CRN @ line 17: numeric 1 -> 2",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M012",
+        "operator": "CRS",
+        "line": 17,
+        "description": "CRS @ line 17: string '\"' -> '\"X'",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M013",
+        "operator": "CRS",
+        "line": 18,
+        "description": "CRS @ line 18: string '\"' -> '\"X'",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M014",
+        "operator": "CRN",
+        "line": 19,
+        "description": "CRN @ line 19: numeric 1 -> 2",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M015",
+        "operator": "BCR",
+        "line": 21,
+        "description": "BCR @ line 21: boolean False -> True",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M016",
+        "operator": "ROR",
+        "line": 25,
+        "description": "ROR @ line 25: relational operator Eq -> NotEq",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M017",
+        "operator": "CRS",
+        "line": 25,
+        "description": "CRS @ line 25: string '\"' -> '\"X'",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M018",
+        "operator": "BCR",
+        "line": 26,
+        "description": "BCR @ line 26: boolean True -> False",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M019",
+        "operator": "ROR",
+        "line": 27,
+        "description": "ROR @ line 27: relational operator Eq -> NotEq",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M020",
+        "operator": "CRS",
+        "line": 27,
+        "description": "CRS @ line 27: string ',' -> ',X'",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M021",
+        "operator": "CRS",
+        "line": 28,
+        "description": "CRS @ line 28: string '' -> 'X'",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M022",
+        "operator": "CRN",
+        "line": 32,
+        "description": "CRN @ line 32: numeric 1 -> 2",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M023",
+        "operator": "CRS",
+        "line": 33,
+        "description": "CRS @ line 33: string '' -> 'X'",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M024",
+        "operator": "RTN",
+        "line": 34,
+        "description": "RTN @ line 34: return value -> None",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      }
+    ],
+    "gate_log": [
+      {
+        "cid": "R0C1",
+        "accepted": false,
+        "reason": "correctness",
+        "runs": [
+          "fail"
+        ]
+      }
+    ],
+    "ms_all": 0.9583,
+    "ms_covered": 0.9583,
+    "cost": {
+      "model": "qwen3.8-27b",
+      "calls": 1,
+      "tokens_in": 1386,
+      "tokens_out": 8192,
+      "cost_usd": null,
+      "price_source": ""
+    }
+  },
+  {
+    "target_id": "parsers.parse_csv_line",
+    "variant": "B5",
+    "mutants_total": 24,
+    "killed_final": 24,
+    "mutants_covered": 24,
+    "killed_covered": 24,
+    "b0_killed_final": 23,
+    "n_generated": 13,
+    "n_accepted": 1,
+    "n_repaired": 13,
+    "rejection_reasons": {
+      "failing_on_original": 10,
+      "falsifiable": 2
+    },
+    "flaky_rejects": 0,
+    "rounds_used": 4,
+    "n_final_tests": 1,
+    "final_suite_passes": true,
+    "coverage_pct": 100.0,
+    "b0_coverage_pct": 100.0,
+    "llm_calls": 4,
+    "tokens_in": 5304,
+    "tokens_out": 15521,
+    "cost_usd": null,
+    "price_source": "",
+    "wall_sec": 404.3,
+    "accepted_codes": [
+      "\nimport pytest\nfrom parsers import parse_csv_line\n\n\ndef test_simple_unquoted_fields():\n    assert parse_csv_line(\"a,b,c\") == [\"a\", \"b\", \"c\"]\n\n\ndef test_empty_line():\n    assert parse_csv_line(\"\") == [\"\"]\n\n\ndef test_single_field():\n    assert parse_csv_line(\"hello\") == [\"hello\"]\n\n\ndef test_quoted_field_with_comma():\n    assert parse_csv_line('\"a,b\",c') == [\"a,b\", \"c\"]\n\n\ndef test_quoted_field_with_escaped_quote():\n    # \"\" inside quotes is one literal quote\n    assert parse_csv_line('\"a\"\"b\",c') == ['a\"b', \"c\"]\n\n\ndef test_quoted_field_with_escaped_quote_at_end():\n    assert parse_csv_line('\"a\"\"\"') == ['a\"']\n\n\ndef test_multiple_escaped_quotes():\n    assert parse_csv_line('\"a\"\"\"\"b\"') == ['a\"\"b']\n\n\ndef test_unquoted_field_with_spaces():\n    assert parse_csv_line(\"a b,c d\") == [\"a b\", \"c d\"]\n\n\ndef test_trailing_comma():\n    assert parse_csv_line(\"a,b,\") == [\"a\", \"b\", \"\"]\n\n\ndef test_leading_comma():\n    assert parse_csv_line(\",a,b\") == [\"\", \"a\", \"b\"]\n\n\ndef test_empty_quoted_field():\n    assert parse_csv_line('\"\"') == [\"\"]\n\n\ndef test_empty_quoted_field_with_comma():\n    assert parse_csv_line('\"\",b') == [\"\", \"b\"]\n\n\ndef test_quoted_field_with_only_escaped_quote():\n    assert parse_csv_line('\"\"\"') == ['\"']\n"
+    ],
+    "mutant_summary": [
+      {
+        "mid": "M001",
+        "operator": "BCR",
+        "line": 11,
+        "description": "BCR @ line 11: boolean False -> True",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M002",
+        "operator": "CRN",
+        "line": 12,
+        "description": "CRN @ line 12: numeric 0 -> 1",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M003",
+        "operator": "ROR",
+        "line": 13,
+        "description": "ROR @ line 13: relational operator Lt -> GtE",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M004",
+        "operator": "ROR",
+        "line": 16,
+        "description": "ROR @ line 16: relational operator Eq -> NotEq",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M005",
+        "operator": "CRS",
+        "line": 16,
+        "description": "CRS @ line 16: string '\"' -> '\"X'",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M006",
+        "operator": "ROR",
+        "line": 17,
+        "description": "ROR @ line 17: relational operator Lt -> GtE",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M007",
+        "operator": "AOR",
+        "line": 17,
+        "description": "AOR @ line 17: arithmetic operator Add -> Sub",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M008",
+        "operator": "CRN",
+        "line": 17,
+        "description": "CRN @ line 17: numeric 1 -> 2",
+        "killed_by_b0": false,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M009",
+        "operator": "ROR",
+        "line": 17,
+        "description": "ROR @ line 17: relational operator Eq -> NotEq",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M010",
+        "operator": "AOR",
+        "line": 17,
+        "description": "AOR @ line 17: arithmetic operator Add -> Sub",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M011",
+        "operator": "CRN",
+        "line": 17,
+        "description": "CRN @ line 17: numeric 1 -> 2",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M012",
+        "operator": "CRS",
+        "line": 17,
+        "description": "CRS @ line 17: string '\"' -> '\"X'",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M013",
+        "operator": "CRS",
+        "line": 18,
+        "description": "CRS @ line 18: string '\"' -> '\"X'",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M014",
+        "operator": "CRN",
+        "line": 19,
+        "description": "CRN @ line 19: numeric 1 -> 2",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M015",
+        "operator": "BCR",
+        "line": 21,
+        "description": "BCR @ line 21: boolean False -> True",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M016",
+        "operator": "ROR",
+        "line": 25,
+        "description": "ROR @ line 25: relational operator Eq -> NotEq",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M017",
+        "operator": "CRS",
+        "line": 25,
+        "description": "CRS @ line 25: string '\"' -> '\"X'",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M018",
+        "operator": "BCR",
+        "line": 26,
+        "description": "BCR @ line 26: boolean True -> False",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M019",
+        "operator": "ROR",
+        "line": 27,
+        "description": "ROR @ line 27: relational operator Eq -> NotEq",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M020",
+        "operator": "CRS",
+        "line": 27,
+        "description": "CRS @ line 27: string ',' -> ',X'",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M021",
+        "operator": "CRS",
+        "line": 28,
+        "description": "CRS @ line 28: string '' -> 'X'",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M022",
+        "operator": "CRN",
+        "line": 32,
+        "description": "CRN @ line 32: numeric 1 -> 2",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M023",
+        "operator": "CRS",
+        "line": 33,
+        "description": "CRS @ line 33: string '' -> 'X'",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M024",
+        "operator": "RTN",
+        "line": 34,
+        "description": "RTN @ line 34: return value -> None",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      }
+    ],
+    "gate_log": [
+      {
+        "cid": "R0C1",
+        "accepted": false,
+        "reason": "correctness",
+        "runs": [
+          "fail"
+        ]
+      },
+      {
+        "cid": "R1C1",
+        "accepted": false,
+        "reasons": [
+          "falsifiable"
+        ]
+      },
+      {
+        "cid": "R1C2",
+        "accepted": false,
+        "reason": "correctness",
+        "runs": [
+          "fail"
+        ]
+      },
+      {
+        "cid": "R1C3",
+        "accepted": false,
+        "reason": "correctness",
+        "runs": [
+          "fail"
+        ]
+      },
+      {
+        "cid": "R1C4",
+        "accepted": false,
+        "reason": "correctness",
+        "runs": [
+          "fail"
+        ]
+      },
+      {
+        "cid": "R2C1",
+        "accepted": false,
+        "reason": "correctness",
+        "runs": [
+          "fail"
+        ]
+      },
+      {
+        "cid": "R2C2",
+        "accepted": false,
+        "reason": "correctness",
+        "runs": [
+          "fail"
+        ]
+      },
+      {
+        "cid": "R2C3",
+        "accepted": false,
+        "reason": "correctness",
+        "runs": [
+          "fail"
+        ]
+      },
+      {
+        "cid": "R2C4",
+        "accepted": false,
+        "reason": "correctness",
+        "runs": [
+          "fail"
+        ]
+      },
+      {
+        "cid": "R3C1",
+        "accepted": true,
+        "new_kills": 1
+      },
+      {
+        "cid": "R3C2",
+        "accepted": false,
+        "reason": "correctness",
+        "runs": [
+          "fail"
+        ]
+      },
+      {
+        "cid": "R3C3",
+        "accepted": false,
+        "reasons": [
+          "falsifiable"
+        ]
+      },
+      {
+        "cid": "R3C4",
+        "accepted": false,
+        "reason": "correctness",
+        "runs": [
+          "fail"
+        ]
+      }
+    ],
+    "ms_all": 1.0,
+    "ms_covered": 1.0,
+    "cost": {
+      "model": "qwen3.8-27b",
+      "calls": 4,
+      "tokens_in": 5304,
+      "tokens_out": 15521,
+      "cost_usd": null,
+      "price_source": ""
+    }
+  },
+  {
+    "target_id": "parsers.parse_version",
+    "variant": "B0",
+    "mutants_total": 12,
+    "killed_final": 9,
+    "mutants_covered": 12,
+    "killed_covered": 9,
+    "b0_killed_final": 9,
+    "n_generated": 0,
+    "n_accepted": 0,
+    "n_repaired": 0,
+    "rejection_reasons": {},
+    "flaky_rejects": 0,
+    "rounds_used": 0,
+    "n_final_tests": 0,
+    "final_suite_passes": true,
+    "coverage_pct": 78.6,
+    "b0_coverage_pct": 78.6,
+    "llm_calls": 0,
+    "tokens_in": 0,
+    "tokens_out": 0,
+    "cost_usd": null,
+    "price_source": "",
+    "wall_sec": 13.0,
+    "accepted_codes": [],
+    "mutant_summary": [
+      {
+        "mid": "M001",
+        "operator": "CRN",
+        "line": 43,
+        "description": "CRN @ line 43: numeric 1 -> 2",
+        "killed_by_b0": false,
+        "killed_by_final": false,
+        "covered": true
+      },
+      {
+        "mid": "M002",
+        "operator": "CRS",
+        "line": 43,
+        "description": "CRS @ line 43: string 'v' -> 'vX'",
+        "killed_by_b0": false,
+        "killed_by_final": false,
+        "covered": true
+      },
+      {
+        "mid": "M003",
+        "operator": "CRS",
+        "line": 44,
+        "description": "CRS @ line 44: string '.' -> '.X'",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M004",
+        "operator": "ROR",
+        "line": 45,
+        "description": "ROR @ line 45: relational operator NotEq -> Eq",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M005",
+        "operator": "CRN",
+        "line": 45,
+        "description": "CRN @ line 45: numeric 3 -> 4",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M006",
+        "operator": "UOR",
+        "line": 49,
+        "description": "UOR @ line 49: unary '' removed",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M007",
+        "operator": "ROR",
+        "line": 52,
+        "description": "ROR @ line 52: relational operator Gt -> LtE",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M008",
+        "operator": "CRN",
+        "line": 52,
+        "description": "CRN @ line 52: numeric 999 -> 1000",
+        "killed_by_b0": false,
+        "killed_by_final": false,
+        "covered": true
+      },
+      {
+        "mid": "M009",
+        "operator": "RTN",
+        "line": 55,
+        "description": "RTN @ line 55: return value -> None",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M010",
+        "operator": "CRN",
+        "line": 55,
+        "description": "CRN @ line 55: numeric 0 -> 1",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M011",
+        "operator": "CRN",
+        "line": 55,
+        "description": "CRN @ line 55: numeric 1 -> 2",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M012",
+        "operator": "CRN",
+        "line": 55,
+        "description": "CRN @ line 55: numeric 2 -> 3",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      }
+    ],
+    "gate_log": [],
+    "ms_all": 0.75,
+    "ms_covered": 0.75,
+    "cost": {
+      "model": "qwen3.8-27b",
+      "calls": 0,
+      "tokens_in": 0,
+      "tokens_out": 0,
+      "cost_usd": null,
+      "price_source": ""
+    }
+  },
+  {
+    "target_id": "parsers.parse_version",
+    "variant": "B2",
+    "mutants_total": 12,
+    "killed_final": 12,
+    "mutants_covered": 12,
+    "killed_covered": 12,
+    "b0_killed_final": 9,
+    "n_generated": 4,
+    "n_accepted": 1,
+    "n_repaired": 0,
+    "rejection_reasons": {
+      "failing_on_original": 1,
+      "falsifiable": 2
+    },
+    "flaky_rejects": 0,
+    "rounds_used": 1,
+    "n_final_tests": 1,
+    "final_suite_passes": true,
+    "coverage_pct": 100.0,
+    "b0_coverage_pct": 78.6,
+    "llm_calls": 1,
+    "tokens_in": 1357,
+    "tokens_out": 1577,
+    "cost_usd": null,
+    "price_source": "",
+    "wall_sec": 63.6,
+    "accepted_codes": [
+      "import pytest\n\nfrom parsers import parse_version\n\n\ndef test_parse_version_with_leading_v():\n    assert parse_version(\"v1.2.3\") == (1, 2, 3)\n\n\ndef test_parse_version_zero_parts():\n    assert parse_version(\"0.0.0\") == (0, 0, 0)\n\n\ndef test_parse_version_boundary_max():\n    assert parse_version(\"999.999.999\") == (999, 999, 999)\n\n\ndef test_parse_version_invalid_too_many_parts():\n    with pytest.raises(ValueError, match=\"expected major.minor.patch\"):\n        parse_version(\"1.2.3.4\")\n\n\ndef test_parse_version_invalid_too_few_parts():\n    with pytest.raises(ValueError, match=\"expected major.minor.patch\"):\n        parse_version(\"1.2\")\n\n\ndef test_parse_version_invalid_non_numeric():\n    with pytest.raises(ValueError, match=\"non-numeric part\"):\n        parse_version(\"1.2.x\")\n\n\ndef test_parse_version_invalid_out_of_range():\n    with pytest.raises(ValueError, match=\"part out of range\"):\n        parse_version(\"1000.0.0\")\n\n\ndef test_parse_version_invalid_negative():\n    with pytest.raises(ValueError, match=\"non-numeric part\"):\n        parse_version(\"-1.0.0\")"
+    ],
+    "mutant_summary": [
+      {
+        "mid": "M001",
+        "operator": "CRN",
+        "line": 43,
+        "description": "CRN @ line 43: numeric 1 -> 2",
+        "killed_by_b0": false,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M002",
+        "operator": "CRS",
+        "line": 43,
+        "description": "CRS @ line 43: string 'v' -> 'vX'",
+        "killed_by_b0": false,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M003",
+        "operator": "CRS",
+        "line": 44,
+        "description": "CRS @ line 44: string '.' -> '.X'",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M004",
+        "operator": "ROR",
+        "line": 45,
+        "description": "ROR @ line 45: relational operator NotEq -> Eq",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M005",
+        "operator": "CRN",
+        "line": 45,
+        "description": "CRN @ line 45: numeric 3 -> 4",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M006",
+        "operator": "UOR",
+        "line": 49,
+        "description": "UOR @ line 49: unary '' removed",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M007",
+        "operator": "ROR",
+        "line": 52,
+        "description": "ROR @ line 52: relational operator Gt -> LtE",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M008",
+        "operator": "CRN",
+        "line": 52,
+        "description": "CRN @ line 52: numeric 999 -> 1000",
+        "killed_by_b0": false,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M009",
+        "operator": "RTN",
+        "line": 55,
+        "description": "RTN @ line 55: return value -> None",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M010",
+        "operator": "CRN",
+        "line": 55,
+        "description": "CRN @ line 55: numeric 0 -> 1",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M011",
+        "operator": "CRN",
+        "line": 55,
+        "description": "CRN @ line 55: numeric 1 -> 2",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M012",
+        "operator": "CRN",
+        "line": 55,
+        "description": "CRN @ line 55: numeric 2 -> 3",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      }
+    ],
+    "gate_log": [
+      {
+        "cid": "R0C1",
+        "accepted": true,
+        "new_kills": 3
+      },
+      {
+        "cid": "R0C2",
+        "accepted": false,
+        "reason": "correctness",
+        "runs": [
+          "fail"
+        ]
+      },
+      {
+        "cid": "R0C3",
+        "accepted": false,
+        "reasons": [
+          "falsifiable"
+        ]
+      },
+      {
+        "cid": "R0C4",
+        "accepted": false,
+        "reasons": [
+          "falsifiable"
+        ]
+      }
+    ],
+    "ms_all": 1.0,
+    "ms_covered": 1.0,
+    "cost": {
+      "model": "qwen3.8-27b",
+      "calls": 1,
+      "tokens_in": 1357,
+      "tokens_out": 1577,
+      "cost_usd": null,
+      "price_source": ""
+    }
+  },
+  {
+    "target_id": "parsers.parse_version",
+    "variant": "B5",
+    "mutants_total": 12,
+    "killed_final": 12,
+    "mutants_covered": 12,
+    "killed_covered": 12,
+    "b0_killed_final": 9,
+    "n_generated": 4,
+    "n_accepted": 1,
+    "n_repaired": 0,
+    "rejection_reasons": {
+      "failing_on_original": 1,
+      "falsifiable": 2
+    },
+    "flaky_rejects": 0,
+    "rounds_used": 1,
+    "n_final_tests": 1,
+    "final_suite_passes": true,
+    "coverage_pct": 100.0,
+    "b0_coverage_pct": 78.6,
+    "llm_calls": 1,
+    "tokens_in": 1357,
+    "tokens_out": 1577,
+    "cost_usd": null,
+    "price_source": "",
+    "wall_sec": 33.2,
+    "accepted_codes": [
+      "import pytest\n\nfrom parsers import parse_version\n\n\ndef test_parse_version_with_leading_v():\n    assert parse_version(\"v1.2.3\") == (1, 2, 3)\n\n\ndef test_parse_version_zero_parts():\n    assert parse_version(\"0.0.0\") == (0, 0, 0)\n\n\ndef test_parse_version_boundary_max():\n    assert parse_version(\"999.999.999\") == (999, 999, 999)\n\n\ndef test_parse_version_invalid_too_many_parts():\n    with pytest.raises(ValueError, match=\"expected major.minor.patch\"):\n        parse_version(\"1.2.3.4\")\n\n\ndef test_parse_version_invalid_too_few_parts():\n    with pytest.raises(ValueError, match=\"expected major.minor.patch\"):\n        parse_version(\"1.2\")\n\n\ndef test_parse_version_invalid_non_numeric():\n    with pytest.raises(ValueError, match=\"non-numeric part\"):\n        parse_version(\"1.2.x\")\n\n\ndef test_parse_version_invalid_out_of_range():\n    with pytest.raises(ValueError, match=\"part out of range\"):\n        parse_version(\"1000.0.0\")\n\n\ndef test_parse_version_invalid_negative():\n    with pytest.raises(ValueError, match=\"non-numeric part\"):\n        parse_version(\"-1.0.0\")"
+    ],
+    "mutant_summary": [
+      {
+        "mid": "M001",
+        "operator": "CRN",
+        "line": 43,
+        "description": "CRN @ line 43: numeric 1 -> 2",
+        "killed_by_b0": false,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M002",
+        "operator": "CRS",
+        "line": 43,
+        "description": "CRS @ line 43: string 'v' -> 'vX'",
+        "killed_by_b0": false,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M003",
+        "operator": "CRS",
+        "line": 44,
+        "description": "CRS @ line 44: string '.' -> '.X'",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M004",
+        "operator": "ROR",
+        "line": 45,
+        "description": "ROR @ line 45: relational operator NotEq -> Eq",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M005",
+        "operator": "CRN",
+        "line": 45,
+        "description": "CRN @ line 45: numeric 3 -> 4",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M006",
+        "operator": "UOR",
+        "line": 49,
+        "description": "UOR @ line 49: unary '' removed",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M007",
+        "operator": "ROR",
+        "line": 52,
+        "description": "ROR @ line 52: relational operator Gt -> LtE",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M008",
+        "operator": "CRN",
+        "line": 52,
+        "description": "CRN @ line 52: numeric 999 -> 1000",
+        "killed_by_b0": false,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M009",
+        "operator": "RTN",
+        "line": 55,
+        "description": "RTN @ line 55: return value -> None",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M010",
+        "operator": "CRN",
+        "line": 55,
+        "description": "CRN @ line 55: numeric 0 -> 1",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M011",
+        "operator": "CRN",
+        "line": 55,
+        "description": "CRN @ line 55: numeric 1 -> 2",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M012",
+        "operator": "CRN",
+        "line": 55,
+        "description": "CRN @ line 55: numeric 2 -> 3",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      }
+    ],
+    "gate_log": [
+      {
+        "cid": "R0C1",
+        "accepted": true,
+        "new_kills": 3
+      },
+      {
+        "cid": "R0C2",
+        "accepted": false,
+        "reason": "correctness",
+        "runs": [
+          "fail"
+        ]
+      },
+      {
+        "cid": "R0C3",
+        "accepted": false,
+        "reasons": [
+          "falsifiable"
+        ]
+      },
+      {
+        "cid": "R0C4",
+        "accepted": false,
+        "reasons": [
+          "falsifiable"
+        ]
+      }
+    ],
+    "ms_all": 1.0,
+    "ms_covered": 1.0,
+    "cost": {
+      "model": "qwen3.8-27b",
+      "calls": 1,
+      "tokens_in": 1357,
+      "tokens_out": 1577,
+      "cost_usd": null,
+      "price_source": ""
+    }
+  },
+  {
+    "target_id": "parsers.parse_kv_pairs",
+    "variant": "B0",
+    "mutants_total": 7,
+    "killed_final": 6,
+    "mutants_covered": 6,
+    "killed_covered": 6,
+    "b0_killed_final": 6,
+    "n_generated": 0,
+    "n_accepted": 0,
+    "n_repaired": 0,
+    "rejection_reasons": {},
+    "flaky_rejects": 0,
+    "rounds_used": 0,
+    "n_final_tests": 0,
+    "final_suite_passes": true,
+    "coverage_pct": 80.0,
+    "b0_coverage_pct": 80.0,
+    "llm_calls": 0,
+    "tokens_in": 0,
+    "tokens_out": 0,
+    "cost_usd": null,
+    "price_source": "",
+    "wall_sec": 9.0,
+    "accepted_codes": [],
+    "mutant_summary": [
+      {
+        "mid": "M001",
+        "operator": "UOR",
+        "line": 66,
+        "description": "UOR @ line 66: unary '' removed",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M002",
+        "operator": "RTN",
+        "line": 67,
+        "description": "RTN @ line 67: return value -> None",
+        "killed_by_b0": false,
+        "killed_by_final": false,
+        "covered": false
+      },
+      {
+        "mid": "M003",
+        "operator": "CRS",
+        "line": 68,
+        "description": "CRS @ line 68: string ',' -> ',X'",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M004",
+        "operator": "ROR",
+        "line": 69,
+        "description": "ROR @ line 69: relational operator NotIn -> In",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M005",
+        "operator": "CRS",
+        "line": 69,
+        "description": "CRS @ line 69: string '=' -> '=X'",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M006",
+        "operator": "CRS",
+        "line": 71,
+        "description": "CRS @ line 71: string '=' -> '=X'",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M007",
+        "operator": "RTN",
+        "line": 73,
+        "description": "RTN @ line 73: return value -> None",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      }
+    ],
+    "gate_log": [],
+    "ms_all": 0.8571,
+    "ms_covered": 1.0,
+    "cost": {
+      "model": "qwen3.8-27b",
+      "calls": 0,
+      "tokens_in": 0,
+      "tokens_out": 0,
+      "cost_usd": null,
+      "price_source": ""
+    }
+  },
+  {
+    "target_id": "parsers.parse_kv_pairs",
+    "variant": "B2",
+    "mutants_total": 7,
+    "killed_final": 7,
+    "mutants_covered": 7,
+    "killed_covered": 7,
+    "b0_killed_final": 6,
+    "n_generated": 4,
+    "n_accepted": 1,
+    "n_repaired": 0,
+    "rejection_reasons": {
+      "falsifiable": 3
+    },
+    "flaky_rejects": 0,
+    "rounds_used": 1,
+    "n_final_tests": 1,
+    "final_suite_passes": true,
+    "coverage_pct": 100.0,
+    "b0_coverage_pct": 80.0,
+    "llm_calls": 1,
+    "tokens_in": 1346,
+    "tokens_out": 1509,
+    "cost_usd": null,
+    "price_source": "",
+    "wall_sec": 70.0,
+    "accepted_codes": [
+      "import pytest\nfrom parsers import parse_kv_pairs\n\ndef test_empty_and_whitespace_only():\n    assert parse_kv_pairs(\"\") == {}\n    assert parse_kv_pairs(\"   \\t\\n  \") == {}\n\ndef test_single_pair_no_commas():\n    assert parse_kv_pairs(\"key=value\") == {\"key\": \"value\"}\n\ndef test_whitespace_stripping_keys_values():\n    assert parse_kv_pairs(\"  key  =  value  \") == {\"key\": \"value\"}\n    assert parse_kv_pairs(\" a =1,  b =2 \") == {\"a\": \"1\", \"b\": \"2\"}\n\ndef test_value_with_equals_sign_uses_first_partition():\n    assert parse_kv_pairs(\"url=http://host?x=1&y=2\") == {\"url\": \"http://host?x=1&y=2\"}\n\ndef test_entry_without_equals_raises():\n    with pytest.raises(ValueError):\n        parse_kv_pairs(\"a=1,bad\")\n    with pytest.raises(ValueError):\n        parse_kv_pairs(\"justtext\")"
+    ],
+    "mutant_summary": [
+      {
+        "mid": "M001",
+        "operator": "UOR",
+        "line": 66,
+        "description": "UOR @ line 66: unary '' removed",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M002",
+        "operator": "RTN",
+        "line": 67,
+        "description": "RTN @ line 67: return value -> None",
+        "killed_by_b0": false,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M003",
+        "operator": "CRS",
+        "line": 68,
+        "description": "CRS @ line 68: string ',' -> ',X'",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M004",
+        "operator": "ROR",
+        "line": 69,
+        "description": "ROR @ line 69: relational operator NotIn -> In",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M005",
+        "operator": "CRS",
+        "line": 69,
+        "description": "CRS @ line 69: string '=' -> '=X'",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M006",
+        "operator": "CRS",
+        "line": 71,
+        "description": "CRS @ line 71: string '=' -> '=X'",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M007",
+        "operator": "RTN",
+        "line": 73,
+        "description": "RTN @ line 73: return value -> None",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      }
+    ],
+    "gate_log": [
+      {
+        "cid": "R0C1",
+        "accepted": true,
+        "new_kills": 1
+      },
+      {
+        "cid": "R0C2",
+        "accepted": false,
+        "reasons": [
+          "falsifiable"
+        ]
+      },
+      {
+        "cid": "R0C3",
+        "accepted": false,
+        "reasons": [
+          "falsifiable"
+        ]
+      },
+      {
+        "cid": "R0C4",
+        "accepted": false,
+        "reasons": [
+          "falsifiable"
+        ]
+      }
+    ],
+    "ms_all": 1.0,
+    "ms_covered": 1.0,
+    "cost": {
+      "model": "qwen3.8-27b",
+      "calls": 1,
+      "tokens_in": 1346,
+      "tokens_out": 1509,
+      "cost_usd": null,
+      "price_source": ""
+    }
+  },
+  {
+    "target_id": "parsers.parse_kv_pairs",
+    "variant": "B5",
+    "mutants_total": 7,
+    "killed_final": 7,
+    "mutants_covered": 7,
+    "killed_covered": 7,
+    "b0_killed_final": 6,
+    "n_generated": 4,
+    "n_accepted": 1,
+    "n_repaired": 0,
+    "rejection_reasons": {
+      "falsifiable": 3
+    },
+    "flaky_rejects": 0,
+    "rounds_used": 1,
+    "n_final_tests": 1,
+    "final_suite_passes": true,
+    "coverage_pct": 100.0,
+    "b0_coverage_pct": 80.0,
+    "llm_calls": 1,
+    "tokens_in": 1346,
+    "tokens_out": 1509,
+    "cost_usd": null,
+    "price_source": "",
+    "wall_sec": 39.5,
+    "accepted_codes": [
+      "import pytest\nfrom parsers import parse_kv_pairs\n\ndef test_empty_and_whitespace_only():\n    assert parse_kv_pairs(\"\") == {}\n    assert parse_kv_pairs(\"   \\t\\n  \") == {}\n\ndef test_single_pair_no_commas():\n    assert parse_kv_pairs(\"key=value\") == {\"key\": \"value\"}\n\ndef test_whitespace_stripping_keys_values():\n    assert parse_kv_pairs(\"  key  =  value  \") == {\"key\": \"value\"}\n    assert parse_kv_pairs(\" a =1,  b =2 \") == {\"a\": \"1\", \"b\": \"2\"}\n\ndef test_value_with_equals_sign_uses_first_partition():\n    assert parse_kv_pairs(\"url=http://host?x=1&y=2\") == {\"url\": \"http://host?x=1&y=2\"}\n\ndef test_entry_without_equals_raises():\n    with pytest.raises(ValueError):\n        parse_kv_pairs(\"a=1,bad\")\n    with pytest.raises(ValueError):\n        parse_kv_pairs(\"justtext\")"
+    ],
+    "mutant_summary": [
+      {
+        "mid": "M001",
+        "operator": "UOR",
+        "line": 66,
+        "description": "UOR @ line 66: unary '' removed",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M002",
+        "operator": "RTN",
+        "line": 67,
+        "description": "RTN @ line 67: return value -> None",
+        "killed_by_b0": false,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M003",
+        "operator": "CRS",
+        "line": 68,
+        "description": "CRS @ line 68: string ',' -> ',X'",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M004",
+        "operator": "ROR",
+        "line": 69,
+        "description": "ROR @ line 69: relational operator NotIn -> In",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M005",
+        "operator": "CRS",
+        "line": 69,
+        "description": "CRS @ line 69: string '=' -> '=X'",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M006",
+        "operator": "CRS",
+        "line": 71,
+        "description": "CRS @ line 71: string '=' -> '=X'",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M007",
+        "operator": "RTN",
+        "line": 73,
+        "description": "RTN @ line 73: return value -> None",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      }
+    ],
+    "gate_log": [
+      {
+        "cid": "R0C1",
+        "accepted": true,
+        "new_kills": 1
+      },
+      {
+        "cid": "R0C2",
+        "accepted": false,
+        "reasons": [
+          "falsifiable"
+        ]
+      },
+      {
+        "cid": "R0C3",
+        "accepted": false,
+        "reasons": [
+          "falsifiable"
+        ]
+      },
+      {
+        "cid": "R0C4",
+        "accepted": false,
+        "reasons": [
+          "falsifiable"
+        ]
+      }
+    ],
+    "ms_all": 1.0,
+    "ms_covered": 1.0,
+    "cost": {
+      "model": "qwen3.8-27b",
+      "calls": 1,
+      "tokens_in": 1346,
+      "tokens_out": 1509,
+      "cost_usd": null,
+      "price_source": ""
+    }
+  },
+  {
+    "target_id": "validators.validate_username",
+    "variant": "B0",
+    "mutants_total": 9,
+    "killed_final": 6,
+    "mutants_covered": 9,
+    "killed_covered": 6,
+    "b0_killed_final": 6,
+    "n_generated": 0,
+    "n_accepted": 0,
+    "n_repaired": 0,
+    "rejection_reasons": {},
+    "flaky_rejects": 0,
+    "rounds_used": 0,
+    "n_final_tests": 0,
+    "final_suite_passes": true,
+    "coverage_pct": 77.8,
+    "b0_coverage_pct": 77.8,
+    "llm_calls": 0,
+    "tokens_in": 0,
+    "tokens_out": 0,
+    "cost_usd": null,
+    "price_source": "",
+    "wall_sec": 12.0,
+    "accepted_codes": [],
+    "mutant_summary": [
+      {
+        "mid": "M001",
+        "operator": "UOR",
+        "line": 10,
+        "description": "UOR @ line 10: unary '' removed",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M002",
+        "operator": "CRN",
+        "line": 10,
+        "description": "CRN @ line 10: numeric 3 -> 4",
+        "killed_by_b0": false,
+        "killed_by_final": false,
+        "covered": true
+      },
+      {
+        "mid": "M003",
+        "operator": "CRN",
+        "line": 10,
+        "description": "CRN @ line 10: numeric 16 -> 17",
+        "killed_by_b0": false,
+        "killed_by_final": false,
+        "covered": true
+      },
+      {
+        "mid": "M004",
+        "operator": "UOR",
+        "line": 12,
+        "description": "UOR @ line 12: unary '' removed",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M005",
+        "operator": "CRN",
+        "line": 12,
+        "description": "CRN @ line 12: numeric 0 -> 1",
+        "killed_by_b0": false,
+        "killed_by_final": false,
+        "covered": true
+      },
+      {
+        "mid": "M006",
+        "operator": "UOR",
+        "line": 15,
+        "description": "UOR @ line 15: unary '' removed",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M007",
+        "operator": "ROR",
+        "line": 15,
+        "description": "ROR @ line 15: relational operator Eq -> NotEq",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M008",
+        "operator": "CRS",
+        "line": 15,
+        "description": "CRS @ line 15: string '_' -> '_X'",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M009",
+        "operator": "RTN",
+        "line": 17,
+        "description": "RTN @ line 17: return value -> None",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      }
+    ],
+    "gate_log": [],
+    "ms_all": 0.6667,
+    "ms_covered": 0.6667,
+    "cost": {
+      "model": "qwen3.8-27b",
+      "calls": 0,
+      "tokens_in": 0,
+      "tokens_out": 0,
+      "cost_usd": null,
+      "price_source": ""
+    }
+  },
+  {
+    "target_id": "validators.validate_username",
+    "variant": "B2",
+    "mutants_total": 9,
+    "killed_final": 9,
+    "mutants_covered": 9,
+    "killed_covered": 9,
+    "b0_killed_final": 6,
+    "n_generated": 1,
+    "n_accepted": 1,
+    "n_repaired": 1,
+    "rejection_reasons": {},
+    "flaky_rejects": 0,
+    "rounds_used": 1,
+    "n_final_tests": 1,
+    "final_suite_passes": true,
+    "coverage_pct": 100.0,
+    "b0_coverage_pct": 77.8,
+    "llm_calls": 1,
+    "tokens_in": 1197,
+    "tokens_out": 7414,
+    "cost_usd": null,
+    "price_source": "",
+    "wall_sec": 211.1,
+    "accepted_codes": [
+      "\nimport pytest\n\nfrom validators import validate_username\n\n\ndef test_username_min_length_ok():\n    assert validate_username(\"abc\") == \"abc\"\n\n\ndef test_username_max_length_ok():\n    name = \"a\" * 16\n    assert validate_username(name) == name\n\n\ndef test_username_length_2_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"ab\")\n\n\ndef test_username_length_17_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"a\" * 17)\n\n\ndef test_username_empty_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"\")\n\n\ndef test_username_starts_with_digit_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"1abc\")\n\n\ndef test_username_starts_with_underscore_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"_abc\")\n\n\ndef test_username_illegal_char_hyphen_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"abc-def\")\n\n\ndef test_username_illegal_char_space_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"abc def\")\n\n\ndef test_username_illegal_char_at_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"abc@def\")\n\n\ndef test_username_illegal_char_dot_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"abc.def\")\n\n\ndef test_username_mixed_valid_chars_ok():\n    assert validate_username(\"a1_b2\") == \"a1_b2\"\n\n\ndef test_username_all_underscores_after_first_ok():\n    assert validate_username(\"a____\") == \"a____\"\n\n\ndef test_username_all_digits_after_first_ok():\n    assert validate_username(\"a1234567890123\") == \"a1234567890123\"\n\n\ndef test_username_unicode_letter_ok():\n    assert validate_username(\"éè_1\") == \"éè_1\"\n\n\ndef test_username_single_char_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"a\")\n\n\ndef test_username_starts_with_non_ascii_digit_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"١abc\")\n\n\ndef test_username_illegal_char_paren_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"abc(def\")\n\n\ndef test_username_illegal_char_slash_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"abc/def\")\n\n\ndef test_username_illegal_char_colon_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"abc:def\")\n\n\ndef test_username_illegal_char_star_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"abc*def\")\n\n\ndef test_username_illegal_char_percent_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"abc%def\")\n\n\ndef test_username_illegal_char_ampersand_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"abc&def\")\n\n\ndef test_username_illegal_char_hash_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"abc#def\")\n\n\ndef test_username_illegal_char_dollar_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"abc$def\")\n\n\ndef test_username_illegal_char_caret_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"abc^def\")\n\n\ndef test_username_illegal_char_backtick_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"abc`def\")\n\n\ndef test_username_illegal_char_bracket_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"abc[def]\")\n\n\ndef test_username_illegal_char_brace_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"abc{def}\")\n\n\ndef test_username_illegal_char_pipe_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"abc|def\")\n\n\ndef test_username_illegal_char_backslash_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"abc\\\\def\")\n\n\ndef test_username_illegal_char_quote_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"abc'def\")\n\n\ndef test_username_illegal_char_double_quote_raises():\n    with pytest.raises(ValueError):\n        validate_username('abc\"def')\n\n\ndef test_username_illegal_char_semicolon_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"abc;def\")\n\n\ndef test_username_illegal_char_comma_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"abc,def\")\n\n\ndef test_username_illegal_char_less_greater_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"abc<def>\")\n\n\ndef test_username_illegal_char_plus_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"abc+def\")\n\n\ndef test_username_illegal_char_equal_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"abc=def\")\n\n\ndef test_username_illegal_char_question_mark_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"abc?def\")\n\n\ndef test_username_illegal_char_exclamation_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"abc!def\")\n\n\ndef test_username_illegal_char_tilde_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"abc~def\")\n\n\ndef test_username_illegal_char_tab_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"abc\\tdef\")\n\n\ndef test_username_illegal_char_newline_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"abc\\ndef\")\n\n\ndef test_username_illegal_char_carriage_return_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"abc\\rdef\")\n\n\ndef test_username_illegal_char_null_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"abc\\x00def\")\n\n\ndef test_username_illegal_char_control_char_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"abc\\x01def\")\n\n\ndef test_username_length_3_with_underscore_ok():\n    assert validate_username(\"a_b\") == \"a_b\"\n\n\ndef test_username_length_16_with_mixed_chars_ok():\n    name = \"a_1b_2c_3d_4e\"\n    assert validate_username(name) == name\n\n\ndef test_username_starts_with_uppercase_ok():\n    assert validate_username(\"Tom_99\") == \"Tom_99\"\n\n\ndef test_username_starts_with_lowercase_ok():\n    assert validate_username(\"tom_99\") == \"tom_99\"\n\n\ndef test_username_only_letters_ok():\n    assert validate_username(\"hello\") == \"hello\"\n\n\ndef test_username_only_digits_after_first_ok():\n    assert validate_username(\"a123456789012345\") == \"a123456789012345\"\n\n\ndef test_username_only_underscores_after_first_ok():\n    assert validate_username(\"a____________\") == \"a____________\"\n\n\ndef test_username_mixed_all_three_types_ok():\n    assert validate_username(\"a1_\") == \"a1_\"\n\n\ndef test_username_illegal_char_in_middle_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"ab-c\")\n\n\ndef test_username_illegal_char_at_end_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"abc-\")\n\n\ndef test_username_illegal_char_at_start_after_first_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"a-b\")\n\n\ndef test_username_length_2_with_valid_chars_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"a1\")\n\n\ndef test_username_length_17_with_valid_chars_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"a\" + \"1\" * 16)\n\n\ndef test_username_starts_with_special_char_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"!abc\")\n\n\ndef test_username_starts_with_symbol_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"#abc\")\n\n\ndef test_username_starts_with_number_sign_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"$abc\")\n\n\ndef test_username_starts_with_percent_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"%abc\")\n\n\ndef test_username_starts_with_asterisk_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"*abc\")\n\n\ndef test_username_starts_with_ampersand_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"&abc\")\n\n\ndef test_username_starts_with_at_sign_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"@abc\")\n\n\ndef test_username_starts_with_dot_raises():\n    with pytest.raises(ValueError):\n        validate_username(\".abc\")\n\n\ndef test_username_starts_with_comma_raises():\n    with pytest.raises(ValueError):\n        validate_username(\",abc\")\n\n\ndef test_username_starts_with_semicolon_raises():\n    with pytest.raises(ValueError):\n        validate_username(\";abc\")\n\n\ndef test_username_starts_with_colon_raises():\n    with pytest.raises(ValueError):\n        validate_username(\":abc\")\n\n\ndef test_username_starts_with_slash_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"/abc\")\n\n\ndef test_username_starts_with_backslash_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"\\\\abc\")\n\n\ndef test_username_starts_with_paren_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"(abc\")\n\n\ndef test_username_starts_with_bracket_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"[abc\")\n\n\ndef test_username_starts_with_brace_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"{abc\")\n\n\ndef test_username_starts_with_angle_bracket_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"<abc\")\n\n\ndef test_username_starts_with_plus_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"+abc\")\n\n\ndef test_username_starts_with_minus_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"-abc\")\n\n\ndef test_username_starts_with_equal_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"=abc\")\n\n\ndef test_username_starts_with_question_mark_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"?abc\")\n\n\ndef test_username_starts_with_exclamation_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"!abc\")\n\n\ndef test_username_starts_with_tilde_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"~abc\")\n\n\ndef test_username_starts_with_caret_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"^abc\")\n\n\ndef test_username_starts_with_backtick_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"`abc\")\n\n\ndef test_username_starts_with_pipe_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"|abc\")\n\n\ndef test_username_starts_with_single_quote_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"'abc\")\n\n\ndef test_username_starts_with_double_quote_raises():\n    with pytest.raises(ValueError):\n        validate_username('\"abc')\n\n\ndef test_username_starts_with_space_raises():\n    with pytest.raises(ValueError):\n        validate_username(\" abc\")\n\n\ndef test_username_starts_with_tab_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"\\tabc\")\n\n\ndef test_username_starts_with_newline_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"\\nabc\")\n\n\ndef test_username_starts_with_carriage_return_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"\\rabc\")\n\n\ndef test_username_starts_with_null_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"\\x00abc\")\n\n\ndef test_username_starts_with_control_char_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"\\x01abc\")\n\n\ndef test_username_starts_with_unicode_digit_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"١abc\")\n\n\ndef test_username_starts_with_unicode_symbol_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"©abc\")\n\n\ndef test_username_starts_with_unicode_emoji_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"😀abc\")\n\n\ndef test_username_starts_with_unicode_punctuation_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"。abc\")\n\n\ndef test_username_starts_with_unicode_connector_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"‐abc\")\n\n\ndef test_username_starts_with_unicode_dash_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"–abc\")\n\n\ndef test_username_starts_with_unicode_ellipsis_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"…abc\")\n\n\ndef test_username_starts_with_unicode_left_quote_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"“abc\")\n\n\ndef test_username_starts_with_unicode_right_quote_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"”abc\")\n\n\ndef test_username_starts_with_unicode_left_bracket_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"［abc\")\n\n\ndef test_username_starts_with_unicode_right_bracket_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"］abc\")\n\n\ndef test_username_starts_with_unicode_underscore_variant_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"＿abc\")\n\n\ndef test_username_starts_with_unicode_fullwidth_digit_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"１abc\")\n\n\ndef test_username_starts_with_unicode_fullwidth_letter_raises():\n    assert validate_username(\"Ａbc\") == \"Ａbc\"\n\n\ndef test_username_starts_with_unicode_cyrillic_ok():\n    assert validate_username(\"аbc\") == \"аbc\"\n\n\ndef test_username_starts_with_unicode_greek_ok():\n    assert validate_username(\"αbc\") == \"αbc\"\n\n\ndef test_username_starts_with_unicode_hebrew_ok():\n    assert validate_username(\"אbc\") == \"אbc\"\n\n\ndef test_username_starts_with_unicode_arabic_ok():\n    assert validate_username(\"اbc\") == \"اbc\"\n\n\ndef test_username_starts_with_unicode_chinese_ok():\n    assert validate_username(\"中bc\") == \"中bc\"\n\n\ndef test_username_starts_with_unicode_japanese_ok():\n    assert validate_username(\"日bc\") == \"日bc\"\n\n\ndef test_username_starts_with_unicode_korean_ok():\n    assert validate_username(\"한bc\") == \"한bc\"\n\n\ndef test_username_starts_with_unicode_devanagari_ok():\n    assert validate_username(\"अbc\") == \"अbc\"\n\n\ndef test_username_starts_with_unicode_bengali_ok():\n    assert validate_username(\"অbc\") == \"অbc\"\n\n\ndef test_username_starts_with_unicode_tamil_ok():\n    assert validate_username(\"அbc\") == \"அbc\"\n\n\ndef test_username_starts_with_unicode_thai_ok():\n    assert validate_username(\"อbc\") == \"อbc\"\n\n\ndef test_username_starts_with_unicode_vietnamese_ok():\n    assert validate_username(\"ảbc\") == \"ảbc\"\n\n\ndef test_username_starts_with_unicode_accented_ok():\n    assert validate_username(\"ébc\") == \"ébc\"\n\n\ndef test_username_starts_with_unicode_umlaut_ok():\n    assert validate_username(\"übc\") == \"übc\"\n\n\ndef test_username_starts_with_unicode_cedilla_ok():\n    assert validate_username(\"çbc\") == \"çbc\"\n\n\ndef test_username_starts_with_unicode_ring_ok():\n    assert validate_username(\"åbc\") == \"åbc\"\n\n\ndef test_username_starts_with_unicode_ogonek_ok():\n    assert validate_username(\"ąbc\") == \"ąbc\"\n\n\ndef test_username_starts_with_unicode_hacek_ok():\n    assert validate_username(\"čbc\") == \"čbc\"\n\n\ndef test_username_starts_with_unicode_macron_ok():\n    assert validate_username(\"ābc\") == \"ābc\"\n\n\ndef test_username_starts_with_unicode_breve_ok():\n    assert validate_username(\"ăbc\") == \"ăbc\"\n\n\ndef test_username_starts_with_unicode_double_grave_ok():\n    assert validate_username(\"ǎbc\") == \"ǎbc\"\n\n\ndef test_username_starts_with_unicode_caron_ok():\n    assert validate_username(\"ěbc\") == \"ěbc\"\n\n\ndef test_username_starts_with_unicode_circumflex_ok():\n    assert validate_username(\"êbc\") == \"êbc\"\n\n\ndef test_username_starts_with_unicode_ogonek2_ok():\n    assert validate_username(\"ėbc\") == \"ėbc\"\n\n\ndef test_username_starts_with_unicode_tilde_ok():\n    assert validate_username(\"ñbc\") == \"ñbc\"\n\n\ndef test_username_starts_with_unicode_slash_ok():\n    assert validate_username(\"đbc\") == \"đbc\"\n\n\ndef test_username_starts_with_unicode_stroke_ok():\n    assert validate_username(\"łbc\") == \"łbc\"\n\n\ndef test_username_starts_with_unicode_dot_above_ok():\n    assert validate_username(\"ıbc\") == \"ıbc\"\n\n\ndef test_username_starts_with_unicode_cedilla2_ok():\n    assert validate_username(\"ğbc\") == \"ğbc\"\n\n\ndef test_username_starts_with_unicode_breve2_ok():\n    assert validate_username(\"ŋbc\") == \"ŋbc\"\n\n\ndef test_username_starts_with_unicode_ring2_ok():\n    assert validate_username(\"øbc\") == \"øbc\"\n\n\ndef test_username_starts_with_unicode_eth_ok():\n    assert validate_username(\"ðbc\") == \"ðbc\"\n\n\ndef test_username_starts_with_unicode_thorn_ok():\n    assert validate_username(\"þbc\") == \"þbc\"\n\n\ndef test_username_starts_with_unicode_ydieresis_ok():\n    assert validate_username(\"ÿbc\") == \"ÿbc\"\n\n\ndef test_username_starts_with_unicode_yacute_ok():\n    assert validate_username(\"ýbc\") == \"ýbc\"\n\n\ndef test_username_starts_with_unicode_ygrave_ok():\n    assert validate_username(\"ÿbc\") == \"ÿbc\"\n\n\ndef test_username_starts_with_unicode_ydiaeresis_ok():\n    assert validate_username(\"ÿbc\") == \"ÿbc\"\n\n\ndef test_username_starts_with_unicode_ytilde_ok():\n    assert validate_username(\"ỹbc\") == \"ỹbc\"\n\n\ndef test_username_starts_with_unicode_ybreve_ok():\n    assert validate_username(\"ŷbc\") == \"ŷbc\"\n\n\ndef test_username_starts_with_unicode_yogonek_ok():\n    assert validate_username(\"ybc\") == \"ybc\"\n\n\ndef test_username_starts_with_unicode_zdotbelow_ok():\n    assert validate_username(\"ẑbc\") == \"ẑbc\"\n\n\ndef test_username_starts_with_unicode_zogonek_ok():\n    assert validate_username(\"žbc\") == \"žbc\"\n\n\ndef test_username_starts_with_unicode_zacute_ok():\n    assert validate_username(\"źbc\") == \"źbc\"\n\n\ndef test_username_starts_with_unicode_zcaron_ok():\n    assert validate_username(\"žbc\") == \"žbc\"\n\n\ndef test_username_starts_with_unicode_zstroke_ok():\n    assert validate_username(\"žbc\") == \"žbc\"\n\n\ndef test_username_starts_with_unicode_ztilde_ok():\n    assert validate_username(\"ẑbc\") == \"ẑbc\"\n\n\ndef test_username_starts_with_unicode_zdotbelow2_ok():\n    assert validate_username(\"ẑbc\") == \"ẑbc\"\n\n\ndef test_username_starts_with_unicode_zbreve_ok():\n    assert validate_username(\"ẑbc\") == \"ẑbc\"\n\n\ndef test_username_starts_with_unicode_zmacron_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zhacek_ok():\n    assert validate_username(\"žbc\") == \"žbc\"\n\n\ndef test_username_starts_with_unicode_zslash_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zring_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zdoubleacute_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zogonek2_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zcaron2_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zstroke2_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_ztilde2_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zdotbelow3_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zbreve2_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zmacron2_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zhacek2_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zslash2_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zring2_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zdoubleacute2_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zogonek3_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zcaron3_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zstroke3_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_ztilde3_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zdotbelow4_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zbreve3_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zmacron3_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zhacek3_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zslash3_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zring3_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zdoubleacute3_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zogonek4_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zcaron4_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zstroke4_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_ztilde4_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zdotbelow5_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zbreve4_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zmacron4_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zhacek4_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zslash4_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zring4_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zdoubleacute4_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zogonek5_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zcaron5_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zstroke5_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_ztilde5_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zdotbelow6_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zbreve5_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zmacron5_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zhacek5_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zslash5_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zring5_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zdoubleacute5_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zogonek6_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zcaron6_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zstroke6_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_ztilde6_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zdotbelow7_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zbreve6_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zmacron6_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zhacek6_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zslash6_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zring6_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zdoubleacute6_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zogonek7_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zcaron7_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zstroke7_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_ztilde7_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zdotbelow8_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zbreve7_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zmacron7_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zhacek7_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zslash7_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zring7_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zdoubleacute7_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zogonek8_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zcaron8_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zstroke8_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_ztilde8_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zdotbelow9_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zbreve8_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zmacron8_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zhacek8_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zslash8_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zring8_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zdoubleacute8_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zogonek9_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zcaron9_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zstroke9_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_ztilde9_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zdotbelow10_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zbreve9_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zmacron9_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zhacek9_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zslash9_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zring9_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zdoubleacute9_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zogonek10_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zcaron10_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zstroke10_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_ztilde10_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zdotbelow11_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zbreve10_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zmacron10_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zhacek10_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zslash10_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zring10_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zdoubleacute10_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zogonek11_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zcaron11_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zstroke11_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_ztilde11_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zdotbelow12_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zbreve11_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zmacron11_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zhacek11_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zslash11_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zring11_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zdoubleacute11_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zogonek12_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zcaron12_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zstroke12_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_ztilde12_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zdotbelow13_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zbreve12_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zmacron12_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zhacek12_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n"
+    ],
+    "mutant_summary": [
+      {
+        "mid": "M001",
+        "operator": "UOR",
+        "line": 10,
+        "description": "UOR @ line 10: unary '' removed",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M002",
+        "operator": "CRN",
+        "line": 10,
+        "description": "CRN @ line 10: numeric 3 -> 4",
+        "killed_by_b0": false,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M003",
+        "operator": "CRN",
+        "line": 10,
+        "description": "CRN @ line 10: numeric 16 -> 17",
+        "killed_by_b0": false,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M004",
+        "operator": "UOR",
+        "line": 12,
+        "description": "UOR @ line 12: unary '' removed",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M005",
+        "operator": "CRN",
+        "line": 12,
+        "description": "CRN @ line 12: numeric 0 -> 1",
+        "killed_by_b0": false,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M006",
+        "operator": "UOR",
+        "line": 15,
+        "description": "UOR @ line 15: unary '' removed",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M007",
+        "operator": "ROR",
+        "line": 15,
+        "description": "ROR @ line 15: relational operator Eq -> NotEq",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M008",
+        "operator": "CRS",
+        "line": 15,
+        "description": "CRS @ line 15: string '_' -> '_X'",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M009",
+        "operator": "RTN",
+        "line": 17,
+        "description": "RTN @ line 17: return value -> None",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      }
+    ],
+    "gate_log": [
+      {
+        "cid": "R0C1",
+        "accepted": true,
+        "new_kills": 3
+      }
+    ],
+    "ms_all": 1.0,
+    "ms_covered": 1.0,
+    "cost": {
+      "model": "qwen3.8-27b",
+      "calls": 1,
+      "tokens_in": 1197,
+      "tokens_out": 7414,
+      "cost_usd": null,
+      "price_source": ""
+    }
+  },
+  {
+    "target_id": "validators.validate_username",
+    "variant": "B5",
+    "mutants_total": 9,
+    "killed_final": 9,
+    "mutants_covered": 9,
+    "killed_covered": 9,
+    "b0_killed_final": 6,
+    "n_generated": 1,
+    "n_accepted": 1,
+    "n_repaired": 1,
+    "rejection_reasons": {},
+    "flaky_rejects": 0,
+    "rounds_used": 1,
+    "n_final_tests": 1,
+    "final_suite_passes": true,
+    "coverage_pct": 100.0,
+    "b0_coverage_pct": 77.8,
+    "llm_calls": 1,
+    "tokens_in": 1197,
+    "tokens_out": 7414,
+    "cost_usd": null,
+    "price_source": "",
+    "wall_sec": 16.3,
+    "accepted_codes": [
+      "\nimport pytest\n\nfrom validators import validate_username\n\n\ndef test_username_min_length_ok():\n    assert validate_username(\"abc\") == \"abc\"\n\n\ndef test_username_max_length_ok():\n    name = \"a\" * 16\n    assert validate_username(name) == name\n\n\ndef test_username_length_2_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"ab\")\n\n\ndef test_username_length_17_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"a\" * 17)\n\n\ndef test_username_empty_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"\")\n\n\ndef test_username_starts_with_digit_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"1abc\")\n\n\ndef test_username_starts_with_underscore_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"_abc\")\n\n\ndef test_username_illegal_char_hyphen_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"abc-def\")\n\n\ndef test_username_illegal_char_space_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"abc def\")\n\n\ndef test_username_illegal_char_at_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"abc@def\")\n\n\ndef test_username_illegal_char_dot_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"abc.def\")\n\n\ndef test_username_mixed_valid_chars_ok():\n    assert validate_username(\"a1_b2\") == \"a1_b2\"\n\n\ndef test_username_all_underscores_after_first_ok():\n    assert validate_username(\"a____\") == \"a____\"\n\n\ndef test_username_all_digits_after_first_ok():\n    assert validate_username(\"a1234567890123\") == \"a1234567890123\"\n\n\ndef test_username_unicode_letter_ok():\n    assert validate_username(\"éè_1\") == \"éè_1\"\n\n\ndef test_username_single_char_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"a\")\n\n\ndef test_username_starts_with_non_ascii_digit_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"١abc\")\n\n\ndef test_username_illegal_char_paren_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"abc(def\")\n\n\ndef test_username_illegal_char_slash_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"abc/def\")\n\n\ndef test_username_illegal_char_colon_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"abc:def\")\n\n\ndef test_username_illegal_char_star_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"abc*def\")\n\n\ndef test_username_illegal_char_percent_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"abc%def\")\n\n\ndef test_username_illegal_char_ampersand_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"abc&def\")\n\n\ndef test_username_illegal_char_hash_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"abc#def\")\n\n\ndef test_username_illegal_char_dollar_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"abc$def\")\n\n\ndef test_username_illegal_char_caret_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"abc^def\")\n\n\ndef test_username_illegal_char_backtick_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"abc`def\")\n\n\ndef test_username_illegal_char_bracket_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"abc[def]\")\n\n\ndef test_username_illegal_char_brace_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"abc{def}\")\n\n\ndef test_username_illegal_char_pipe_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"abc|def\")\n\n\ndef test_username_illegal_char_backslash_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"abc\\\\def\")\n\n\ndef test_username_illegal_char_quote_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"abc'def\")\n\n\ndef test_username_illegal_char_double_quote_raises():\n    with pytest.raises(ValueError):\n        validate_username('abc\"def')\n\n\ndef test_username_illegal_char_semicolon_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"abc;def\")\n\n\ndef test_username_illegal_char_comma_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"abc,def\")\n\n\ndef test_username_illegal_char_less_greater_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"abc<def>\")\n\n\ndef test_username_illegal_char_plus_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"abc+def\")\n\n\ndef test_username_illegal_char_equal_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"abc=def\")\n\n\ndef test_username_illegal_char_question_mark_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"abc?def\")\n\n\ndef test_username_illegal_char_exclamation_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"abc!def\")\n\n\ndef test_username_illegal_char_tilde_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"abc~def\")\n\n\ndef test_username_illegal_char_tab_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"abc\\tdef\")\n\n\ndef test_username_illegal_char_newline_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"abc\\ndef\")\n\n\ndef test_username_illegal_char_carriage_return_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"abc\\rdef\")\n\n\ndef test_username_illegal_char_null_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"abc\\x00def\")\n\n\ndef test_username_illegal_char_control_char_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"abc\\x01def\")\n\n\ndef test_username_length_3_with_underscore_ok():\n    assert validate_username(\"a_b\") == \"a_b\"\n\n\ndef test_username_length_16_with_mixed_chars_ok():\n    name = \"a_1b_2c_3d_4e\"\n    assert validate_username(name) == name\n\n\ndef test_username_starts_with_uppercase_ok():\n    assert validate_username(\"Tom_99\") == \"Tom_99\"\n\n\ndef test_username_starts_with_lowercase_ok():\n    assert validate_username(\"tom_99\") == \"tom_99\"\n\n\ndef test_username_only_letters_ok():\n    assert validate_username(\"hello\") == \"hello\"\n\n\ndef test_username_only_digits_after_first_ok():\n    assert validate_username(\"a123456789012345\") == \"a123456789012345\"\n\n\ndef test_username_only_underscores_after_first_ok():\n    assert validate_username(\"a____________\") == \"a____________\"\n\n\ndef test_username_mixed_all_three_types_ok():\n    assert validate_username(\"a1_\") == \"a1_\"\n\n\ndef test_username_illegal_char_in_middle_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"ab-c\")\n\n\ndef test_username_illegal_char_at_end_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"abc-\")\n\n\ndef test_username_illegal_char_at_start_after_first_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"a-b\")\n\n\ndef test_username_length_2_with_valid_chars_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"a1\")\n\n\ndef test_username_length_17_with_valid_chars_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"a\" + \"1\" * 16)\n\n\ndef test_username_starts_with_special_char_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"!abc\")\n\n\ndef test_username_starts_with_symbol_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"#abc\")\n\n\ndef test_username_starts_with_number_sign_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"$abc\")\n\n\ndef test_username_starts_with_percent_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"%abc\")\n\n\ndef test_username_starts_with_asterisk_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"*abc\")\n\n\ndef test_username_starts_with_ampersand_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"&abc\")\n\n\ndef test_username_starts_with_at_sign_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"@abc\")\n\n\ndef test_username_starts_with_dot_raises():\n    with pytest.raises(ValueError):\n        validate_username(\".abc\")\n\n\ndef test_username_starts_with_comma_raises():\n    with pytest.raises(ValueError):\n        validate_username(\",abc\")\n\n\ndef test_username_starts_with_semicolon_raises():\n    with pytest.raises(ValueError):\n        validate_username(\";abc\")\n\n\ndef test_username_starts_with_colon_raises():\n    with pytest.raises(ValueError):\n        validate_username(\":abc\")\n\n\ndef test_username_starts_with_slash_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"/abc\")\n\n\ndef test_username_starts_with_backslash_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"\\\\abc\")\n\n\ndef test_username_starts_with_paren_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"(abc\")\n\n\ndef test_username_starts_with_bracket_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"[abc\")\n\n\ndef test_username_starts_with_brace_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"{abc\")\n\n\ndef test_username_starts_with_angle_bracket_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"<abc\")\n\n\ndef test_username_starts_with_plus_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"+abc\")\n\n\ndef test_username_starts_with_minus_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"-abc\")\n\n\ndef test_username_starts_with_equal_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"=abc\")\n\n\ndef test_username_starts_with_question_mark_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"?abc\")\n\n\ndef test_username_starts_with_exclamation_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"!abc\")\n\n\ndef test_username_starts_with_tilde_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"~abc\")\n\n\ndef test_username_starts_with_caret_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"^abc\")\n\n\ndef test_username_starts_with_backtick_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"`abc\")\n\n\ndef test_username_starts_with_pipe_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"|abc\")\n\n\ndef test_username_starts_with_single_quote_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"'abc\")\n\n\ndef test_username_starts_with_double_quote_raises():\n    with pytest.raises(ValueError):\n        validate_username('\"abc')\n\n\ndef test_username_starts_with_space_raises():\n    with pytest.raises(ValueError):\n        validate_username(\" abc\")\n\n\ndef test_username_starts_with_tab_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"\\tabc\")\n\n\ndef test_username_starts_with_newline_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"\\nabc\")\n\n\ndef test_username_starts_with_carriage_return_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"\\rabc\")\n\n\ndef test_username_starts_with_null_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"\\x00abc\")\n\n\ndef test_username_starts_with_control_char_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"\\x01abc\")\n\n\ndef test_username_starts_with_unicode_digit_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"١abc\")\n\n\ndef test_username_starts_with_unicode_symbol_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"©abc\")\n\n\ndef test_username_starts_with_unicode_emoji_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"😀abc\")\n\n\ndef test_username_starts_with_unicode_punctuation_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"。abc\")\n\n\ndef test_username_starts_with_unicode_connector_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"‐abc\")\n\n\ndef test_username_starts_with_unicode_dash_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"–abc\")\n\n\ndef test_username_starts_with_unicode_ellipsis_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"…abc\")\n\n\ndef test_username_starts_with_unicode_left_quote_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"“abc\")\n\n\ndef test_username_starts_with_unicode_right_quote_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"”abc\")\n\n\ndef test_username_starts_with_unicode_left_bracket_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"［abc\")\n\n\ndef test_username_starts_with_unicode_right_bracket_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"］abc\")\n\n\ndef test_username_starts_with_unicode_underscore_variant_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"＿abc\")\n\n\ndef test_username_starts_with_unicode_fullwidth_digit_raises():\n    with pytest.raises(ValueError):\n        validate_username(\"１abc\")\n\n\ndef test_username_starts_with_unicode_fullwidth_letter_raises():\n    assert validate_username(\"Ａbc\") == \"Ａbc\"\n\n\ndef test_username_starts_with_unicode_cyrillic_ok():\n    assert validate_username(\"аbc\") == \"аbc\"\n\n\ndef test_username_starts_with_unicode_greek_ok():\n    assert validate_username(\"αbc\") == \"αbc\"\n\n\ndef test_username_starts_with_unicode_hebrew_ok():\n    assert validate_username(\"אbc\") == \"אbc\"\n\n\ndef test_username_starts_with_unicode_arabic_ok():\n    assert validate_username(\"اbc\") == \"اbc\"\n\n\ndef test_username_starts_with_unicode_chinese_ok():\n    assert validate_username(\"中bc\") == \"中bc\"\n\n\ndef test_username_starts_with_unicode_japanese_ok():\n    assert validate_username(\"日bc\") == \"日bc\"\n\n\ndef test_username_starts_with_unicode_korean_ok():\n    assert validate_username(\"한bc\") == \"한bc\"\n\n\ndef test_username_starts_with_unicode_devanagari_ok():\n    assert validate_username(\"अbc\") == \"अbc\"\n\n\ndef test_username_starts_with_unicode_bengali_ok():\n    assert validate_username(\"অbc\") == \"অbc\"\n\n\ndef test_username_starts_with_unicode_tamil_ok():\n    assert validate_username(\"அbc\") == \"அbc\"\n\n\ndef test_username_starts_with_unicode_thai_ok():\n    assert validate_username(\"อbc\") == \"อbc\"\n\n\ndef test_username_starts_with_unicode_vietnamese_ok():\n    assert validate_username(\"ảbc\") == \"ảbc\"\n\n\ndef test_username_starts_with_unicode_accented_ok():\n    assert validate_username(\"ébc\") == \"ébc\"\n\n\ndef test_username_starts_with_unicode_umlaut_ok():\n    assert validate_username(\"übc\") == \"übc\"\n\n\ndef test_username_starts_with_unicode_cedilla_ok():\n    assert validate_username(\"çbc\") == \"çbc\"\n\n\ndef test_username_starts_with_unicode_ring_ok():\n    assert validate_username(\"åbc\") == \"åbc\"\n\n\ndef test_username_starts_with_unicode_ogonek_ok():\n    assert validate_username(\"ąbc\") == \"ąbc\"\n\n\ndef test_username_starts_with_unicode_hacek_ok():\n    assert validate_username(\"čbc\") == \"čbc\"\n\n\ndef test_username_starts_with_unicode_macron_ok():\n    assert validate_username(\"ābc\") == \"ābc\"\n\n\ndef test_username_starts_with_unicode_breve_ok():\n    assert validate_username(\"ăbc\") == \"ăbc\"\n\n\ndef test_username_starts_with_unicode_double_grave_ok():\n    assert validate_username(\"ǎbc\") == \"ǎbc\"\n\n\ndef test_username_starts_with_unicode_caron_ok():\n    assert validate_username(\"ěbc\") == \"ěbc\"\n\n\ndef test_username_starts_with_unicode_circumflex_ok():\n    assert validate_username(\"êbc\") == \"êbc\"\n\n\ndef test_username_starts_with_unicode_ogonek2_ok():\n    assert validate_username(\"ėbc\") == \"ėbc\"\n\n\ndef test_username_starts_with_unicode_tilde_ok():\n    assert validate_username(\"ñbc\") == \"ñbc\"\n\n\ndef test_username_starts_with_unicode_slash_ok():\n    assert validate_username(\"đbc\") == \"đbc\"\n\n\ndef test_username_starts_with_unicode_stroke_ok():\n    assert validate_username(\"łbc\") == \"łbc\"\n\n\ndef test_username_starts_with_unicode_dot_above_ok():\n    assert validate_username(\"ıbc\") == \"ıbc\"\n\n\ndef test_username_starts_with_unicode_cedilla2_ok():\n    assert validate_username(\"ğbc\") == \"ğbc\"\n\n\ndef test_username_starts_with_unicode_breve2_ok():\n    assert validate_username(\"ŋbc\") == \"ŋbc\"\n\n\ndef test_username_starts_with_unicode_ring2_ok():\n    assert validate_username(\"øbc\") == \"øbc\"\n\n\ndef test_username_starts_with_unicode_eth_ok():\n    assert validate_username(\"ðbc\") == \"ðbc\"\n\n\ndef test_username_starts_with_unicode_thorn_ok():\n    assert validate_username(\"þbc\") == \"þbc\"\n\n\ndef test_username_starts_with_unicode_ydieresis_ok():\n    assert validate_username(\"ÿbc\") == \"ÿbc\"\n\n\ndef test_username_starts_with_unicode_yacute_ok():\n    assert validate_username(\"ýbc\") == \"ýbc\"\n\n\ndef test_username_starts_with_unicode_ygrave_ok():\n    assert validate_username(\"ÿbc\") == \"ÿbc\"\n\n\ndef test_username_starts_with_unicode_ydiaeresis_ok():\n    assert validate_username(\"ÿbc\") == \"ÿbc\"\n\n\ndef test_username_starts_with_unicode_ytilde_ok():\n    assert validate_username(\"ỹbc\") == \"ỹbc\"\n\n\ndef test_username_starts_with_unicode_ybreve_ok():\n    assert validate_username(\"ŷbc\") == \"ŷbc\"\n\n\ndef test_username_starts_with_unicode_yogonek_ok():\n    assert validate_username(\"ybc\") == \"ybc\"\n\n\ndef test_username_starts_with_unicode_zdotbelow_ok():\n    assert validate_username(\"ẑbc\") == \"ẑbc\"\n\n\ndef test_username_starts_with_unicode_zogonek_ok():\n    assert validate_username(\"žbc\") == \"žbc\"\n\n\ndef test_username_starts_with_unicode_zacute_ok():\n    assert validate_username(\"źbc\") == \"źbc\"\n\n\ndef test_username_starts_with_unicode_zcaron_ok():\n    assert validate_username(\"žbc\") == \"žbc\"\n\n\ndef test_username_starts_with_unicode_zstroke_ok():\n    assert validate_username(\"žbc\") == \"žbc\"\n\n\ndef test_username_starts_with_unicode_ztilde_ok():\n    assert validate_username(\"ẑbc\") == \"ẑbc\"\n\n\ndef test_username_starts_with_unicode_zdotbelow2_ok():\n    assert validate_username(\"ẑbc\") == \"ẑbc\"\n\n\ndef test_username_starts_with_unicode_zbreve_ok():\n    assert validate_username(\"ẑbc\") == \"ẑbc\"\n\n\ndef test_username_starts_with_unicode_zmacron_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zhacek_ok():\n    assert validate_username(\"žbc\") == \"žbc\"\n\n\ndef test_username_starts_with_unicode_zslash_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zring_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zdoubleacute_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zogonek2_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zcaron2_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zstroke2_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_ztilde2_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zdotbelow3_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zbreve2_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zmacron2_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zhacek2_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zslash2_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zring2_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zdoubleacute2_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zogonek3_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zcaron3_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zstroke3_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_ztilde3_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zdotbelow4_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zbreve3_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zmacron3_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zhacek3_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zslash3_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zring3_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zdoubleacute3_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zogonek4_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zcaron4_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zstroke4_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_ztilde4_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zdotbelow5_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zbreve4_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zmacron4_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zhacek4_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zslash4_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zring4_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zdoubleacute4_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zogonek5_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zcaron5_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zstroke5_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_ztilde5_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zdotbelow6_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zbreve5_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zmacron5_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zhacek5_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zslash5_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zring5_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zdoubleacute5_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zogonek6_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zcaron6_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zstroke6_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_ztilde6_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zdotbelow7_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zbreve6_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zmacron6_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zhacek6_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zslash6_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zring6_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zdoubleacute6_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zogonek7_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zcaron7_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zstroke7_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_ztilde7_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zdotbelow8_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zbreve7_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zmacron7_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zhacek7_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zslash7_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zring7_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zdoubleacute7_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zogonek8_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zcaron8_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zstroke8_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_ztilde8_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zdotbelow9_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zbreve8_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zmacron8_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zhacek8_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zslash8_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zring8_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zdoubleacute8_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zogonek9_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zcaron9_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zstroke9_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_ztilde9_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zdotbelow10_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zbreve9_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zmacron9_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zhacek9_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zslash9_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zring9_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zdoubleacute9_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zogonek10_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zcaron10_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zstroke10_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_ztilde10_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zdotbelow11_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zbreve10_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zmacron10_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zhacek10_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zslash10_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zring10_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zdoubleacute10_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zogonek11_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zcaron11_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zstroke11_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_ztilde11_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zdotbelow12_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zbreve11_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zmacron11_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zhacek11_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zslash11_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zring11_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zdoubleacute11_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zogonek12_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zcaron12_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zstroke12_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_ztilde12_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zdotbelow13_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zbreve12_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zmacron12_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n\n\ndef test_username_starts_with_unicode_zhacek12_ok():\n    assert validate_username(\"zbc\") == \"zbc\"\n"
+    ],
+    "mutant_summary": [
+      {
+        "mid": "M001",
+        "operator": "UOR",
+        "line": 10,
+        "description": "UOR @ line 10: unary '' removed",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M002",
+        "operator": "CRN",
+        "line": 10,
+        "description": "CRN @ line 10: numeric 3 -> 4",
+        "killed_by_b0": false,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M003",
+        "operator": "CRN",
+        "line": 10,
+        "description": "CRN @ line 10: numeric 16 -> 17",
+        "killed_by_b0": false,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M004",
+        "operator": "UOR",
+        "line": 12,
+        "description": "UOR @ line 12: unary '' removed",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M005",
+        "operator": "CRN",
+        "line": 12,
+        "description": "CRN @ line 12: numeric 0 -> 1",
+        "killed_by_b0": false,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M006",
+        "operator": "UOR",
+        "line": 15,
+        "description": "UOR @ line 15: unary '' removed",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M007",
+        "operator": "ROR",
+        "line": 15,
+        "description": "ROR @ line 15: relational operator Eq -> NotEq",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M008",
+        "operator": "CRS",
+        "line": 15,
+        "description": "CRS @ line 15: string '_' -> '_X'",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M009",
+        "operator": "RTN",
+        "line": 17,
+        "description": "RTN @ line 17: return value -> None",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      }
+    ],
+    "gate_log": [
+      {
+        "cid": "R0C1",
+        "accepted": true,
+        "new_kills": 3
+      }
+    ],
+    "ms_all": 1.0,
+    "ms_covered": 1.0,
+    "cost": {
+      "model": "qwen3.8-27b",
+      "calls": 1,
+      "tokens_in": 1197,
+      "tokens_out": 7414,
+      "cost_usd": null,
+      "price_source": ""
+    }
+  },
+  {
+    "target_id": "validators.validate_port",
+    "variant": "B0",
+    "mutants_total": 5,
+    "killed_final": 3,
+    "mutants_covered": 5,
+    "killed_covered": 3,
+    "b0_killed_final": 3,
+    "n_generated": 0,
+    "n_accepted": 0,
+    "n_repaired": 0,
+    "rejection_reasons": {},
+    "flaky_rejects": 0,
+    "rounds_used": 0,
+    "n_final_tests": 0,
+    "final_suite_passes": true,
+    "coverage_pct": 75.0,
+    "b0_coverage_pct": 75.0,
+    "llm_calls": 0,
+    "tokens_in": 0,
+    "tokens_out": 0,
+    "cost_usd": null,
+    "price_source": "",
+    "wall_sec": 5.2,
+    "accepted_codes": [],
+    "mutant_summary": [
+      {
+        "mid": "M001",
+        "operator": "UOR",
+        "line": 28,
+        "description": "UOR @ line 28: unary '' removed",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M002",
+        "operator": "UOR",
+        "line": 30,
+        "description": "UOR @ line 30: unary '' removed",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M003",
+        "operator": "CRN",
+        "line": 30,
+        "description": "CRN @ line 30: numeric 1 -> 2",
+        "killed_by_b0": false,
+        "killed_by_final": false,
+        "covered": true
+      },
+      {
+        "mid": "M004",
+        "operator": "CRN",
+        "line": 30,
+        "description": "CRN @ line 30: numeric 65535 -> 65536",
+        "killed_by_b0": false,
+        "killed_by_final": false,
+        "covered": true
+      },
+      {
+        "mid": "M005",
+        "operator": "RTN",
+        "line": 32,
+        "description": "RTN @ line 32: return value -> None",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      }
+    ],
+    "gate_log": [],
+    "ms_all": 0.6,
+    "ms_covered": 0.6,
+    "cost": {
+      "model": "qwen3.8-27b",
+      "calls": 0,
+      "tokens_in": 0,
+      "tokens_out": 0,
+      "cost_usd": null,
+      "price_source": ""
+    }
+  },
+  {
+    "target_id": "validators.validate_port",
+    "variant": "B2",
+    "mutants_total": 5,
+    "killed_final": 5,
+    "mutants_covered": 5,
+    "killed_covered": 5,
+    "b0_killed_final": 3,
+    "n_generated": 4,
+    "n_accepted": 2,
+    "n_repaired": 0,
+    "rejection_reasons": {
+      "falsifiable": 2
+    },
+    "flaky_rejects": 0,
+    "rounds_used": 1,
+    "n_final_tests": 2,
+    "final_suite_passes": true,
+    "coverage_pct": 100.0,
+    "b0_coverage_pct": 75.0,
+    "llm_calls": 1,
+    "tokens_in": 1186,
+    "tokens_out": 955,
+    "cost_usd": null,
+    "price_source": "",
+    "wall_sec": 51.0,
+    "accepted_codes": [
+      "import pytest\n\nfrom validators import validate_port\n\n\ndef test_validate_port_returns_int_unchanged():\n    \"\"\"Valid int in range is returned as-is.\"\"\"\n    assert validate_port(1) == 1\n    assert validate_port(65535) == 65535\n    assert validate_port(443) == 443\n\n\ndef test_validate_port_rejects_bool_true():\n    \"\"\"True is a bool and must be rejected.\"\"\"\n    with pytest.raises(ValueError):\n        validate_port(True)\n\n\ndef test_validate_port_rejects_bool_false():\n    \"\"\"False is a bool and must be rejected.\"\"\"\n    with pytest.raises(ValueError):\n        validate_port(False)\n\n\ndef test_validate_port_rejects_non_int_types():\n    \"\"\"Non-int types (str, float, None) must raise ValueError.\"\"\"\n    with pytest.raises(ValueError):\n        validate_port(\"80\")\n    with pytest.raises(ValueError):\n        validate_port(80.0)\n    with pytest.raises(ValueError):\n        validate_port(None)",
+      "import pytest\n\nfrom validators import validate_port\n\n\ndef test_validate_port_boundary_min():\n    \"\"\"Port 1 is the minimum valid port.\"\"\"\n    assert validate_port(1) == 1\n\n\ndef test_validate_port_boundary_max():\n    \"\"\"Port 65535 is the maximum valid port.\"\"\"\n    assert validate_port(65535) == 65535\n\n\ndef test_validate_port_rejects_below_min():\n    \"\"\"Port 0 and negative values are out of range.\"\"\"\n    with pytest.raises(ValueError):\n        validate_port(0)\n    with pytest.raises(ValueError):\n        validate_port(-1)\n    with pytest.raises(ValueError):\n        validate_port(-65535)\n\n\ndef test_validate_port_rejects_above_max():\n    \"\"\"Port 65536 and larger values are out of range.\"\"\"\n    with pytest.raises(ValueError):\n        validate_port(65536)\n    with pytest.raises(ValueError):\n        validate_port(100000)"
+    ],
+    "mutant_summary": [
+      {
+        "mid": "M001",
+        "operator": "UOR",
+        "line": 28,
+        "description": "UOR @ line 28: unary '' removed",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M002",
+        "operator": "UOR",
+        "line": 30,
+        "description": "UOR @ line 30: unary '' removed",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M003",
+        "operator": "CRN",
+        "line": 30,
+        "description": "CRN @ line 30: numeric 1 -> 2",
+        "killed_by_b0": false,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M004",
+        "operator": "CRN",
+        "line": 30,
+        "description": "CRN @ line 30: numeric 65535 -> 65536",
+        "killed_by_b0": false,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M005",
+        "operator": "RTN",
+        "line": 32,
+        "description": "RTN @ line 32: return value -> None",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      }
+    ],
+    "gate_log": [
+      {
+        "cid": "R0C1",
+        "accepted": true,
+        "new_kills": 1
+      },
+      {
+        "cid": "R0C2",
+        "accepted": true,
+        "new_kills": 1
+      },
+      {
+        "cid": "R0C3",
+        "accepted": false,
+        "reasons": [
+          "falsifiable"
+        ]
+      },
+      {
+        "cid": "R0C4",
+        "accepted": false,
+        "reasons": [
+          "falsifiable"
+        ]
+      }
+    ],
+    "ms_all": 1.0,
+    "ms_covered": 1.0,
+    "cost": {
+      "model": "qwen3.8-27b",
+      "calls": 1,
+      "tokens_in": 1186,
+      "tokens_out": 955,
+      "cost_usd": null,
+      "price_source": ""
+    }
+  },
+  {
+    "target_id": "validators.validate_port",
+    "variant": "B5",
+    "mutants_total": 5,
+    "killed_final": 5,
+    "mutants_covered": 5,
+    "killed_covered": 5,
+    "b0_killed_final": 3,
+    "n_generated": 4,
+    "n_accepted": 2,
+    "n_repaired": 0,
+    "rejection_reasons": {
+      "falsifiable": 2
+    },
+    "flaky_rejects": 0,
+    "rounds_used": 1,
+    "n_final_tests": 2,
+    "final_suite_passes": true,
+    "coverage_pct": 100.0,
+    "b0_coverage_pct": 75.0,
+    "llm_calls": 1,
+    "tokens_in": 1186,
+    "tokens_out": 955,
+    "cost_usd": null,
+    "price_source": "",
+    "wall_sec": 31.0,
+    "accepted_codes": [
+      "import pytest\n\nfrom validators import validate_port\n\n\ndef test_validate_port_returns_int_unchanged():\n    \"\"\"Valid int in range is returned as-is.\"\"\"\n    assert validate_port(1) == 1\n    assert validate_port(65535) == 65535\n    assert validate_port(443) == 443\n\n\ndef test_validate_port_rejects_bool_true():\n    \"\"\"True is a bool and must be rejected.\"\"\"\n    with pytest.raises(ValueError):\n        validate_port(True)\n\n\ndef test_validate_port_rejects_bool_false():\n    \"\"\"False is a bool and must be rejected.\"\"\"\n    with pytest.raises(ValueError):\n        validate_port(False)\n\n\ndef test_validate_port_rejects_non_int_types():\n    \"\"\"Non-int types (str, float, None) must raise ValueError.\"\"\"\n    with pytest.raises(ValueError):\n        validate_port(\"80\")\n    with pytest.raises(ValueError):\n        validate_port(80.0)\n    with pytest.raises(ValueError):\n        validate_port(None)",
+      "import pytest\n\nfrom validators import validate_port\n\n\ndef test_validate_port_boundary_min():\n    \"\"\"Port 1 is the minimum valid port.\"\"\"\n    assert validate_port(1) == 1\n\n\ndef test_validate_port_boundary_max():\n    \"\"\"Port 65535 is the maximum valid port.\"\"\"\n    assert validate_port(65535) == 65535\n\n\ndef test_validate_port_rejects_below_min():\n    \"\"\"Port 0 and negative values are out of range.\"\"\"\n    with pytest.raises(ValueError):\n        validate_port(0)\n    with pytest.raises(ValueError):\n        validate_port(-1)\n    with pytest.raises(ValueError):\n        validate_port(-65535)\n\n\ndef test_validate_port_rejects_above_max():\n    \"\"\"Port 65536 and larger values are out of range.\"\"\"\n    with pytest.raises(ValueError):\n        validate_port(65536)\n    with pytest.raises(ValueError):\n        validate_port(100000)"
+    ],
+    "mutant_summary": [
+      {
+        "mid": "M001",
+        "operator": "UOR",
+        "line": 28,
+        "description": "UOR @ line 28: unary '' removed",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M002",
+        "operator": "UOR",
+        "line": 30,
+        "description": "UOR @ line 30: unary '' removed",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M003",
+        "operator": "CRN",
+        "line": 30,
+        "description": "CRN @ line 30: numeric 1 -> 2",
+        "killed_by_b0": false,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M004",
+        "operator": "CRN",
+        "line": 30,
+        "description": "CRN @ line 30: numeric 65535 -> 65536",
+        "killed_by_b0": false,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M005",
+        "operator": "RTN",
+        "line": 32,
+        "description": "RTN @ line 32: return value -> None",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      }
+    ],
+    "gate_log": [
+      {
+        "cid": "R0C1",
+        "accepted": true,
+        "new_kills": 1
+      },
+      {
+        "cid": "R0C2",
+        "accepted": true,
+        "new_kills": 1
+      },
+      {
+        "cid": "R0C3",
+        "accepted": false,
+        "reasons": [
+          "falsifiable"
+        ]
+      },
+      {
+        "cid": "R0C4",
+        "accepted": false,
+        "reasons": [
+          "falsifiable"
+        ]
+      }
+    ],
+    "ms_all": 1.0,
+    "ms_covered": 1.0,
+    "cost": {
+      "model": "qwen3.8-27b",
+      "calls": 1,
+      "tokens_in": 1186,
+      "tokens_out": 955,
+      "cost_usd": null,
+      "price_source": ""
+    }
+  },
+  {
+    "target_id": "validators.normalize_hex_color",
+    "variant": "B0",
+    "mutants_total": 14,
+    "killed_final": 14,
+    "mutants_covered": 14,
+    "killed_covered": 14,
+    "b0_killed_final": 14,
+    "n_generated": 0,
+    "n_accepted": 0,
+    "n_repaired": 0,
+    "rejection_reasons": {},
+    "flaky_rejects": 0,
+    "rounds_used": 0,
+    "n_final_tests": 0,
+    "final_suite_passes": true,
+    "coverage_pct": 69.2,
+    "b0_coverage_pct": 69.2,
+    "llm_calls": 0,
+    "tokens_in": 0,
+    "tokens_out": 0,
+    "cost_usd": null,
+    "price_source": "",
+    "wall_sec": 13.6,
+    "accepted_codes": [],
+    "mutant_summary": [
+      {
+        "mid": "M001",
+        "operator": "UOR",
+        "line": 41,
+        "description": "UOR @ line 41: unary '' removed",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M002",
+        "operator": "CRS",
+        "line": 41,
+        "description": "CRS @ line 41: string '#' -> '#X'",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M003",
+        "operator": "CRN",
+        "line": 43,
+        "description": "CRN @ line 43: numeric 1 -> 2",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M004",
+        "operator": "ROR",
+        "line": 44,
+        "description": "ROR @ line 44: relational operator Eq -> NotEq",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M005",
+        "operator": "CRN",
+        "line": 44,
+        "description": "CRN @ line 44: numeric 3 -> 4",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M006",
+        "operator": "CRS",
+        "line": 45,
+        "description": "CRS @ line 45: string '' -> 'X'",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M007",
+        "operator": "AOR",
+        "line": 45,
+        "description": "AOR @ line 45: arithmetic operator Mult -> Div",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M008",
+        "operator": "CRN",
+        "line": 45,
+        "description": "CRN @ line 45: numeric 2 -> 3",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M009",
+        "operator": "ROR",
+        "line": 46,
+        "description": "ROR @ line 46: relational operator NotEq -> Eq",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M010",
+        "operator": "CRN",
+        "line": 46,
+        "description": "CRN @ line 46: numeric 6 -> 7",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M011",
+        "operator": "CRN",
+        "line": 49,
+        "description": "CRN @ line 49: numeric 16 -> 17",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M012",
+        "operator": "RTN",
+        "line": 52,
+        "description": "RTN @ line 52: return value -> None",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M013",
+        "operator": "CRS",
+        "line": 52,
+        "description": "CRS @ line 52: string '#' -> '#X'",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M014",
+        "operator": "CRS",
+        "line": 52,
+        "description": "CRS @ line 52: string '06X' -> '06XX'",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      }
+    ],
+    "gate_log": [],
+    "ms_all": 1.0,
+    "ms_covered": 1.0,
+    "cost": {
+      "model": "qwen3.8-27b",
+      "calls": 0,
+      "tokens_in": 0,
+      "tokens_out": 0,
+      "cost_usd": null,
+      "price_source": ""
+    }
+  },
+  {
+    "target_id": "validators.normalize_hex_color",
+    "variant": "B2",
+    "mutants_total": 14,
+    "killed_final": 14,
+    "mutants_covered": 14,
+    "killed_covered": 14,
+    "b0_killed_final": 14,
+    "n_generated": 0,
+    "n_accepted": 0,
+    "n_repaired": 0,
+    "rejection_reasons": {},
+    "flaky_rejects": 0,
+    "rounds_used": 0,
+    "n_final_tests": 0,
+    "final_suite_passes": true,
+    "coverage_pct": 69.2,
+    "b0_coverage_pct": 69.2,
+    "llm_calls": 0,
+    "tokens_in": 0,
+    "tokens_out": 0,
+    "cost_usd": null,
+    "price_source": "",
+    "wall_sec": 13.2,
+    "accepted_codes": [],
+    "mutant_summary": [
+      {
+        "mid": "M001",
+        "operator": "UOR",
+        "line": 41,
+        "description": "UOR @ line 41: unary '' removed",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M002",
+        "operator": "CRS",
+        "line": 41,
+        "description": "CRS @ line 41: string '#' -> '#X'",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M003",
+        "operator": "CRN",
+        "line": 43,
+        "description": "CRN @ line 43: numeric 1 -> 2",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M004",
+        "operator": "ROR",
+        "line": 44,
+        "description": "ROR @ line 44: relational operator Eq -> NotEq",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M005",
+        "operator": "CRN",
+        "line": 44,
+        "description": "CRN @ line 44: numeric 3 -> 4",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M006",
+        "operator": "CRS",
+        "line": 45,
+        "description": "CRS @ line 45: string '' -> 'X'",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M007",
+        "operator": "AOR",
+        "line": 45,
+        "description": "AOR @ line 45: arithmetic operator Mult -> Div",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M008",
+        "operator": "CRN",
+        "line": 45,
+        "description": "CRN @ line 45: numeric 2 -> 3",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M009",
+        "operator": "ROR",
+        "line": 46,
+        "description": "ROR @ line 46: relational operator NotEq -> Eq",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M010",
+        "operator": "CRN",
+        "line": 46,
+        "description": "CRN @ line 46: numeric 6 -> 7",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M011",
+        "operator": "CRN",
+        "line": 49,
+        "description": "CRN @ line 49: numeric 16 -> 17",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M012",
+        "operator": "RTN",
+        "line": 52,
+        "description": "RTN @ line 52: return value -> None",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M013",
+        "operator": "CRS",
+        "line": 52,
+        "description": "CRS @ line 52: string '#' -> '#X'",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M014",
+        "operator": "CRS",
+        "line": 52,
+        "description": "CRS @ line 52: string '06X' -> '06XX'",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      }
+    ],
+    "gate_log": [],
+    "ms_all": 1.0,
+    "ms_covered": 1.0,
+    "cost": {
+      "model": "qwen3.8-27b",
+      "calls": 0,
+      "tokens_in": 0,
+      "tokens_out": 0,
+      "cost_usd": null,
+      "price_source": ""
+    }
+  },
+  {
+    "target_id": "validators.normalize_hex_color",
+    "variant": "B5",
+    "mutants_total": 14,
+    "killed_final": 14,
+    "mutants_covered": 14,
+    "killed_covered": 14,
+    "b0_killed_final": 14,
+    "n_generated": 0,
+    "n_accepted": 0,
+    "n_repaired": 0,
+    "rejection_reasons": {},
+    "flaky_rejects": 0,
+    "rounds_used": 0,
+    "n_final_tests": 0,
+    "final_suite_passes": true,
+    "coverage_pct": 69.2,
+    "b0_coverage_pct": 69.2,
+    "llm_calls": 0,
+    "tokens_in": 0,
+    "tokens_out": 0,
+    "cost_usd": null,
+    "price_source": "",
+    "wall_sec": 11.7,
+    "accepted_codes": [],
+    "mutant_summary": [
+      {
+        "mid": "M001",
+        "operator": "UOR",
+        "line": 41,
+        "description": "UOR @ line 41: unary '' removed",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M002",
+        "operator": "CRS",
+        "line": 41,
+        "description": "CRS @ line 41: string '#' -> '#X'",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M003",
+        "operator": "CRN",
+        "line": 43,
+        "description": "CRN @ line 43: numeric 1 -> 2",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M004",
+        "operator": "ROR",
+        "line": 44,
+        "description": "ROR @ line 44: relational operator Eq -> NotEq",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M005",
+        "operator": "CRN",
+        "line": 44,
+        "description": "CRN @ line 44: numeric 3 -> 4",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M006",
+        "operator": "CRS",
+        "line": 45,
+        "description": "CRS @ line 45: string '' -> 'X'",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M007",
+        "operator": "AOR",
+        "line": 45,
+        "description": "AOR @ line 45: arithmetic operator Mult -> Div",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M008",
+        "operator": "CRN",
+        "line": 45,
+        "description": "CRN @ line 45: numeric 2 -> 3",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M009",
+        "operator": "ROR",
+        "line": 46,
+        "description": "ROR @ line 46: relational operator NotEq -> Eq",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M010",
+        "operator": "CRN",
+        "line": 46,
+        "description": "CRN @ line 46: numeric 6 -> 7",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M011",
+        "operator": "CRN",
+        "line": 49,
+        "description": "CRN @ line 49: numeric 16 -> 17",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M012",
+        "operator": "RTN",
+        "line": 52,
+        "description": "RTN @ line 52: return value -> None",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M013",
+        "operator": "CRS",
+        "line": 52,
+        "description": "CRS @ line 52: string '#' -> '#X'",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M014",
+        "operator": "CRS",
+        "line": 52,
+        "description": "CRS @ line 52: string '06X' -> '06XX'",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      }
+    ],
+    "gate_log": [],
+    "ms_all": 1.0,
+    "ms_covered": 1.0,
+    "cost": {
+      "model": "qwen3.8-27b",
+      "calls": 0,
+      "tokens_in": 0,
+      "tokens_out": 0,
+      "cost_usd": null,
+      "price_source": ""
+    }
   }
 ]

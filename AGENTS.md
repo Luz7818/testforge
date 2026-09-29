@@ -14,8 +14,8 @@
 
 | 项 | 值 | 复核命令 |
 |---|---|---|
-| 测试数 | 70 个测试（全部收集成功） | `.venv/Scripts/python.exe -m pytest --collect-only`，末行 `70 tests collected` |
-| 测试全通过 | 70 项通过，退出码 0（0.2 新增预设与成本口径测试） | `.venv/Scripts/python.exe -m pytest` |
+| 测试数 | 74 个测试（全部收集成功） | `.venv/Scripts/python.exe -m pytest --collect-only`，末行 `75 tests collected` |
+| 测试全通过 | 75 项通过，退出码 0（0.3 新增传输/节流/缓存键测试） | `.venv/Scripts/python.exe -m pytest` |
 | 静态检查 | pyflakes 0 项；它已在 `[project.optional-dependencies].dev` 里，`pip install -e .[dev]` 即恢复 | `.venv/Scripts/python.exe -m pyflakes testforge experiments tests conftest.py` |
 | CLI 可用 | 退出码 0，三个子命令 `targets` / `run` / `report` | `.venv/Scripts/python.exe -m testforge.cli --help` |
 | 基准规模 | 18 个目标函数 / 6 个模块 | `.venv/Scripts/python.exe -m testforge.cli targets`（输出 18 行） |
@@ -25,7 +25,7 @@
 | CI | 5 个 job：4 格测试矩阵（ubuntu 3.10/3.11/3.12 + windows 3.12，`pip install -e .[dev]` + pytest + CLI 冒烟）、`mutation-loop-smoke`（pyflakes + 一格 Mock 全链路冒烟 + 结果断言）、`api-smoke`（仅手动触发，无密钥自动跳过）。**这里不写"最近一次是哪个提交"**——分支每推一次它就变，写进文档同一次提交里就作废了；当前分支 HEAD 的徽章为 `passing`（复核见右）。本机没有 `gh`，但徽章与 Actions 接口对**公开仓都免认证**；要提交号再用 `/actions/runs`（匿名限 60 次/小时/IP，别拿它轮询） | `python -c "import urllib.request as u;b=u.urlopen(u.Request('https://github.com/Luz7818/testforge/workflows/CI/badge.svg',headers={'User-Agent':'Mozilla/5.0'}),timeout=30).read().decode();print('passing' in b)"` 应为 `True`；步骤读 `.github/workflows/ci.yml` |
 | 运行时依赖 | 4 项：`pytest>=8.0`、`coverage>=7.4`、`openai>=1.30`、`matplotlib>=3.8` | 读 `pyproject.toml` 的 `[project] dependencies` |
 | 依赖安装位置 | 仓库根 `pyproject.toml`，无 `requirements.txt`；`testforge` 已以 editable 装进 `.venv`（0.2 起），从任意 cwd 都能 `python -m testforge.cli` | `.venv/Scripts/python.exe -m pip list`（有 `testforge 0.2.0` 条目） |
-| prompt 缓存 | 本机 `llm_cache/` 78 个 JSON（`--mode api` 才会写） | `.venv/Scripts/python.exe -c "import pathlib;print(len(list(pathlib.Path('llm_cache').glob('*.json'))))"` |
+| prompt 缓存 | `llm_cache/`（8B 时代）与 `llm_cache_27b_full/`、`llm_cache_27b_rq2/`（0.3 网格，独立采样）；缓存键含 `TESTFORGE_EXTRA_BODY`（0.3 起），不同请求体设置不互串 | `python -c "import pathlib;print(len(list(pathlib.Path('llm_cache_27b_full').glob('*.json'))))"` |
 
 ## 仓库地图
 
@@ -40,13 +40,13 @@
 | `testforge/agent/` | 回路编排与 prompt | `orchestrator.py`（`run_target`：基线 → 变异 → 生成 → 门禁 → 联合评估）、`prompts.py`（`=== BLOCK ===` 结构） |
 | `testforge/gate/` | 验收判定与原代码执行 | `gate.py`（`evaluate_candidate`）、`runner.py`（`run_tests_once` / `measure_coverage`）、`__init__.py` 里定义 `coverage_pct` |
 | `testforge/mutation/` | 变异体生成与杀伤矩阵 | `operators.py`（7 类算子）、`engine.py`（拼接、语法校验、分层采样、编号）、`runner.py`（进程池 + `pytest -x`） |
-| `testforge/llm/` | 两个后端 | `client.py`：`OpenAICompatClient`（磁盘缓存/重试/记账）与 `MockLLMClient`（特征化生成） |
+| `testforge/llm/` | 两个后端 | `client.py`：`OpenAICompatClient`（`TESTFORGE_TRANSPORT`（sdk/urllib）双传输、磁盘缓存/重试/节流/记账）与 `MockLLMClient`（特征化生成） |
 | `testforge/analysis/` | 目标函数静态解析 | `inspector.py`：签名、docstring、参数表、行号区间 |
 | `testforge/report/` | Markdown 渲染 | `renderer.py`：`render_target_report` / `render_summary` |
 | `testforge/utils.py` | 临时工作区、子进程、diff、JSON | `workspace()`（一次性目录，退出即删）、`run_cmd()`（超时返回 -9） |
 | `benchmarks/` | 目标函数 + 每模块一份既有测试（B0） | `manifest.json` 是目标清单的唯一来源 |
 | `experiments/` | 网格、统计、图、跨网格比较 | `run_experiment.py` / `analyze.py` / `plots.py` / `compare_grids.py` |
-| `tests/` | 自身测试 | 11 个文件、70 项，见 `tests/README.md` |
+| `tests/` | 自身测试 | 11 个文件、75 项，见 `tests/README.md` |
 | `results/` | 实验产物 | 只读。`.gitignore` 用白名单只放行 `results/exp_*` 里的 JSON/MD/PNG |
 
 ## 关键约定
@@ -54,7 +54,7 @@
 1. **确定性用 `zlib.crc32`，不用内建 `hash()`**：`orchestrator._stable_hash` 给变异采样种子和候选
    去重哈希用。内建 `hash()` 对 `str` 按进程随机加盐（`PYTHONHASHSEED`），换一次进程就会挑到另一批
    变异体，网格结果不可复现。`llm/client.py` 里 Mock 的测试函数名后缀同样用 crc32。
-2. **prompt 磁盘缓存**：`OpenAICompatClient._cache_path` 用 `sha256(model|system|prompt|temperature|max_tokens)`
+2. **prompt 磁盘缓存**：`OpenAICompatClient._cache_path` 用 `sha256(model|system|prompt|temperature|max_tokens|extra_body)`
    作键名写到 `llm_cache/`（或 `TESTFORGE_CACHE_DIR`）。命中即 `cached=True`、零 API 消耗、逐位重放。
    要一次独立采样就把缓存目录指到空目录（已发表的两轮真实网格即如此）。Mock 后端不读写缓存。
 3. **逐格落盘、可续跑**：`run_experiment.py` 每跑完一个（目标 × 变体）就把整份 `results.json` 重写一次。
@@ -73,17 +73,17 @@
 8. **`n_accepted` 是最终套件里的文件数**：联合评估若整体不通过，会按“和 B0 一起跑不过”逐个剔除，
    最多三轮。所以 `n_accepted` 可能小于回路中验收过的数量。
 9. **数字口径**：README 与 `docs/report.md` 里的“36 个单元”“pooled n=36”指实验格数
-   （18 目标 × 2 轮网格），不是测试数。测试数是 70，两处不要互相引用。
+   （18 目标 × 2 轮网格），不是测试数。测试数是 75，两处不要互相引用。
 
 ## 改动后的验证
 
 | 你动了 | 必须跑 |
 |---|---|
-| `testforge/**` 任意文件 | `.venv/Scripts/python.exe -m pytest`（70 项通过，约 1 分钟） |
+| `testforge/**` 任意文件 | `.venv/Scripts/python.exe -m pytest`（75 项通过，约 1.5 分钟） |
 | `mutation/operators.py` / `engine.py` | `.venv/Scripts/python.exe -m pytest tests/test_operators.py tests/test_engine.py`；再核对上面那条 197 的计数是否变化 |
 | `gate/` | `.venv/Scripts/python.exe -m pytest tests/test_gate.py` |
 | `agent/orchestrator.py` / `llm/client.py` | `.venv/Scripts/python.exe -m pytest tests/test_e2e.py tests/test_mock_client.py`，再跑一次离线单格看 MS 是否漂移 |
-| `config.py` / `.env` 读取逻辑 | `.venv/Scripts/python.exe -m pytest tests/test_dotenv.py tests/test_config_client.py` |
+| `config.py` / `.env` 读取逻辑 | `.venv/Scripts/python.exe -m pytest tests/test_dotenv.py tests/test_config_client.py tests/test_cost_accounting.py` |
 | `benchmarks/` | `.venv/Scripts/python.exe -m pytest tests/test_inspector.py`（内含“18 个目标”的断言）+ `.venv/Scripts/python.exe -m testforge.cli targets` |
 | `cli.py` 参数 | `.venv/Scripts/python.exe -m testforge.cli --help` 与 `run --help`，并至少执行一次离线单格 |
 | `experiments/` | 冒烟网格（见 `experiments/README.md`）→ `analyze.py` → `plots.py`，全部指向临时目录 |
@@ -92,8 +92,13 @@
 ## 已知坑
 
 - 本地 `.env` 现已配置 SEU 校园网关（`https://openapi.seu.edu.cn/v1`，模型 `qwen3.8-27b`，0.3 网格的
-  真实后端）。该文件不入库；换机器要重配，或只跑 Mock。`DEEPSEEK_API_KEY` 为空时 `--mode api` 在建
-  客户端之前就退出（退出码 1），不会带着空凭据发请求，这是设计行为。
+  真实后端；`TESTFORGE_TRANSPORT=urllib`、`TESTFORGE_EXTRA_BODY={"chat_template_kwargs": {"enable_thinking": false}}`、
+  `TESTFORGE_MIN_CALL_INTERVAL_SEC=3`）。该文件不入库；换机器要重配，或只跑 Mock。`DEEPSEEK_API_KEY` 为空时
+  `--mode api` 在建客户端之前就退出（退出码 1），不会带着空凭据发请求，这是设计行为。
+- 该网关有两层拦截，都实测过：(a) WAF 对 openai SDK 的 HTTP 栈（httpx2）返回 HTML「禁止访问」页，
+  curl/urllib 正常——所以 0.3 网格用 `TESTFORGE_TRANSPORT=urllib`；(b) 持续高频请求触发 HTTP 420
+  压力限流——27B 主网格首跑因此丢过 36 格，靠「重跑同一命令只补错误格」的续跑机制 + 10 秒节流补齐。
+  长限流窗口不要指望进程内重试，等窗口过去再续跑。
 - `TESTFORGE_MODE` 从 0.2 起对 CLI 与网格脚本生效：`--mode` 缺省时取该环境变量，再退回 `mock`。
 - 已发表的三个 90 格网格（`exp_api_full` / `exp_api_replicate` / `exp_mock_full`）用的是变异体上限 16、
   每轮 3 候选、最多 2 轮、门禁重跑 ×3；默认值是 24 / 4 / 3 / ×5。0.2 起用 `--preset published` 固化，
@@ -128,4 +133,5 @@
   后缀）：内建 hash 按进程加盐，换一次进程就换一批变异体，历史网格全部失去可比性。
 - 不要在 README 与手册里另写一套数字。测试数、命令、路径的口径改到本文件。
 - CI 只做安装校验、测试、CLI 冒烟、pyflakes 与一格 Mock 全链路冒烟（`mutation-loop-smoke`），
-  外加一个需手动触发、无密钥自动跳过的 `api-smoke`；不要往里加打包/发布流水线。
+  外加一个需手动触发、未配置密钥或未显式 opt-in（`TESTFORGE_SMOKE_ENABLED=1`）时自动跳过的 `api-smoke`；
+  不要往里加打包/发布流水线。

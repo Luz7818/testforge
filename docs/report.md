@@ -10,7 +10,7 @@
 
 大语言模型（LLM）编程助手生成的单元测试普遍存在"**弱预言机（weak oracle）**"问题：测试针对当前代码编写，倾向于通过而非证伪，断言薄弱、边界缺失，行覆盖率提升但未能校验行为。其根源是测试生成优化了一个错误的代理指标——"测试通过/覆盖提升"，而测试的根本价值在于**故障检出能力（fault detection capability）**。
 
-TestForge 用**变异测试（mutation testing）**作为验收标准构建闭环智能体：LLM 生成候选测试 → 多信号质量门禁（正确性、确定性/抗 flaky、可证伪性）→ 把"未被杀死的存活变异体"以最小语义 diff 的形式反馈给模型迭代强化 → 仅验收通过全部门禁的测试。系统在 6 模块 × 18 个目标函数的基准上以 5 个变体（B0–B4）做配对实验，并在**真实 LLM（Qwen3-VL-8B，自建 vLLM 推理服务）上完成两轮独立采样共 180 格、在确定性离线 Mock 上完成 90 格**的全网格实验：真实模型将套件平均变异分数从 77.6% 提升至 91.3%（B1 vs B0：pooled +12.7pp，Wilcoxon p=0.0001，两轮网格方向一致；网格 1 有 10/18 个目标打满 100%，两轮均打满的为 8/18），门禁在同等检出力下将验收测试数缩减至约一半；LLM 后端同时支持 DeepSeek 等任意 OpenAI 兼容端点。后续的定点消融（§6.7）还定位出一处**由本实现自身引入的度量偏差**：反馈回路在 8B 模型上的零增量部分来自"本轮零验收即停止迭代"的工程早退规则，取消该规则的 B5 变体在 56 个配对单元上无一退步：全基准两次独立采样 pooled（n=36）**+4.2pp（Wilcoxon p=0.0115，95% CI [+1.8, +7.1]）**，套件平均变异分数由 89.2% / 91.1% 升至 93.8% / 94.8%；困难子集两轮 pooled **+6.9pp（p=0.027，95% CI [+2.4, +12.1]）**。
+TestForge 用**变异测试（mutation testing）**作为验收标准构建闭环智能体：LLM 生成候选测试 → 多信号质量门禁（正确性、确定性/抗 flaky、可证伪性）→ 把"未被杀死的存活变异体"以最小语义 diff 的形式反馈给模型迭代强化 → 仅验收通过全部门禁的测试。系统在 6 模块 × 18 个目标函数的基准上以 5 个变体（B0–B4）做配对实验，并在**真实 LLM（Qwen3-VL-8B，自建 vLLM 推理服务）上完成两轮独立采样共 180 格、在确定性离线 Mock 上完成 90 格**的全网格实验：真实模型将套件平均变异分数从 77.6% 提升至 91.3%（B1 vs B0：pooled +12.7pp，Wilcoxon p=0.0001，两轮网格方向一致；网格 1 有 10/18 个目标打满 100%，两轮均打满的为 8/18），门禁在同等检出力下将验收测试数缩减至约一半；LLM 后端同时支持 DeepSeek 等任意 OpenAI 兼容端点。后续的定点消融（§6.7）还定位出一处**由本实现自身引入的度量偏差**：反馈回路在 8B 模型上的零增量部分来自"本轮零验收即停止迭代"的工程早退规则，取消该规则的 B5 变体在 56 个配对单元上无一退步：全基准两次独立采样 pooled（n=36）**+4.2pp（Wilcoxon p=0.0115，95% CI [+1.8, +7.1]）**，套件平均变异分数由 89.2% / 91.1% 升至 93.8% / 94.8%；困难子集两轮 pooled **+6.9pp（p=0.027，95% CI [+2.4, +12.1]）**。外部效度（§6.8）已在第二个模型上补齐：校园 OpenAI 兼容网关上的 qwen3.8-27B 以相同协议重跑 144 格零错误，**RQ1（+16.2pp，p=0.0015）与"门禁减半验收数而不降检出力"完整复现**；反馈回路增量随模型能力衰减（B5−B2 为 +2.6pp、0 负、单项不再显著），且两模型在同一 24 变异体协议下收敛到几乎相同的天花板（93.0% / 93.8%）。
 
 本文贡献：(1) 一个开源、端到端、工程完整的变异反馈测试生成智能体（对应 Meta ACH/FSE 2025 的工业方案）；(2) 一套以"验收式质量门禁"为中心的实验方法论与可复现基准；(3) 杀伤矩阵执行、成本控制与可复现性方面的工程实践。
 
@@ -105,9 +105,10 @@ TestForge 用**变异测试（mutation testing）**作为验收标准构建闭�
 
 ## 6. 结果
 
-真实 LLM 后端运行两轮独立采样的完整网格（18 目标 × 5 变体，设置相同：变异体采样上限 16/目标、每轮 3 候选、最多 2 轮反馈、门禁重跑 ×3；两轮之间清除 prompt 缓存以获得独立样本），共 180 格全部成功、零错误，两轮结果交叉验证；确定性 Mock 后端运行单轮 90 格用于机制对比：
+真实 LLM 后端运行两轮独立采样的完整网格（18 目标 × 5 变体，设置相同：变异体采样上限 16/目标、每轮 3 候选、最多 2 轮反馈、门禁重跑 ×3；两轮之间清除 prompt 缓存以获得独立样本），共 180 格全部成功、零错误，两轮结果交叉验证；确定性 Mock 后端运行单轮 90 格用于机制对比；§6.8 的外部效度实验另以第二个模型在相同协议下运行 144 格（90 + 54），同样零错误：
 
-- **真实 LLM**：Qwen3-VL-8B-Instruct（自建 vLLM 推理服务，`enable_thinking=false`）——效果结论；
+- **真实 LLM（主）**：Qwen3-VL-8B-Instruct（自建 vLLM 推理服务，`enable_thinking=false`）——效果结论；
+- **真实 LLM（外部效度，§6.8）**：qwen3.8-27B（SEU 校园 OpenAI 兼容网关，`chat_template_kwargs: {"enable_thinking": false}`）；
 - **确定性 Mock**：捕获-重放式特征化生成器——机制结论（门禁过滤了什么、系统是否诚实）。
 
 ### 6.1 真实 LLM 主结果
@@ -166,11 +167,14 @@ Mock 网格的机制结论：(1) RQ1 同样显著（+7.8pp，9 胜/9 平/0 负�
 ```bash
 # 真实 LLM（DeepSeek 或任意 OpenAI 兼容端点，见 .env.example）
 .venv/Scripts/python experiments/run_experiment.py --mode api
+# 第二个模型的外部效度网格（§6.8；published 预设即已发表参数）
+.venv/Scripts/python experiments/run_experiment.py --mode api --preset published
+.venv/Scripts/python experiments/run_experiment.py --mode api --preset published-b5 --variants B0,B2,B5
 # Mock（离线，零成本）
-.venv/Scripts/python experiments/run_experiment.py --mode mock
-# 分析与图表
-.venv/Scripts/python experiments/analyze.py --exp results/exp_api_full
-.venv/Scripts/python experiments/plots.py   --exp results/exp_api_full
+.venv/Scripts/python experiments/run_experiment.py --mode mock --preset published
+# 分析与图表（--compare-with 追加跨模型对比节）
+.venv/Scripts/python experiments/analyze.py --exp results/exp_api27b_full --compare-with results/exp_api_full
+.venv/Scripts/python experiments/plots.py   --exp results/exp_api27b_full
 ```
 
 ### 6.7 后续实验：早退规则对反馈回路增量的抑制（B5 消融）
@@ -194,12 +198,34 @@ Mock 网格的机制结论：(1) RQ1 同样显著（+7.8pp，9 胜/9 平/0 负�
 4. **负结果（同样值得记录）**：把单轮候选数从 3 提到 8（`--candidates 8`）**不会**提高回路触发率——`n_generated` 确实达到 8，但 `rounds_used` 仍为 1，因为终止条件是"零验收"而非"预算耗尽"；加大单轮预算与增加轮次是两件不同的事。该次运行另暴露一个配置缺陷：`max_tokens=2048` 下 8 个候选会被截断（实测 8 候选需 2.1k–2.9k 输出 token），现已提供 `TESTFORGE_MAX_TOKENS` 覆盖。该网格因推理服务端点故障中止（40 格完成 18 格），未作为结果发表。
 5. **口径限定**：本节网格的变异体上限为 24/目标，与 §6.1–6.4 的 16/目标不同，**绝对分数不可跨表比较**；可比的是同一网格内的 B5 − B2 配对。全基准采样 1 中 10 个困难目标命中困难子集的 prompt 缓存（逐位重放），其独立信息量为 8 个易目标；采样 2 使用独立缓存目录（`TESTFORGE_CACHE_DIR`），是干净的第二样本，也是 pooled n=36 显著性的来源。产物：`results/exp_api_rq2b/`、`results/exp_api_rq2rep/`、`results/exp_api_rq2full/`、`results/exp_api_rq2full_rep/`（后两者的跨网格检验见 `results/exp_api_rq2full/compare.md`）。
 
+### 6.8 外部效度：第二个模型（qwen3.8-27B）
+
+为回应 §7 威胁 4（效果结论只到 8B），在 SEU 校园 OpenAI 兼容网关上以 **qwen3.8-27B** 重跑同一基准：主网格 B0–B4（`--preset published`：16 变异体/目标、每轮 3 候选、2 轮反馈、门禁重跑 ×3）与 B5 网格（`--preset published-b5`：24 变异体/目标、每轮 4 候选、4 轮），协议与 §6.1 / §6.7 的 8B 网格逐参数一致，两次运行共 **144 格零错误**（产物：`results/exp_api27b_full/`、`results/exp_api27b_rq2full/`；跨模型对比节由 `analyze.py --compare-with` 自动生成于两份 `analysis.md`）。模型以 `chat_template_kwargs: {"enable_thinking": false}` 关闭思考模式，与 8B 网格协议对齐。为通过该端点，后端新增三项能力（见 CHANGELOG 0.3.0）：绕过网关 WAF 对 openai SDK HTTP 栈拦截的 `TESTFORGE_TRANSPORT=urllib` 传输、应对压力限流（HTTP 420）的 `TESTFORGE_MIN_CALL_INTERVAL_SEC` 调用节流、以及"推理模型思考耗尽输出预算返回空内容"的响亮报错（替代静默零候选格）。
+
+| 变体 | 27B MS(all) 均值 | 8B MS(all)（网格 1） | 27B 中位数 | 27B 验收测试/目标 | 27B 行覆盖率 |
+|---|---|---|---|---|---|
+| B0 既有套件 | 77.6% | 77.6% | 80.6% | — | 83.1% |
+| B1 单次生成（无门禁） | **93.8%** | 91.3% | 100% | 1.78 | 94.0% |
+| B2 单次+门禁 | 93.8% | 91.3% | 100% | 0.78 | 94.0% |
+| B3 完整方案 | 93.8% | 91.3% | 100% | 0.78 | 94.0% |
+| B4 覆盖反馈消融 | 93.8% | 91.3% | 100% | 0.78 | 94.0% |
+
+B0 均值与 8B 网格逐位一致（77.6%、中位数 80.6%）——确定性基线按预期跨模型不变，可作为网格对齐的完整性校验。逐条发现：
+
+1. **RQ1 复现且更强**：B1−B0 = **+16.2pp**（13 胜 5 平 0 负；Wilcoxon p=0.0015；bootstrap 95% CI [+9.2, +24.5]），8B 网格 1 为 +13.6pp（p=0.0033）。满分目标从 10/18 升至 **13/18**，残留存活体从 16 个（8 目标）降至 **11 个（5 目标）**。
+2. **RQ3 复现**：门禁在变异分数不变的前提下把验收测试数从 1.78 砍到 0.78/目标（比值 0.44，8B 为 0.48）；拦下 18 个"通过但不可证伪"与 13 个"原代码即失败"的候选；全部最终套件在原代码上通过（`final_suite_passes` 全真）。
+3. **RQ2/RQ4 的结论在 27B 上成立且更极端**：已发表 2 轮协议内 18/18 个单元的 B3−B1 与 B4−B3 增量为零——"易杀区间首轮饱和"随模型能力增强而更彻底，2 轮 × 3 候选的预算内已无可收割增量。
+4. **RQ5 增量随模型能力衰减**：B5−B2 = **+2.6pp**（3 胜 15 平 0 负；p=0.109；CI [0.0, +6.2]），对照 8B 同协议的 +4.7pp（p=0.068）与两轮 pooled +4.2pp（p=0.0115）。方向一致、无一退步，但单项不再显著：更强模型首轮即清掉更多存活体（B2 已达 90.4%，8B 为 89.2%），留给后续轮次的空间变小。合并两个模型的全部 B5 配对证据（8B 两网格 + 27B 一网格，n=74 单元）为 **12 胜 0 负**；两模型的 B5 天花板几乎重合（93.0% / 93.8%），残留的是同一批语义硬核——§6.3 的 `parse_csv_line` 引号转义边界在 27B 上依然存活。
+5. **成本口径**：主网格逐格账目 82,474 输入 / 119,991 输出 token（8B 网格 1 为 79,896 / 76,106；27B 关思考后输出仍为 1.6 倍，模型更啰嗦）；校园端点未配置单价，按 §6.5 的诚实口径只报精确 token、不报美元。
+
+**对 §8 路线的回答**：第 1 项"更大模型重跑 B5 网格"完成，结论是一次**否定性修正**——回路增量不是被早退规则压制的固定红利，而是随模型能力衰减的边际收益；工程含义不变（B5 适合离线批量增强，不进交互式 CI 路径）。两个跨模型稳定的主结论是："变异分数判别测试质量"与"门禁在检出力不减的前提下大幅缩减套件"。
+
 ## 7. 有效性威胁
 
 1. **等价变异体**：理论上无法完全排除不可杀灭的变异体，MS 因此是下界估计；通过跳过错误消息字符串、docstring 与注解压缩其数量。
 2. **基准规模与代表性**：18 个纯函数、单一语言（Python）。结论外推到更大仓库/多语言需谨慎；工程上 AST 方案可移植（同一算子族在其他语言有对应实现）。
 3. **Wilcoxon 正态近似**：n=18 处于精确表与近似的边界；已用并列校正并注明，另以 bootstrap CI 交叉验证。
-4. **模型规模**：效果结论来自 8B 级模型（Qwen3-VL-8B）；更大模型可能进一步清理语义型存活体，反馈回路的增量收益预期更高（Mock 网格仅用于机制验证，不参与效果结论）。
+4. **模型规模**：效果结论现已覆盖两个模型（Qwen3-VL-8B 两轮网格、qwen3.8-27B 一轮网格，§6.8）；单发生成与门禁结论跨模型复现，反馈回路增量随模型能力衰减。仍属单语言、单一厂商家族（Qwen 系列）的结论，推广到其他家族需进一步实验。
 5. **单种子运行**：真实 LLM 运行受采样随机性影响；`--candidates` 与多轮机制部分对冲，严格结论可多 seed 重复，增量成本主要为本地变异执行时间。
 
 ## 8. 结论与未来工作
@@ -208,7 +234,7 @@ TestForge 证明：把测试生成的验收标准从"通过+覆盖率"换成"变
 
 未来工作（按优先级）：
 
-1. **更大模型**：轮次维度已在 §6.7 量化并跨采样确认（全基准 pooled n=36 为 +4.2pp、p=0.0115；困难子集 pooled n=20 为 +6.9pp、p=0.027；代价约 2.5 倍调用），剩下未解的是 8B 模型对 CRN 边界常量类存活体的预言机能力上限——需在更大模型上重跑 B5 网格；
+1. ~~**更大模型**~~ **已完成（§6.8）**：qwen3.8-27B 以相同协议重跑主网格与 B5 网格（144 格零错误）。结论：RQ1 与门禁结论复现且更强；回路增量随模型能力衰减（+4.7pp → +2.6pp，0 负），B5 的边际收益在更强模型上缩小，两模型在同一 24 变异体协议下收敛到 ~93-94% 的天花板；
 2. **变异体优先级**：按"难度/覆盖关系"排序，进一步压执行成本（PRIMG 方向）；
 3. **增量变异执行**：利用行级覆盖信息做测试选择，把 O(T×M) 降为近似 O(T×M_local)；
 4. **扩展到 property-based 测试**（Hypothesis 风格），反馈信号不变、生成空间升级；
@@ -219,9 +245,9 @@ TestForge 证明：把测试生成的验收标准从"通过+覆盖率"换成"变
 ### 附：运行清单
 
 ```bash
-python -m pytest tests/ -q                                    # 36 个自测
-python experiments/run_experiment.py --mode mock              # Mock 全网格（零成本）
-python experiments/run_experiment.py --mode api               # 真实 LLM 全网格（约 8.0 万输入 / 7.6 万输出 token；自建端点零 API 费用）
-python experiments/analyze.py --exp results/exp_api_<stamp>   # 统计分析
-python experiments/plots.py   --exp results/exp_api_<stamp>   # 图表
+python -m pytest                                              # 74 个自测
+python experiments/run_experiment.py --mode mock --preset published   # Mock 复现已发表网格（零成本）
+python experiments/run_experiment.py --mode api  --preset published   # 真实 LLM 全网格（约 8.0 万输入 / 12.0 万输出 token @27B）
+python experiments/analyze.py --exp results/exp_api27b_full --compare-with results/exp_api_full
+python experiments/plots.py   --exp results/exp_api27b_full
 ```

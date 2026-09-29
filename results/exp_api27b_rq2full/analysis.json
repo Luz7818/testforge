@@ -1,0 +1,190 @@
+{
+  "aggregate": {
+    "B0": {
+      "ms_all": 0.7722611111111112,
+      "ms_covered": 0.8000833333333334,
+      "ms_all_median": 0.78095,
+      "cov": 83.13333333333334,
+      "acc": 0.0,
+      "cost": 0,
+      "n_priced": 0
+    },
+    "B2": {
+      "ms_all": 0.90355,
+      "ms_covered": 0.9073388888888889,
+      "ms_all_median": 1.0,
+      "cov": 94.66111111111111,
+      "acc": 0.6666666666666666,
+      "cost": 0,
+      "n_priced": 0
+    },
+    "B5": {
+      "ms_all": 0.9295611111111111,
+      "ms_covered": 0.9295611111111111,
+      "ms_all_median": 1.0,
+      "cov": 96.05000000000001,
+      "acc": 0.8333333333333334,
+      "cost": 0,
+      "n_priced": 0
+    }
+  },
+  "RQ5": {
+    "base": "B2",
+    "treatment": "B5",
+    "pairs": [
+      {
+        "target": "containers.chunk",
+        "a": 1.0,
+        "b": 1.0,
+        "diff": 0.0
+      },
+      {
+        "target": "containers.flatten",
+        "a": 0.3333,
+        "b": 0.3333,
+        "diff": 0.0
+      },
+      {
+        "target": "containers.most_frequent",
+        "a": 0.7143,
+        "b": 0.7143,
+        "diff": 0.0
+      },
+      {
+        "target": "date_utils.age_in_days",
+        "a": 1.0,
+        "b": 1.0,
+        "diff": 0.0
+      },
+      {
+        "target": "date_utils.days_in_month",
+        "a": 1.0,
+        "b": 1.0,
+        "diff": 0.0
+      },
+      {
+        "target": "date_utils.is_leap_year",
+        "a": 1.0,
+        "b": 0.8235,
+        "diff": 0.1765
+      },
+      {
+        "target": "numeric.clamp",
+        "a": 1.0,
+        "b": 1.0,
+        "diff": 0.0
+      },
+      {
+        "target": "numeric.integer_sqrt",
+        "a": 0.8095,
+        "b": 0.8095,
+        "diff": 0.0
+      },
+      {
+        "target": "numeric.moving_average",
+        "a": 1.0,
+        "b": 1.0,
+        "diff": 0.0
+      },
+      {
+        "target": "parsers.parse_csv_line",
+        "a": 1.0,
+        "b": 0.9583,
+        "diff": 0.04169999999999996
+      },
+      {
+        "target": "parsers.parse_kv_pairs",
+        "a": 1.0,
+        "b": 1.0,
+        "diff": 0.0
+      },
+      {
+        "target": "parsers.parse_version",
+        "a": 1.0,
+        "b": 1.0,
+        "diff": 0.0
+      },
+      {
+        "target": "string_utils.mask_email",
+        "a": 1.0,
+        "b": 1.0,
+        "diff": 0.0
+      },
+      {
+        "target": "string_utils.slugify",
+        "a": 0.875,
+        "b": 0.875,
+        "diff": 0.0
+      },
+      {
+        "target": "string_utils.truncate_with_ellipsis",
+        "a": 1.0,
+        "b": 0.75,
+        "diff": 0.25
+      },
+      {
+        "target": "validators.normalize_hex_color",
+        "a": 1.0,
+        "b": 1.0,
+        "diff": 0.0
+      },
+      {
+        "target": "validators.validate_port",
+        "a": 1.0,
+        "b": 1.0,
+        "diff": 0.0
+      },
+      {
+        "target": "validators.validate_username",
+        "a": 1.0,
+        "b": 1.0,
+        "diff": 0.0
+      }
+    ],
+    "mean_uplift": 0.02601111111111111,
+    "median_uplift": 0.0,
+    "wilcoxon": {
+      "n": 3,
+      "W_plus": 6.0,
+      "z": 1.604,
+      "p": 0.1088
+    },
+    "bootstrap_ci": {
+      "lo": 0.0,
+      "hi": 0.0618
+    }
+  },
+  "cross_model": {
+    "grid_a": "qwen3.8-27b",
+    "grid_b": "qwen3-vl-8b",
+    "variants": {
+      "B0": {
+        "ms_all_mean_a": 0.7722611111111112,
+        "ms_all_mean_b": 0.7722611111111112,
+        "delta_b_minus_a": 0.0
+      },
+      "B2": {
+        "ms_all_mean_a": 0.90355,
+        "ms_all_mean_b": 0.8916444444444446,
+        "delta_b_minus_a": -0.011905555555555392
+      },
+      "B5": {
+        "ms_all_mean_a": 0.9295611111111111,
+        "ms_all_mean_b": 0.9384944444444445,
+        "delta_b_minus_a": 0.00893333333333346
+      }
+    },
+    "rq1_b1_minus_b0": {},
+    "gate_b1_vs_b2": {},
+    "tokens": {
+      "qwen3.8-27b": {
+        "tokens_in": 58250,
+        "tokens_out": 146371
+      },
+      "qwen3-vl-8b": {
+        "tokens_in": 62469,
+        "tokens_out": 68609
+      }
+    }
+  }
+}

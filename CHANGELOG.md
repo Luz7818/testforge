@@ -5,18 +5,37 @@ All notable changes to TestForge are documented here. The format follows
 [SemVer](https://semver.org/): breaking the documented CLI/config contract
 bumps the major, added capability the minor, fixes the patch.
 
-## [Unreleased]
+## [0.3.0] — 2026-09-30
+
+The external-validity release: a second, larger model reruns the same grids
+under the same protocol, and the backend learns to survive the campus
+gateway that served them.
 
 ### Added
 
+- External validity (docs/report.md §6.8): **qwen3.8-27B** (SEU campus
+  OpenAI-compatible gateway) reruns the published protocols — the B0–B4 grid
+  with `--preset published` (90 cells) and the B5 grid with
+  `--preset published-b5` (54 cells) — **144 cells, zero errors**.
+  RQ1 replicates stronger (+16.2pp, p=0.0015; 8B: +13.6pp) and the gate
+  result replicates (1.78 → 0.78 accepted tests/target at equal MS, ratio
+  0.44); the feedback-loop gain **decays with model capability** (B5−B2:
+  +2.6pp, 3 wins / 15 ties / **0 losses**, p=0.109, vs 8B's +4.7pp / pooled
+  +4.2pp), with both models converging to the same ~93-94% ceiling under the
+  24-mutant protocol. Grids, analyses and cross-model comparison sections are
+  committed under `results/exp_api27b_full/` and `results/exp_api27b_rq2full/`.
+- `experiments/analyze.py --compare-with <exp_dir>`: cross-model comparison
+  section (per-variant MS, RQ1 stats per grid, gate ratio, token totals).
 - `TESTFORGE_TRANSPORT=urllib`: a stdlib HTTP transport for the
   OpenAI-compatible backend, alongside the default SDK transport. Some campus
   gateways WAF-block the SDK's HTTP stack with an HTML "access denied"
   interstitial while serving plain requests fine (verified against
   openapi.seu.edu.cn: curl and urllib pass, the SDK transport is rejected);
   the urllib transport uses the identical wire format and gets through.
-- `TESTFORGE_MIN_CALL_INTERVAL_SEC`: minimum gap between real (non-cached)
-  API calls, process-wide, for gateways that throttle request bursts.
+- `TESTFORGE_MIN_CALL_INTERVAL_SEC` (gap between real API calls) and
+  `TESTFORGE_LLM_RETRIES` (retry budget), for gateways that answer request
+  bursts with HTTP 420 throttling. Completed cells are crash-safe: rerunning
+  the same grid command retries only errored cells.
 - CI `api-smoke` opt-in: the manual job now also requires a
   `TESTFORGE_SMOKE_ENABLED=1` secret, because an endpoint that is only
   reachable from campus cannot smoke-test from public runners (it would fail
@@ -31,6 +50,12 @@ bumps the major, added capability the minor, fixes the patch.
   return empty content now fail loudly instead of silently producing a
   zero-candidate cell: an empty response with `finish_reason=length` is a
   retryable error.
+
+### Changed
+
+- `docs/example-report.md` is now rendered from the tracked
+  `results/exp_api27b_smoke/` artifact (one real-endpoint cell,
+  thinking-off protocol), replacing the render of an untracked local run.
 
 ## [0.2.0] — 2026-09-29
 
