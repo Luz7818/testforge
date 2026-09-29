@@ -1,0 +1,4793 @@
+[
+  {
+    "target_id": "string_utils.slugify",
+    "variant": "B0",
+    "mutants_total": 8,
+    "killed_final": 6,
+    "mutants_covered": 8,
+    "killed_covered": 6,
+    "b0_killed_final": 6,
+    "n_generated": 0,
+    "n_accepted": 0,
+    "n_repaired": 0,
+    "rejection_reasons": {},
+    "flaky_rejects": 0,
+    "rounds_used": 0,
+    "n_final_tests": 0,
+    "final_suite_passes": true,
+    "coverage_pct": 100.0,
+    "b0_coverage_pct": 100.0,
+    "llm_calls": 0,
+    "tokens_in": 0,
+    "tokens_out": 0,
+    "cost_usd": null,
+    "price_source": "",
+    "wall_sec": 19.0,
+    "accepted_codes": [],
+    "mutant_summary": [
+      {
+        "mid": "M001",
+        "operator": "CRS",
+        "line": 16,
+        "description": "CRS @ line 16: string '-' -> '-X'",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M002",
+        "operator": "CRS",
+        "line": 17,
+        "description": "CRS @ line 17: string '' -> 'X'",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M003",
+        "operator": "ROR",
+        "line": 18,
+        "description": "ROR @ line 18: relational operator In -> NotIn",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M004",
+        "operator": "CRS",
+        "line": 18,
+        "description": "CRS @ line 18: string '--' -> '--X'",
+        "killed_by_b0": false,
+        "killed_by_final": false,
+        "covered": true
+      },
+      {
+        "mid": "M005",
+        "operator": "CRS",
+        "line": 19,
+        "description": "CRS @ line 19: string '--' -> '--X'",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M006",
+        "operator": "CRS",
+        "line": 19,
+        "description": "CRS @ line 19: string '-' -> '-X'",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M007",
+        "operator": "RTN",
+        "line": 20,
+        "description": "RTN @ line 20: return value -> None",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M008",
+        "operator": "CRS",
+        "line": 20,
+        "description": "CRS @ line 20: string '-' -> '-X'",
+        "killed_by_b0": false,
+        "killed_by_final": false,
+        "covered": true
+      }
+    ],
+    "gate_log": [],
+    "ms_all": 0.75,
+    "ms_covered": 0.75,
+    "cost": {
+      "model": "qwen3.8-27b",
+      "calls": 0,
+      "tokens_in": 0,
+      "tokens_out": 0,
+      "cost_usd": null,
+      "price_source": ""
+    }
+  },
+  {
+    "target_id": "string_utils.slugify",
+    "variant": "B2",
+    "mutants_total": 8,
+    "killed_final": 7,
+    "mutants_covered": 8,
+    "killed_covered": 7,
+    "b0_killed_final": 6,
+    "n_generated": 4,
+    "n_accepted": 1,
+    "n_repaired": 0,
+    "rejection_reasons": {
+      "falsifiable": 3
+    },
+    "flaky_rejects": 0,
+    "rounds_used": 1,
+    "n_final_tests": 1,
+    "final_suite_passes": true,
+    "coverage_pct": 100.0,
+    "b0_coverage_pct": 100.0,
+    "llm_calls": 1,
+    "tokens_in": 1305,
+    "tokens_out": 2247,
+    "cost_usd": null,
+    "price_source": "",
+    "wall_sec": 272.5,
+    "accepted_codes": [
+      "import pytest\n\nfrom string_utils import slugify\n\n\ndef test_slugify_mixed_case_uppercase():\n    assert slugify(\"Hello WORLD\") == \"hello-world\"\n\n\ndef test_slugify_multiple_spaces_collapse():\n    assert slugify(\"Hello   World\") == \"hello-world\"\n\n\ndef test_slugify_punctuation_only():\n    assert slugify(\"!!!\") == \"\"\n\n\ndef test_slugify_special_symbols():\n    assert slugify(\"a@b#c$d\") == \"a-b-c-d\"\n\n\ndef test_slugify_leading_trailing_special_chars():\n    assert slugify(\"--hello--\") == \"hello\"\n\n\ndef test_slugify_numeric_only():\n    assert slugify(\"12345\") == \"12345\"\n\n\ndef test_slugify_alphanumeric_mixed():\n    assert slugify(\"Test123\") == \"test123\"\n\n\ndef test_slugify_unicode_letters():\n    # isalnum() returns True for unicode letters/digits in Python 3\n    assert slugify(\"Café\") == \"café\"\n\n\ndef test_slugify_all_special_chars():\n    assert slugify(\"!!!???\") == \"\"\n\n\ndef test_slugify_single_character():\n    assert slugify(\"A\") == \"a\"\n\n\ndef test_slugify_hyphens_in_input():\n    assert slugify(\"already-slug\") == \"already-slug\"\n\n\ndef test_slugify_consecutive_hyphens_input():\n    assert slugify(\"a---b\") == \"a-b\"\n\n\ndef test_slugify_tab_and_newline():\n    assert slugify(\"hello\\tworld\\n\") == \"hello-world\"\n\n\ndef test_slugify_underscore_replaced():\n    assert slugify(\"snake_case\") == \"snake-case\"\n\n\ndef test_slugify_period_replaced():\n    assert slugify(\"file.name.txt\") == \"file-name-txt\"\n\n\ndef test_slugify_long_text():\n    text = \"A\" * 100\n    assert slugify(text) == \"a\" * 100\n\n\ndef test_slugify_alternating_special_and_alnum():\n    assert slugify(\"a!b@c#d\") == \"a-b-c-d\"\n\n\ndef test_slugify_only_whitespace():\n    assert slugify(\"   \") == \"\"\n\n\ndef test_slugify_single_space():\n    assert slugify(\" \") == \"\"\n\n\ndef test_slugify_digit_and_special_mixed():\n    assert slugify(\"1!2@3#4\") == \"1-2-3-4\""
+    ],
+    "mutant_summary": [
+      {
+        "mid": "M001",
+        "operator": "CRS",
+        "line": 16,
+        "description": "CRS @ line 16: string '-' -> '-X'",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M002",
+        "operator": "CRS",
+        "line": 17,
+        "description": "CRS @ line 17: string '' -> 'X'",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M003",
+        "operator": "ROR",
+        "line": 18,
+        "description": "ROR @ line 18: relational operator In -> NotIn",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M004",
+        "operator": "CRS",
+        "line": 18,
+        "description": "CRS @ line 18: string '--' -> '--X'",
+        "killed_by_b0": false,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M005",
+        "operator": "CRS",
+        "line": 19,
+        "description": "CRS @ line 19: string '--' -> '--X'",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M006",
+        "operator": "CRS",
+        "line": 19,
+        "description": "CRS @ line 19: string '-' -> '-X'",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M007",
+        "operator": "RTN",
+        "line": 20,
+        "description": "RTN @ line 20: return value -> None",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M008",
+        "operator": "CRS",
+        "line": 20,
+        "description": "CRS @ line 20: string '-' -> '-X'",
+        "killed_by_b0": false,
+        "killed_by_final": false,
+        "covered": true
+      }
+    ],
+    "gate_log": [
+      {
+        "cid": "R0C1",
+        "accepted": true,
+        "new_kills": 1
+      },
+      {
+        "cid": "R0C2",
+        "accepted": false,
+        "reasons": [
+          "falsifiable"
+        ]
+      },
+      {
+        "cid": "R0C3",
+        "accepted": false,
+        "reasons": [
+          "falsifiable"
+        ]
+      },
+      {
+        "cid": "R0C4",
+        "accepted": false,
+        "reasons": [
+          "falsifiable"
+        ]
+      }
+    ],
+    "ms_all": 0.875,
+    "ms_covered": 0.875,
+    "cost": {
+      "model": "qwen3.8-27b",
+      "calls": 1,
+      "tokens_in": 1305,
+      "tokens_out": 2247,
+      "cost_usd": null,
+      "price_source": ""
+    }
+  },
+  {
+    "target_id": "string_utils.slugify",
+    "variant": "B5",
+    "mutants_total": 8,
+    "killed_final": 7,
+    "mutants_covered": 8,
+    "killed_covered": 7,
+    "b0_killed_final": 6,
+    "n_generated": 16,
+    "n_accepted": 1,
+    "n_repaired": 7,
+    "rejection_reasons": {
+      "falsifiable": 9,
+      "failing_on_original": 6
+    },
+    "flaky_rejects": 0,
+    "rounds_used": 4,
+    "n_final_tests": 1,
+    "final_suite_passes": true,
+    "coverage_pct": 100.0,
+    "b0_coverage_pct": 100.0,
+    "llm_calls": 4,
+    "tokens_in": 4899,
+    "tokens_out": 9726,
+    "cost_usd": null,
+    "price_source": "",
+    "wall_sec": 760.4,
+    "accepted_codes": [
+      "import pytest\n\nfrom string_utils import slugify\n\n\ndef test_slugify_mixed_case_uppercase():\n    assert slugify(\"Hello WORLD\") == \"hello-world\"\n\n\ndef test_slugify_multiple_spaces_collapse():\n    assert slugify(\"Hello   World\") == \"hello-world\"\n\n\ndef test_slugify_punctuation_only():\n    assert slugify(\"!!!\") == \"\"\n\n\ndef test_slugify_special_symbols():\n    assert slugify(\"a@b#c$d\") == \"a-b-c-d\"\n\n\ndef test_slugify_leading_trailing_special_chars():\n    assert slugify(\"--hello--\") == \"hello\"\n\n\ndef test_slugify_numeric_only():\n    assert slugify(\"12345\") == \"12345\"\n\n\ndef test_slugify_alphanumeric_mixed():\n    assert slugify(\"Test123\") == \"test123\"\n\n\ndef test_slugify_unicode_letters():\n    # isalnum() returns True for unicode letters/digits in Python 3\n    assert slugify(\"Café\") == \"café\"\n\n\ndef test_slugify_all_special_chars():\n    assert slugify(\"!!!???\") == \"\"\n\n\ndef test_slugify_single_character():\n    assert slugify(\"A\") == \"a\"\n\n\ndef test_slugify_hyphens_in_input():\n    assert slugify(\"already-slug\") == \"already-slug\"\n\n\ndef test_slugify_consecutive_hyphens_input():\n    assert slugify(\"a---b\") == \"a-b\"\n\n\ndef test_slugify_tab_and_newline():\n    assert slugify(\"hello\\tworld\\n\") == \"hello-world\"\n\n\ndef test_slugify_underscore_replaced():\n    assert slugify(\"snake_case\") == \"snake-case\"\n\n\ndef test_slugify_period_replaced():\n    assert slugify(\"file.name.txt\") == \"file-name-txt\"\n\n\ndef test_slugify_long_text():\n    text = \"A\" * 100\n    assert slugify(text) == \"a\" * 100\n\n\ndef test_slugify_alternating_special_and_alnum():\n    assert slugify(\"a!b@c#d\") == \"a-b-c-d\"\n\n\ndef test_slugify_only_whitespace():\n    assert slugify(\"   \") == \"\"\n\n\ndef test_slugify_single_space():\n    assert slugify(\" \") == \"\"\n\n\ndef test_slugify_digit_and_special_mixed():\n    assert slugify(\"1!2@3#4\") == \"1-2-3-4\""
+    ],
+    "mutant_summary": [
+      {
+        "mid": "M001",
+        "operator": "CRS",
+        "line": 16,
+        "description": "CRS @ line 16: string '-' -> '-X'",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M002",
+        "operator": "CRS",
+        "line": 17,
+        "description": "CRS @ line 17: string '' -> 'X'",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M003",
+        "operator": "ROR",
+        "line": 18,
+        "description": "ROR @ line 18: relational operator In -> NotIn",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M004",
+        "operator": "CRS",
+        "line": 18,
+        "description": "CRS @ line 18: string '--' -> '--X'",
+        "killed_by_b0": false,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M005",
+        "operator": "CRS",
+        "line": 19,
+        "description": "CRS @ line 19: string '--' -> '--X'",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M006",
+        "operator": "CRS",
+        "line": 19,
+        "description": "CRS @ line 19: string '-' -> '-X'",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M007",
+        "operator": "RTN",
+        "line": 20,
+        "description": "RTN @ line 20: return value -> None",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M008",
+        "operator": "CRS",
+        "line": 20,
+        "description": "CRS @ line 20: string '-' -> '-X'",
+        "killed_by_b0": false,
+        "killed_by_final": false,
+        "covered": true
+      }
+    ],
+    "gate_log": [
+      {
+        "cid": "R0C1",
+        "accepted": true,
+        "new_kills": 1
+      },
+      {
+        "cid": "R0C2",
+        "accepted": false,
+        "reasons": [
+          "falsifiable"
+        ]
+      },
+      {
+        "cid": "R0C3",
+        "accepted": false,
+        "reasons": [
+          "falsifiable"
+        ]
+      },
+      {
+        "cid": "R0C4",
+        "accepted": false,
+        "reasons": [
+          "falsifiable"
+        ]
+      },
+      {
+        "cid": "R1C1",
+        "accepted": false,
+        "reasons": [
+          "falsifiable"
+        ]
+      },
+      {
+        "cid": "R1C2",
+        "accepted": false,
+        "reasons": [
+          "falsifiable"
+        ]
+      },
+      {
+        "cid": "R1C3",
+        "accepted": false,
+        "reasons": [
+          "falsifiable"
+        ]
+      },
+      {
+        "cid": "R1C4",
+        "accepted": false,
+        "reasons": [
+          "falsifiable"
+        ]
+      },
+      {
+        "cid": "R2C1",
+        "accepted": false,
+        "reason": "correctness",
+        "runs": [
+          "fail"
+        ]
+      },
+      {
+        "cid": "R2C2",
+        "accepted": false,
+        "reasons": [
+          "falsifiable"
+        ]
+      },
+      {
+        "cid": "R2C3",
+        "accepted": false,
+        "reason": "correctness",
+        "runs": [
+          "fail"
+        ]
+      },
+      {
+        "cid": "R2C4",
+        "accepted": false,
+        "reasons": [
+          "falsifiable"
+        ]
+      },
+      {
+        "cid": "R3C1",
+        "accepted": false,
+        "reason": "correctness",
+        "runs": [
+          "fail"
+        ]
+      },
+      {
+        "cid": "R3C2",
+        "accepted": false,
+        "reason": "correctness",
+        "runs": [
+          "fail"
+        ]
+      },
+      {
+        "cid": "R3C3",
+        "accepted": false,
+        "reason": "correctness",
+        "runs": [
+          "fail"
+        ]
+      },
+      {
+        "cid": "R3C4",
+        "accepted": false,
+        "reason": "correctness",
+        "runs": [
+          "fail"
+        ]
+      }
+    ],
+    "ms_all": 0.875,
+    "ms_covered": 0.875,
+    "cost": {
+      "model": "qwen3.8-27b",
+      "calls": 4,
+      "tokens_in": 4899,
+      "tokens_out": 9726,
+      "cost_usd": null,
+      "price_source": ""
+    }
+  },
+  {
+    "target_id": "string_utils.mask_email",
+    "variant": "B0",
+    "mutants_total": 21,
+    "killed_final": 16,
+    "mutants_covered": 17,
+    "killed_covered": 16,
+    "b0_killed_final": 16,
+    "n_generated": 0,
+    "n_accepted": 0,
+    "n_repaired": 0,
+    "rejection_reasons": {},
+    "flaky_rejects": 0,
+    "rounds_used": 0,
+    "n_final_tests": 0,
+    "final_suite_passes": true,
+    "coverage_pct": 77.8,
+    "b0_coverage_pct": 77.8,
+    "llm_calls": 0,
+    "tokens_in": 0,
+    "tokens_out": 0,
+    "cost_usd": null,
+    "price_source": "",
+    "wall_sec": 6.5,
+    "accepted_codes": [],
+    "mutant_summary": [
+      {
+        "mid": "M001",
+        "operator": "ROR",
+        "line": 32,
+        "description": "ROR @ line 32: relational operator NotIn -> In",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M002",
+        "operator": "CRS",
+        "line": 32,
+        "description": "CRS @ line 32: string '@' -> '@X'",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M003",
+        "operator": "CRS",
+        "line": 34,
+        "description": "CRS @ line 34: string '@' -> '@X'",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M004",
+        "operator": "UOR",
+        "line": 35,
+        "description": "UOR @ line 35: unary '' removed",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M005",
+        "operator": "UOR",
+        "line": 35,
+        "description": "UOR @ line 35: unary '' removed",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M006",
+        "operator": "ROR",
+        "line": 37,
+        "description": "ROR @ line 37: relational operator Eq -> NotEq",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M007",
+        "operator": "CRN",
+        "line": 37,
+        "description": "CRN @ line 37: numeric 1 -> 2",
+        "killed_by_b0": false,
+        "killed_by_final": false,
+        "covered": true
+      },
+      {
+        "mid": "M008",
+        "operator": "RTN",
+        "line": 38,
+        "description": "RTN @ line 38: return value -> None",
+        "killed_by_b0": false,
+        "killed_by_final": false,
+        "covered": false
+      },
+      {
+        "mid": "M009",
+        "operator": "AOR",
+        "line": 38,
+        "description": "AOR @ line 38: arithmetic operator Add -> Sub",
+        "killed_by_b0": false,
+        "killed_by_final": false,
+        "covered": false
+      },
+      {
+        "mid": "M010",
+        "operator": "AOR",
+        "line": 38,
+        "description": "AOR @ line 38: arithmetic operator Add -> Sub",
+        "killed_by_b0": false,
+        "killed_by_final": false,
+        "covered": false
+      },
+      {
+        "mid": "M011",
+        "operator": "CRS",
+        "line": 38,
+        "description": "CRS @ line 38: string '@' -> '@X'",
+        "killed_by_b0": false,
+        "killed_by_final": false,
+        "covered": false
+      },
+      {
+        "mid": "M012",
+        "operator": "RTN",
+        "line": 39,
+        "description": "RTN @ line 39: return value -> None",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M013",
+        "operator": "AOR",
+        "line": 39,
+        "description": "AOR @ line 39: arithmetic operator Add -> Sub",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M014",
+        "operator": "AOR",
+        "line": 39,
+        "description": "AOR @ line 39: arithmetic operator Add -> Sub",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M015",
+        "operator": "AOR",
+        "line": 39,
+        "description": "AOR @ line 39: arithmetic operator Add -> Sub",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M016",
+        "operator": "CRN",
+        "line": 39,
+        "description": "CRN @ line 39: numeric 0 -> 1",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M017",
+        "operator": "AOR",
+        "line": 39,
+        "description": "AOR @ line 39: arithmetic operator Mult -> Div",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M018",
+        "operator": "CRS",
+        "line": 39,
+        "description": "CRS @ line 39: string '*' -> '*X'",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M019",
+        "operator": "AOR",
+        "line": 39,
+        "description": "AOR @ line 39: arithmetic operator Sub -> Add",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M020",
+        "operator": "CRN",
+        "line": 39,
+        "description": "CRN @ line 39: numeric 1 -> 2",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M021",
+        "operator": "CRS",
+        "line": 39,
+        "description": "CRS @ line 39: string '@' -> '@X'",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      }
+    ],
+    "gate_log": [],
+    "ms_all": 0.7619,
+    "ms_covered": 0.9412,
+    "cost": {
+      "model": "qwen3.8-27b",
+      "calls": 0,
+      "tokens_in": 0,
+      "tokens_out": 0,
+      "cost_usd": null,
+      "price_source": ""
+    }
+  },
+  {
+    "target_id": "string_utils.mask_email",
+    "variant": "B2",
+    "mutants_total": 21,
+    "killed_final": 21,
+    "mutants_covered": 21,
+    "killed_covered": 21,
+    "b0_killed_final": 16,
+    "n_generated": 4,
+    "n_accepted": 1,
+    "n_repaired": 0,
+    "rejection_reasons": {
+      "failing_on_original": 3
+    },
+    "flaky_rejects": 0,
+    "rounds_used": 1,
+    "n_final_tests": 1,
+    "final_suite_passes": true,
+    "coverage_pct": 100.0,
+    "b0_coverage_pct": 77.8,
+    "llm_calls": 1,
+    "tokens_in": 1390,
+    "tokens_out": 1351,
+    "cost_usd": null,
+    "price_source": "",
+    "wall_sec": 55.2,
+    "accepted_codes": [
+      "import pytest\n\nfrom string_utils import mask_email\n\n\ndef test_mask_email_single_char_local():\n    assert mask_email(\"a@b.com\") == \"a@b.com\"\n\n\ndef test_mask_email_two_char_local():\n    assert mask_email(\"ab@example.com\") == \"a*@example.com\"\n\n\ndef test_mask_email_long_local():\n    assert mask_email(\"abcdefgh@example.com\") == \"a*******@example.com\"\n\n\ndef test_mask_email_empty_local_raises():\n    with pytest.raises(ValueError):\n        mask_email(\"@example.com\")\n\n\ndef test_mask_email_empty_domain_raises():\n    with pytest.raises(ValueError):\n        mask_email(\"user@\")\n\n\ndef test_mask_email_missing_at_raises():\n    with pytest.raises(ValueError):\n        mask_email(\"userexample.com\")\n\n\ndef test_mask_email_multiple_at_raises():\n    # partition takes first '@', so \"a@b@c.com\" -> local=\"a\", domain=\"b@c.com\"\n    # This is valid per implementation; domain is non-empty\n    assert mask_email(\"a@b@c.com\") == \"a@b@c.com\"\n\n\ndef test_mask_email_special_chars_in_local():\n    assert mask_email(\"user.name+tag@example.com\") == \"u************@example.com\"\n\n\ndef test_mask_email_single_char_domain():\n    assert mask_email(\"ab@c\") == \"a*@c\"\n\n\ndef test_mask_email_preserves_domain_case():\n    assert mask_email(\"user@Example.COM\") == \"u***@Example.COM\""
+    ],
+    "mutant_summary": [
+      {
+        "mid": "M001",
+        "operator": "ROR",
+        "line": 32,
+        "description": "ROR @ line 32: relational operator NotIn -> In",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M002",
+        "operator": "CRS",
+        "line": 32,
+        "description": "CRS @ line 32: string '@' -> '@X'",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M003",
+        "operator": "CRS",
+        "line": 34,
+        "description": "CRS @ line 34: string '@' -> '@X'",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M004",
+        "operator": "UOR",
+        "line": 35,
+        "description": "UOR @ line 35: unary '' removed",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M005",
+        "operator": "UOR",
+        "line": 35,
+        "description": "UOR @ line 35: unary '' removed",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M006",
+        "operator": "ROR",
+        "line": 37,
+        "description": "ROR @ line 37: relational operator Eq -> NotEq",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M007",
+        "operator": "CRN",
+        "line": 37,
+        "description": "CRN @ line 37: numeric 1 -> 2",
+        "killed_by_b0": false,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M008",
+        "operator": "RTN",
+        "line": 38,
+        "description": "RTN @ line 38: return value -> None",
+        "killed_by_b0": false,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M009",
+        "operator": "AOR",
+        "line": 38,
+        "description": "AOR @ line 38: arithmetic operator Add -> Sub",
+        "killed_by_b0": false,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M010",
+        "operator": "AOR",
+        "line": 38,
+        "description": "AOR @ line 38: arithmetic operator Add -> Sub",
+        "killed_by_b0": false,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M011",
+        "operator": "CRS",
+        "line": 38,
+        "description": "CRS @ line 38: string '@' -> '@X'",
+        "killed_by_b0": false,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M012",
+        "operator": "RTN",
+        "line": 39,
+        "description": "RTN @ line 39: return value -> None",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M013",
+        "operator": "AOR",
+        "line": 39,
+        "description": "AOR @ line 39: arithmetic operator Add -> Sub",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M014",
+        "operator": "AOR",
+        "line": 39,
+        "description": "AOR @ line 39: arithmetic operator Add -> Sub",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M015",
+        "operator": "AOR",
+        "line": 39,
+        "description": "AOR @ line 39: arithmetic operator Add -> Sub",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M016",
+        "operator": "CRN",
+        "line": 39,
+        "description": "CRN @ line 39: numeric 0 -> 1",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M017",
+        "operator": "AOR",
+        "line": 39,
+        "description": "AOR @ line 39: arithmetic operator Mult -> Div",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M018",
+        "operator": "CRS",
+        "line": 39,
+        "description": "CRS @ line 39: string '*' -> '*X'",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M019",
+        "operator": "AOR",
+        "line": 39,
+        "description": "AOR @ line 39: arithmetic operator Sub -> Add",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M020",
+        "operator": "CRN",
+        "line": 39,
+        "description": "CRN @ line 39: numeric 1 -> 2",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M021",
+        "operator": "CRS",
+        "line": 39,
+        "description": "CRS @ line 39: string '@' -> '@X'",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      }
+    ],
+    "gate_log": [
+      {
+        "cid": "R0C1",
+        "accepted": true,
+        "new_kills": 5
+      },
+      {
+        "cid": "R0C2",
+        "accepted": false,
+        "reason": "correctness",
+        "runs": [
+          "fail"
+        ]
+      },
+      {
+        "cid": "R0C3",
+        "accepted": false,
+        "reason": "correctness",
+        "runs": [
+          "fail"
+        ]
+      },
+      {
+        "cid": "R0C4",
+        "accepted": false,
+        "reason": "correctness",
+        "runs": [
+          "fail"
+        ]
+      }
+    ],
+    "ms_all": 1.0,
+    "ms_covered": 1.0,
+    "cost": {
+      "model": "qwen3.8-27b",
+      "calls": 1,
+      "tokens_in": 1390,
+      "tokens_out": 1351,
+      "cost_usd": null,
+      "price_source": ""
+    }
+  },
+  {
+    "target_id": "string_utils.mask_email",
+    "variant": "B5",
+    "mutants_total": 21,
+    "killed_final": 21,
+    "mutants_covered": 21,
+    "killed_covered": 21,
+    "b0_killed_final": 16,
+    "n_generated": 4,
+    "n_accepted": 1,
+    "n_repaired": 0,
+    "rejection_reasons": {
+      "failing_on_original": 3
+    },
+    "flaky_rejects": 0,
+    "rounds_used": 1,
+    "n_final_tests": 1,
+    "final_suite_passes": true,
+    "coverage_pct": 100.0,
+    "b0_coverage_pct": 77.8,
+    "llm_calls": 1,
+    "tokens_in": 1390,
+    "tokens_out": 1351,
+    "cost_usd": null,
+    "price_source": "",
+    "wall_sec": 11.7,
+    "accepted_codes": [
+      "import pytest\n\nfrom string_utils import mask_email\n\n\ndef test_mask_email_single_char_local():\n    assert mask_email(\"a@b.com\") == \"a@b.com\"\n\n\ndef test_mask_email_two_char_local():\n    assert mask_email(\"ab@example.com\") == \"a*@example.com\"\n\n\ndef test_mask_email_long_local():\n    assert mask_email(\"abcdefgh@example.com\") == \"a*******@example.com\"\n\n\ndef test_mask_email_empty_local_raises():\n    with pytest.raises(ValueError):\n        mask_email(\"@example.com\")\n\n\ndef test_mask_email_empty_domain_raises():\n    with pytest.raises(ValueError):\n        mask_email(\"user@\")\n\n\ndef test_mask_email_missing_at_raises():\n    with pytest.raises(ValueError):\n        mask_email(\"userexample.com\")\n\n\ndef test_mask_email_multiple_at_raises():\n    # partition takes first '@', so \"a@b@c.com\" -> local=\"a\", domain=\"b@c.com\"\n    # This is valid per implementation; domain is non-empty\n    assert mask_email(\"a@b@c.com\") == \"a@b@c.com\"\n\n\ndef test_mask_email_special_chars_in_local():\n    assert mask_email(\"user.name+tag@example.com\") == \"u************@example.com\"\n\n\ndef test_mask_email_single_char_domain():\n    assert mask_email(\"ab@c\") == \"a*@c\"\n\n\ndef test_mask_email_preserves_domain_case():\n    assert mask_email(\"user@Example.COM\") == \"u***@Example.COM\""
+    ],
+    "mutant_summary": [
+      {
+        "mid": "M001",
+        "operator": "ROR",
+        "line": 32,
+        "description": "ROR @ line 32: relational operator NotIn -> In",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M002",
+        "operator": "CRS",
+        "line": 32,
+        "description": "CRS @ line 32: string '@' -> '@X'",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M003",
+        "operator": "CRS",
+        "line": 34,
+        "description": "CRS @ line 34: string '@' -> '@X'",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M004",
+        "operator": "UOR",
+        "line": 35,
+        "description": "UOR @ line 35: unary '' removed",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M005",
+        "operator": "UOR",
+        "line": 35,
+        "description": "UOR @ line 35: unary '' removed",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M006",
+        "operator": "ROR",
+        "line": 37,
+        "description": "ROR @ line 37: relational operator Eq -> NotEq",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M007",
+        "operator": "CRN",
+        "line": 37,
+        "description": "CRN @ line 37: numeric 1 -> 2",
+        "killed_by_b0": false,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M008",
+        "operator": "RTN",
+        "line": 38,
+        "description": "RTN @ line 38: return value -> None",
+        "killed_by_b0": false,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M009",
+        "operator": "AOR",
+        "line": 38,
+        "description": "AOR @ line 38: arithmetic operator Add -> Sub",
+        "killed_by_b0": false,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M010",
+        "operator": "AOR",
+        "line": 38,
+        "description": "AOR @ line 38: arithmetic operator Add -> Sub",
+        "killed_by_b0": false,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M011",
+        "operator": "CRS",
+        "line": 38,
+        "description": "CRS @ line 38: string '@' -> '@X'",
+        "killed_by_b0": false,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M012",
+        "operator": "RTN",
+        "line": 39,
+        "description": "RTN @ line 39: return value -> None",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M013",
+        "operator": "AOR",
+        "line": 39,
+        "description": "AOR @ line 39: arithmetic operator Add -> Sub",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M014",
+        "operator": "AOR",
+        "line": 39,
+        "description": "AOR @ line 39: arithmetic operator Add -> Sub",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M015",
+        "operator": "AOR",
+        "line": 39,
+        "description": "AOR @ line 39: arithmetic operator Add -> Sub",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M016",
+        "operator": "CRN",
+        "line": 39,
+        "description": "CRN @ line 39: numeric 0 -> 1",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M017",
+        "operator": "AOR",
+        "line": 39,
+        "description": "AOR @ line 39: arithmetic operator Mult -> Div",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M018",
+        "operator": "CRS",
+        "line": 39,
+        "description": "CRS @ line 39: string '*' -> '*X'",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M019",
+        "operator": "AOR",
+        "line": 39,
+        "description": "AOR @ line 39: arithmetic operator Sub -> Add",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M020",
+        "operator": "CRN",
+        "line": 39,
+        "description": "CRN @ line 39: numeric 1 -> 2",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M021",
+        "operator": "CRS",
+        "line": 39,
+        "description": "CRS @ line 39: string '@' -> '@X'",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      }
+    ],
+    "gate_log": [
+      {
+        "cid": "R0C1",
+        "accepted": true,
+        "new_kills": 5
+      },
+      {
+        "cid": "R0C2",
+        "accepted": false,
+        "reason": "correctness",
+        "runs": [
+          "fail"
+        ]
+      },
+      {
+        "cid": "R0C3",
+        "accepted": false,
+        "reason": "correctness",
+        "runs": [
+          "fail"
+        ]
+      },
+      {
+        "cid": "R0C4",
+        "accepted": false,
+        "reason": "correctness",
+        "runs": [
+          "fail"
+        ]
+      }
+    ],
+    "ms_all": 1.0,
+    "ms_covered": 1.0,
+    "cost": {
+      "model": "qwen3.8-27b",
+      "calls": 1,
+      "tokens_in": 1390,
+      "tokens_out": 1351,
+      "cost_usd": null,
+      "price_source": ""
+    }
+  },
+  {
+    "target_id": "string_utils.truncate_with_ellipsis",
+    "variant": "B0",
+    "mutants_total": 12,
+    "killed_final": 9,
+    "mutants_covered": 11,
+    "killed_covered": 9,
+    "b0_killed_final": 9,
+    "n_generated": 0,
+    "n_accepted": 0,
+    "n_repaired": 0,
+    "rejection_reasons": {},
+    "flaky_rejects": 0,
+    "rounds_used": 0,
+    "n_final_tests": 0,
+    "final_suite_passes": true,
+    "coverage_pct": 75.0,
+    "b0_coverage_pct": 75.0,
+    "llm_calls": 0,
+    "tokens_in": 0,
+    "tokens_out": 0,
+    "cost_usd": null,
+    "price_source": "",
+    "wall_sec": 5.1,
+    "accepted_codes": [],
+    "mutant_summary": [
+      {
+        "mid": "M001",
+        "operator": "ROR",
+        "line": 51,
+        "description": "ROR @ line 51: relational operator Lt -> GtE",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M002",
+        "operator": "CRN",
+        "line": 51,
+        "description": "CRN @ line 51: numeric 0 -> 1",
+        "killed_by_b0": false,
+        "killed_by_final": false,
+        "covered": true
+      },
+      {
+        "mid": "M003",
+        "operator": "ROR",
+        "line": 53,
+        "description": "ROR @ line 53: relational operator LtE -> Gt",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M004",
+        "operator": "RTN",
+        "line": 54,
+        "description": "RTN @ line 54: return value -> None",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M005",
+        "operator": "ROR",
+        "line": 55,
+        "description": "ROR @ line 55: relational operator LtE -> Gt",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M006",
+        "operator": "CRN",
+        "line": 55,
+        "description": "CRN @ line 55: numeric 3 -> 4",
+        "killed_by_b0": false,
+        "killed_by_final": false,
+        "covered": true
+      },
+      {
+        "mid": "M007",
+        "operator": "RTN",
+        "line": 56,
+        "description": "RTN @ line 56: return value -> None",
+        "killed_by_b0": false,
+        "killed_by_final": false,
+        "covered": false
+      },
+      {
+        "mid": "M008",
+        "operator": "RTN",
+        "line": 57,
+        "description": "RTN @ line 57: return value -> None",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M009",
+        "operator": "AOR",
+        "line": 57,
+        "description": "AOR @ line 57: arithmetic operator Add -> Sub",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M010",
+        "operator": "AOR",
+        "line": 57,
+        "description": "AOR @ line 57: arithmetic operator Sub -> Add",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M011",
+        "operator": "CRN",
+        "line": 57,
+        "description": "CRN @ line 57: numeric 3 -> 4",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M012",
+        "operator": "CRS",
+        "line": 57,
+        "description": "CRS @ line 57: string '...' -> '...X'",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      }
+    ],
+    "gate_log": [],
+    "ms_all": 0.75,
+    "ms_covered": 0.8182,
+    "cost": {
+      "model": "qwen3.8-27b",
+      "calls": 0,
+      "tokens_in": 0,
+      "tokens_out": 0,
+      "cost_usd": null,
+      "price_source": ""
+    }
+  },
+  {
+    "target_id": "string_utils.truncate_with_ellipsis",
+    "variant": "B2",
+    "mutants_total": 12,
+    "killed_final": 9,
+    "mutants_covered": 11,
+    "killed_covered": 9,
+    "b0_killed_final": 9,
+    "n_generated": 4,
+    "n_accepted": 0,
+    "n_repaired": 0,
+    "rejection_reasons": {
+      "failing_on_original": 4
+    },
+    "flaky_rejects": 0,
+    "rounds_used": 1,
+    "n_final_tests": 0,
+    "final_suite_passes": true,
+    "coverage_pct": 75.0,
+    "b0_coverage_pct": 75.0,
+    "llm_calls": 1,
+    "tokens_in": 1430,
+    "tokens_out": 2648,
+    "cost_usd": null,
+    "price_source": "",
+    "wall_sec": 218.0,
+    "accepted_codes": [],
+    "mutant_summary": [
+      {
+        "mid": "M001",
+        "operator": "ROR",
+        "line": 51,
+        "description": "ROR @ line 51: relational operator Lt -> GtE",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M002",
+        "operator": "CRN",
+        "line": 51,
+        "description": "CRN @ line 51: numeric 0 -> 1",
+        "killed_by_b0": false,
+        "killed_by_final": false,
+        "covered": true
+      },
+      {
+        "mid": "M003",
+        "operator": "ROR",
+        "line": 53,
+        "description": "ROR @ line 53: relational operator LtE -> Gt",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M004",
+        "operator": "RTN",
+        "line": 54,
+        "description": "RTN @ line 54: return value -> None",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M005",
+        "operator": "ROR",
+        "line": 55,
+        "description": "ROR @ line 55: relational operator LtE -> Gt",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M006",
+        "operator": "CRN",
+        "line": 55,
+        "description": "CRN @ line 55: numeric 3 -> 4",
+        "killed_by_b0": false,
+        "killed_by_final": false,
+        "covered": true
+      },
+      {
+        "mid": "M007",
+        "operator": "RTN",
+        "line": 56,
+        "description": "RTN @ line 56: return value -> None",
+        "killed_by_b0": false,
+        "killed_by_final": false,
+        "covered": false
+      },
+      {
+        "mid": "M008",
+        "operator": "RTN",
+        "line": 57,
+        "description": "RTN @ line 57: return value -> None",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M009",
+        "operator": "AOR",
+        "line": 57,
+        "description": "AOR @ line 57: arithmetic operator Add -> Sub",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M010",
+        "operator": "AOR",
+        "line": 57,
+        "description": "AOR @ line 57: arithmetic operator Sub -> Add",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M011",
+        "operator": "CRN",
+        "line": 57,
+        "description": "CRN @ line 57: numeric 3 -> 4",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M012",
+        "operator": "CRS",
+        "line": 57,
+        "description": "CRS @ line 57: string '...' -> '...X'",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      }
+    ],
+    "gate_log": [
+      {
+        "cid": "R0C1",
+        "accepted": false,
+        "reason": "correctness",
+        "runs": [
+          "fail"
+        ]
+      },
+      {
+        "cid": "R0C2",
+        "accepted": false,
+        "reason": "correctness",
+        "runs": [
+          "fail"
+        ]
+      },
+      {
+        "cid": "R0C3",
+        "accepted": false,
+        "reason": "correctness",
+        "runs": [
+          "fail"
+        ]
+      },
+      {
+        "cid": "R0C4",
+        "accepted": false,
+        "reason": "correctness",
+        "runs": [
+          "fail"
+        ]
+      }
+    ],
+    "ms_all": 0.75,
+    "ms_covered": 0.8182,
+    "cost": {
+      "model": "qwen3.8-27b",
+      "calls": 1,
+      "tokens_in": 1430,
+      "tokens_out": 2648,
+      "cost_usd": null,
+      "price_source": ""
+    }
+  },
+  {
+    "target_id": "string_utils.truncate_with_ellipsis",
+    "variant": "B5",
+    "mutants_total": 12,
+    "killed_final": 12,
+    "mutants_covered": 12,
+    "killed_covered": 12,
+    "b0_killed_final": 9,
+    "n_generated": 8,
+    "n_accepted": 1,
+    "n_repaired": 4,
+    "rejection_reasons": {
+      "failing_on_original": 7
+    },
+    "flaky_rejects": 0,
+    "rounds_used": 2,
+    "n_final_tests": 1,
+    "final_suite_passes": true,
+    "coverage_pct": 100.0,
+    "b0_coverage_pct": 75.0,
+    "llm_calls": 2,
+    "tokens_in": 2799,
+    "tokens_out": 6427,
+    "cost_usd": null,
+    "price_source": "",
+    "wall_sec": 229.2,
+    "accepted_codes": [
+      "\nimport pytest\nfrom string_utils import truncate_with_ellipsis\n\n\ndef test_max_len_zero_yields_empty():\n    # M002: max_len=0 must return '', not raise\n    assert truncate_with_ellipsis(\"x\", 0) == \"\"\n\n\ndef test_max_len_zero_long_string():\n    assert truncate_with_ellipsis(\"a\" * 50, 0) == \"\"\n\n\ndef test_max_len_four_uses_ellipsis_not_hard_cut():\n    # M006: max_len=4 must go through ellipsis branch (text[:1]+\"...\")\n    # If threshold were 4 instead of 3, this would hard-cut to text[:4]\n    result = truncate_with_ellipsis(\"abcdef\", 4)\n    assert result == \"a...\"\n    assert len(result) == 4\n    assert result[1:] == \"...\"\n\n\ndef test_max_len_four_different_from_hard_cut():\n    # Hard cut at max_len=4 would give \"abcd\"; ellipsis gives \"a...\"\n    text = \"abcdef\"\n    ellipsis_result = truncate_with_ellipsis(text, 4)\n    hard_cut_result = text[:4]  # \"abcd\"\n    assert ellipsis_result != hard_cut_result\n    assert ellipsis_result == \"a...\"\n\n\ndef test_max_len_three_hard_cut():\n    # max_len=3 is the boundary: hard cut, no ellipsis\n    assert truncate_with_ellipsis(\"abcdef\", 3) == \"abc\"\n    assert \"...\" not in truncate_with_ellipsis(\"abcdef\", 3)\n\n\ndef test_hard_cut_returns_proper_string():\n    # M007: must return str, not None\n    for ml in [0, 1, 2, 3]:\n        result = truncate_with_ellipsis(\"hello\", ml)\n        assert isinstance(result, str), f\"max_len={ml} returned {type(result)}\"\n        assert result is not None\n\n\ndef test_hard_cut_max_len_zero_type():\n    result = truncate_with_ellipsis(\"hello\", 0)\n    assert type(result) is str\n    assert result == \"\"\n\n\ndef test_ellipsis_present_when_max_len_greater_than_three():\n    for ml in [4, 5, 6, 10, 20]:\n        result = truncate_with_ellipsis(\"abcdefghij\", ml)\n        if len(\"abcdefghij\") > ml:\n            assert result.endswith(\"...\"), f\"max_len={ml} should have ellipsis\"\n            assert len(result) == ml\n\n\ndef test_no_ellipsis_when_max_len_leq_three():\n    for ml in [0, 1, 2, 3]:\n        result = truncate_with_ellipsis(\"abcdefghij\", ml)\n        assert \"...\" not in result, f\"max_len={ml} should not have ellipsis\"\n\n\ndef test_result_length_never_exceeds_max_len():\n    for ml in range(0, 15):\n        result = truncate_with_ellipsis(\"abcdefghij\", ml)\n        assert len(result) <= ml\n\n\ndef test_fits_unchanged():\n    assert truncate_with_ellipsis(\"hello\", 10) == \"hello\"\n    assert truncate_with_ellipsis(\"hello\", 5) == \"hello\"\n    assert truncate_with_ellipsis(\"\", 5) == \"\"\n\n\ndef test_negative_raises_value_error():\n    with pytest.raises(ValueError):\n        truncate_with_ellipsis(\"hello\", -1)\n    with pytest.raises(ValueError):\n        truncate_with_ellipsis(\"hello\", -50)\n\n\ndef test_negative_max_len_message():\n    with pytest.raises(ValueError, match=\"non-negative\"):\n        truncate_with_ellipsis(\"hello\", -1)\n\n\ndef test_single_char_boundary():\n    assert truncate_with_ellipsis(\"a\", 1) == \"a\"\n    assert truncate_with_ellipsis(\"a\", 0) == \"\"\n    assert truncate_with_ellipsis(\"ab\", 1) == \"a\"\n"
+    ],
+    "mutant_summary": [
+      {
+        "mid": "M001",
+        "operator": "ROR",
+        "line": 51,
+        "description": "ROR @ line 51: relational operator Lt -> GtE",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M002",
+        "operator": "CRN",
+        "line": 51,
+        "description": "CRN @ line 51: numeric 0 -> 1",
+        "killed_by_b0": false,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M003",
+        "operator": "ROR",
+        "line": 53,
+        "description": "ROR @ line 53: relational operator LtE -> Gt",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M004",
+        "operator": "RTN",
+        "line": 54,
+        "description": "RTN @ line 54: return value -> None",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M005",
+        "operator": "ROR",
+        "line": 55,
+        "description": "ROR @ line 55: relational operator LtE -> Gt",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M006",
+        "operator": "CRN",
+        "line": 55,
+        "description": "CRN @ line 55: numeric 3 -> 4",
+        "killed_by_b0": false,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M007",
+        "operator": "RTN",
+        "line": 56,
+        "description": "RTN @ line 56: return value -> None",
+        "killed_by_b0": false,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M008",
+        "operator": "RTN",
+        "line": 57,
+        "description": "RTN @ line 57: return value -> None",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M009",
+        "operator": "AOR",
+        "line": 57,
+        "description": "AOR @ line 57: arithmetic operator Add -> Sub",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M010",
+        "operator": "AOR",
+        "line": 57,
+        "description": "AOR @ line 57: arithmetic operator Sub -> Add",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M011",
+        "operator": "CRN",
+        "line": 57,
+        "description": "CRN @ line 57: numeric 3 -> 4",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M012",
+        "operator": "CRS",
+        "line": 57,
+        "description": "CRS @ line 57: string '...' -> '...X'",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      }
+    ],
+    "gate_log": [
+      {
+        "cid": "R0C1",
+        "accepted": false,
+        "reason": "correctness",
+        "runs": [
+          "fail"
+        ]
+      },
+      {
+        "cid": "R0C2",
+        "accepted": false,
+        "reason": "correctness",
+        "runs": [
+          "fail"
+        ]
+      },
+      {
+        "cid": "R0C3",
+        "accepted": false,
+        "reason": "correctness",
+        "runs": [
+          "fail"
+        ]
+      },
+      {
+        "cid": "R0C4",
+        "accepted": false,
+        "reason": "correctness",
+        "runs": [
+          "fail"
+        ]
+      },
+      {
+        "cid": "R1C1",
+        "accepted": false,
+        "reason": "correctness",
+        "runs": [
+          "fail"
+        ]
+      },
+      {
+        "cid": "R1C2",
+        "accepted": false,
+        "reason": "correctness",
+        "runs": [
+          "fail"
+        ]
+      },
+      {
+        "cid": "R1C3",
+        "accepted": true,
+        "new_kills": 3
+      },
+      {
+        "cid": "R1C4",
+        "accepted": false,
+        "reason": "correctness",
+        "runs": [
+          "fail"
+        ]
+      }
+    ],
+    "ms_all": 1.0,
+    "ms_covered": 1.0,
+    "cost": {
+      "model": "qwen3.8-27b",
+      "calls": 2,
+      "tokens_in": 2799,
+      "tokens_out": 6427,
+      "cost_usd": null,
+      "price_source": ""
+    }
+  },
+  {
+    "target_id": "numeric.clamp",
+    "variant": "B0",
+    "mutants_total": 6,
+    "killed_final": 6,
+    "mutants_covered": 6,
+    "killed_covered": 6,
+    "b0_killed_final": 6,
+    "n_generated": 0,
+    "n_accepted": 0,
+    "n_repaired": 0,
+    "rejection_reasons": {},
+    "flaky_rejects": 0,
+    "rounds_used": 0,
+    "n_final_tests": 0,
+    "final_suite_passes": true,
+    "coverage_pct": 87.5,
+    "b0_coverage_pct": 87.5,
+    "llm_calls": 0,
+    "tokens_in": 0,
+    "tokens_out": 0,
+    "cost_usd": null,
+    "price_source": "",
+    "wall_sec": 5.0,
+    "accepted_codes": [],
+    "mutant_summary": [
+      {
+        "mid": "M001",
+        "operator": "ROR",
+        "line": 9,
+        "description": "ROR @ line 9: relational operator Gt -> LtE",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M002",
+        "operator": "ROR",
+        "line": 11,
+        "description": "ROR @ line 11: relational operator Lt -> GtE",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M003",
+        "operator": "RTN",
+        "line": 12,
+        "description": "RTN @ line 12: return value -> None",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M004",
+        "operator": "ROR",
+        "line": 13,
+        "description": "ROR @ line 13: relational operator Gt -> LtE",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M005",
+        "operator": "RTN",
+        "line": 14,
+        "description": "RTN @ line 14: return value -> None",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M006",
+        "operator": "RTN",
+        "line": 15,
+        "description": "RTN @ line 15: return value -> None",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      }
+    ],
+    "gate_log": [],
+    "ms_all": 1.0,
+    "ms_covered": 1.0,
+    "cost": {
+      "model": "qwen3.8-27b",
+      "calls": 0,
+      "tokens_in": 0,
+      "tokens_out": 0,
+      "cost_usd": null,
+      "price_source": ""
+    }
+  },
+  {
+    "target_id": "numeric.clamp",
+    "variant": "B2",
+    "mutants_total": 6,
+    "killed_final": 6,
+    "mutants_covered": 6,
+    "killed_covered": 6,
+    "b0_killed_final": 6,
+    "n_generated": 0,
+    "n_accepted": 0,
+    "n_repaired": 0,
+    "rejection_reasons": {},
+    "flaky_rejects": 0,
+    "rounds_used": 0,
+    "n_final_tests": 0,
+    "final_suite_passes": true,
+    "coverage_pct": 87.5,
+    "b0_coverage_pct": 87.5,
+    "llm_calls": 0,
+    "tokens_in": 0,
+    "tokens_out": 0,
+    "cost_usd": null,
+    "price_source": "",
+    "wall_sec": 4.1,
+    "accepted_codes": [],
+    "mutant_summary": [
+      {
+        "mid": "M001",
+        "operator": "ROR",
+        "line": 9,
+        "description": "ROR @ line 9: relational operator Gt -> LtE",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M002",
+        "operator": "ROR",
+        "line": 11,
+        "description": "ROR @ line 11: relational operator Lt -> GtE",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M003",
+        "operator": "RTN",
+        "line": 12,
+        "description": "RTN @ line 12: return value -> None",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M004",
+        "operator": "ROR",
+        "line": 13,
+        "description": "ROR @ line 13: relational operator Gt -> LtE",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M005",
+        "operator": "RTN",
+        "line": 14,
+        "description": "RTN @ line 14: return value -> None",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M006",
+        "operator": "RTN",
+        "line": 15,
+        "description": "RTN @ line 15: return value -> None",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      }
+    ],
+    "gate_log": [],
+    "ms_all": 1.0,
+    "ms_covered": 1.0,
+    "cost": {
+      "model": "qwen3.8-27b",
+      "calls": 0,
+      "tokens_in": 0,
+      "tokens_out": 0,
+      "cost_usd": null,
+      "price_source": ""
+    }
+  },
+  {
+    "target_id": "numeric.clamp",
+    "variant": "B5",
+    "mutants_total": 6,
+    "killed_final": 6,
+    "mutants_covered": 6,
+    "killed_covered": 6,
+    "b0_killed_final": 6,
+    "n_generated": 0,
+    "n_accepted": 0,
+    "n_repaired": 0,
+    "rejection_reasons": {},
+    "flaky_rejects": 0,
+    "rounds_used": 0,
+    "n_final_tests": 0,
+    "final_suite_passes": true,
+    "coverage_pct": 87.5,
+    "b0_coverage_pct": 87.5,
+    "llm_calls": 0,
+    "tokens_in": 0,
+    "tokens_out": 0,
+    "cost_usd": null,
+    "price_source": "",
+    "wall_sec": 4.1,
+    "accepted_codes": [],
+    "mutant_summary": [
+      {
+        "mid": "M001",
+        "operator": "ROR",
+        "line": 9,
+        "description": "ROR @ line 9: relational operator Gt -> LtE",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M002",
+        "operator": "ROR",
+        "line": 11,
+        "description": "ROR @ line 11: relational operator Lt -> GtE",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M003",
+        "operator": "RTN",
+        "line": 12,
+        "description": "RTN @ line 12: return value -> None",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M004",
+        "operator": "ROR",
+        "line": 13,
+        "description": "ROR @ line 13: relational operator Gt -> LtE",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M005",
+        "operator": "RTN",
+        "line": 14,
+        "description": "RTN @ line 14: return value -> None",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M006",
+        "operator": "RTN",
+        "line": 15,
+        "description": "RTN @ line 15: return value -> None",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      }
+    ],
+    "gate_log": [],
+    "ms_all": 1.0,
+    "ms_covered": 1.0,
+    "cost": {
+      "model": "qwen3.8-27b",
+      "calls": 0,
+      "tokens_in": 0,
+      "tokens_out": 0,
+      "cost_usd": null,
+      "price_source": ""
+    }
+  },
+  {
+    "target_id": "numeric.integer_sqrt",
+    "variant": "B0",
+    "mutants_total": 21,
+    "killed_final": 12,
+    "mutants_covered": 20,
+    "killed_covered": 12,
+    "b0_killed_final": 12,
+    "n_generated": 0,
+    "n_accepted": 0,
+    "n_repaired": 0,
+    "rejection_reasons": {},
+    "flaky_rejects": 0,
+    "rounds_used": 0,
+    "n_final_tests": 0,
+    "final_suite_passes": true,
+    "coverage_pct": 83.3,
+    "b0_coverage_pct": 83.3,
+    "llm_calls": 0,
+    "tokens_in": 0,
+    "tokens_out": 0,
+    "cost_usd": null,
+    "price_source": "",
+    "wall_sec": 21.3,
+    "accepted_codes": [],
+    "mutant_summary": [
+      {
+        "mid": "M001",
+        "operator": "ROR",
+        "line": 24,
+        "description": "ROR @ line 24: relational operator Lt -> GtE",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M002",
+        "operator": "CRN",
+        "line": 24,
+        "description": "CRN @ line 24: numeric 0 -> 1",
+        "killed_by_b0": false,
+        "killed_by_final": false,
+        "covered": true
+      },
+      {
+        "mid": "M003",
+        "operator": "ROR",
+        "line": 26,
+        "description": "ROR @ line 26: relational operator Lt -> GtE",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M004",
+        "operator": "CRN",
+        "line": 26,
+        "description": "CRN @ line 26: numeric 2 -> 3",
+        "killed_by_b0": false,
+        "killed_by_final": false,
+        "covered": true
+      },
+      {
+        "mid": "M005",
+        "operator": "RTN",
+        "line": 27,
+        "description": "RTN @ line 27: return value -> None",
+        "killed_by_b0": false,
+        "killed_by_final": false,
+        "covered": false
+      },
+      {
+        "mid": "M006",
+        "operator": "CRN",
+        "line": 28,
+        "description": "CRN @ line 28: numeric 1 -> 2",
+        "killed_by_b0": false,
+        "killed_by_final": false,
+        "covered": true
+      },
+      {
+        "mid": "M007",
+        "operator": "AOR",
+        "line": 28,
+        "description": "AOR @ line 28: arithmetic operator Add -> Sub",
+        "killed_by_b0": false,
+        "killed_by_final": false,
+        "covered": true
+      },
+      {
+        "mid": "M008",
+        "operator": "AOR",
+        "line": 28,
+        "description": "AOR @ line 28: arithmetic operator FloorDiv -> Div",
+        "killed_by_b0": false,
+        "killed_by_final": false,
+        "covered": true
+      },
+      {
+        "mid": "M009",
+        "operator": "CRN",
+        "line": 28,
+        "description": "CRN @ line 28: numeric 2 -> 3",
+        "killed_by_b0": false,
+        "killed_by_final": false,
+        "covered": true
+      },
+      {
+        "mid": "M010",
+        "operator": "CRN",
+        "line": 28,
+        "description": "CRN @ line 28: numeric 1 -> 2",
+        "killed_by_b0": false,
+        "killed_by_final": false,
+        "covered": true
+      },
+      {
+        "mid": "M011",
+        "operator": "ROR",
+        "line": 29,
+        "description": "ROR @ line 29: relational operator Lt -> GtE",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M012",
+        "operator": "AOR",
+        "line": 30,
+        "description": "AOR @ line 30: arithmetic operator FloorDiv -> Div",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M013",
+        "operator": "AOR",
+        "line": 30,
+        "description": "AOR @ line 30: arithmetic operator Add -> Sub",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M014",
+        "operator": "AOR",
+        "line": 30,
+        "description": "AOR @ line 30: arithmetic operator Add -> Sub",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M015",
+        "operator": "CRN",
+        "line": 30,
+        "description": "CRN @ line 30: numeric 1 -> 2",
+        "killed_by_b0": false,
+        "killed_by_final": false,
+        "covered": true
+      },
+      {
+        "mid": "M016",
+        "operator": "CRN",
+        "line": 30,
+        "description": "CRN @ line 30: numeric 2 -> 3",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M017",
+        "operator": "ROR",
+        "line": 31,
+        "description": "ROR @ line 31: relational operator LtE -> Gt",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M018",
+        "operator": "AOR",
+        "line": 31,
+        "description": "AOR @ line 31: arithmetic operator Mult -> Div",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M019",
+        "operator": "AOR",
+        "line": 34,
+        "description": "AOR @ line 34: arithmetic operator Sub -> Add",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M020",
+        "operator": "CRN",
+        "line": 34,
+        "description": "CRN @ line 34: numeric 1 -> 2",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M021",
+        "operator": "RTN",
+        "line": 35,
+        "description": "RTN @ line 35: return value -> None",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      }
+    ],
+    "gate_log": [],
+    "ms_all": 0.5714,
+    "ms_covered": 0.6,
+    "cost": {
+      "model": "qwen3.8-27b",
+      "calls": 0,
+      "tokens_in": 0,
+      "tokens_out": 0,
+      "cost_usd": null,
+      "price_source": ""
+    }
+  },
+  {
+    "target_id": "numeric.integer_sqrt",
+    "variant": "B2",
+    "mutants_total": 21,
+    "killed_final": 17,
+    "mutants_covered": 21,
+    "killed_covered": 17,
+    "b0_killed_final": 12,
+    "n_generated": 4,
+    "n_accepted": 1,
+    "n_repaired": 0,
+    "rejection_reasons": {
+      "falsifiable": 3
+    },
+    "flaky_rejects": 0,
+    "rounds_used": 1,
+    "n_final_tests": 1,
+    "final_suite_passes": true,
+    "coverage_pct": 100.0,
+    "b0_coverage_pct": 83.3,
+    "llm_calls": 1,
+    "tokens_in": 1253,
+    "tokens_out": 1304,
+    "cost_usd": null,
+    "price_source": "",
+    "wall_sec": 35.2,
+    "accepted_codes": [
+      "import pytest\n\nfrom numeric import integer_sqrt\n\n\ndef test_isqrt_zero():\n    assert integer_sqrt(0) == 0\n\n\ndef test_isqrt_one():\n    assert integer_sqrt(1) == 1\n\n\ndef test_isqrt_two():\n    assert integer_sqrt(2) == 1\n\n\ndef test_isqrt_three():\n    assert integer_sqrt(3) == 1\n\n\ndef test_isqrt_four():\n    assert integer_sqrt(4) == 2\n\n\ndef test_isqrt_negative_raises():\n    with pytest.raises(ValueError):\n        integer_sqrt(-1)\n\n\ndef test_isqrt_large_perfect_square():\n    assert integer_sqrt(1000000) == 1000\n\n\ndef test_isqrt_just_below_square():\n    assert integer_sqrt(999999) == 999\n\n\ndef test_isqrt_just_above_square():\n    assert integer_sqrt(1000001) == 1000\n\n\ndef test_isqrt_big_non_square():\n    assert integer_sqrt(999999999) == 31622"
+    ],
+    "mutant_summary": [
+      {
+        "mid": "M001",
+        "operator": "ROR",
+        "line": 24,
+        "description": "ROR @ line 24: relational operator Lt -> GtE",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M002",
+        "operator": "CRN",
+        "line": 24,
+        "description": "CRN @ line 24: numeric 0 -> 1",
+        "killed_by_b0": false,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M003",
+        "operator": "ROR",
+        "line": 26,
+        "description": "ROR @ line 26: relational operator Lt -> GtE",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M004",
+        "operator": "CRN",
+        "line": 26,
+        "description": "CRN @ line 26: numeric 2 -> 3",
+        "killed_by_b0": false,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M005",
+        "operator": "RTN",
+        "line": 27,
+        "description": "RTN @ line 27: return value -> None",
+        "killed_by_b0": false,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M006",
+        "operator": "CRN",
+        "line": 28,
+        "description": "CRN @ line 28: numeric 1 -> 2",
+        "killed_by_b0": false,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M007",
+        "operator": "AOR",
+        "line": 28,
+        "description": "AOR @ line 28: arithmetic operator Add -> Sub",
+        "killed_by_b0": false,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M008",
+        "operator": "AOR",
+        "line": 28,
+        "description": "AOR @ line 28: arithmetic operator FloorDiv -> Div",
+        "killed_by_b0": false,
+        "killed_by_final": false,
+        "covered": true
+      },
+      {
+        "mid": "M009",
+        "operator": "CRN",
+        "line": 28,
+        "description": "CRN @ line 28: numeric 2 -> 3",
+        "killed_by_b0": false,
+        "killed_by_final": false,
+        "covered": true
+      },
+      {
+        "mid": "M010",
+        "operator": "CRN",
+        "line": 28,
+        "description": "CRN @ line 28: numeric 1 -> 2",
+        "killed_by_b0": false,
+        "killed_by_final": false,
+        "covered": true
+      },
+      {
+        "mid": "M011",
+        "operator": "ROR",
+        "line": 29,
+        "description": "ROR @ line 29: relational operator Lt -> GtE",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M012",
+        "operator": "AOR",
+        "line": 30,
+        "description": "AOR @ line 30: arithmetic operator FloorDiv -> Div",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M013",
+        "operator": "AOR",
+        "line": 30,
+        "description": "AOR @ line 30: arithmetic operator Add -> Sub",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M014",
+        "operator": "AOR",
+        "line": 30,
+        "description": "AOR @ line 30: arithmetic operator Add -> Sub",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M015",
+        "operator": "CRN",
+        "line": 30,
+        "description": "CRN @ line 30: numeric 1 -> 2",
+        "killed_by_b0": false,
+        "killed_by_final": false,
+        "covered": true
+      },
+      {
+        "mid": "M016",
+        "operator": "CRN",
+        "line": 30,
+        "description": "CRN @ line 30: numeric 2 -> 3",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M017",
+        "operator": "ROR",
+        "line": 31,
+        "description": "ROR @ line 31: relational operator LtE -> Gt",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M018",
+        "operator": "AOR",
+        "line": 31,
+        "description": "AOR @ line 31: arithmetic operator Mult -> Div",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M019",
+        "operator": "AOR",
+        "line": 34,
+        "description": "AOR @ line 34: arithmetic operator Sub -> Add",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M020",
+        "operator": "CRN",
+        "line": 34,
+        "description": "CRN @ line 34: numeric 1 -> 2",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M021",
+        "operator": "RTN",
+        "line": 35,
+        "description": "RTN @ line 35: return value -> None",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      }
+    ],
+    "gate_log": [
+      {
+        "cid": "R0C1",
+        "accepted": true,
+        "new_kills": 5
+      },
+      {
+        "cid": "R0C2",
+        "accepted": false,
+        "reasons": [
+          "falsifiable"
+        ]
+      },
+      {
+        "cid": "R0C3",
+        "accepted": false,
+        "reasons": [
+          "falsifiable"
+        ]
+      },
+      {
+        "cid": "R0C4",
+        "accepted": false,
+        "reasons": [
+          "falsifiable"
+        ]
+      }
+    ],
+    "ms_all": 0.8095,
+    "ms_covered": 0.8095,
+    "cost": {
+      "model": "qwen3.8-27b",
+      "calls": 1,
+      "tokens_in": 1253,
+      "tokens_out": 1304,
+      "cost_usd": null,
+      "price_source": ""
+    }
+  },
+  {
+    "target_id": "numeric.integer_sqrt",
+    "variant": "B5",
+    "mutants_total": 21,
+    "killed_final": 17,
+    "mutants_covered": 21,
+    "killed_covered": 17,
+    "b0_killed_final": 12,
+    "n_generated": 16,
+    "n_accepted": 1,
+    "n_repaired": 7,
+    "rejection_reasons": {
+      "falsifiable": 15
+    },
+    "flaky_rejects": 0,
+    "rounds_used": 4,
+    "n_final_tests": 1,
+    "final_suite_passes": true,
+    "coverage_pct": 100.0,
+    "b0_coverage_pct": 83.3,
+    "llm_calls": 4,
+    "tokens_in": 4946,
+    "tokens_out": 9236,
+    "cost_usd": null,
+    "price_source": "",
+    "wall_sec": 404.4,
+    "accepted_codes": [
+      "import pytest\n\nfrom numeric import integer_sqrt\n\n\ndef test_isqrt_zero():\n    assert integer_sqrt(0) == 0\n\n\ndef test_isqrt_one():\n    assert integer_sqrt(1) == 1\n\n\ndef test_isqrt_two():\n    assert integer_sqrt(2) == 1\n\n\ndef test_isqrt_three():\n    assert integer_sqrt(3) == 1\n\n\ndef test_isqrt_four():\n    assert integer_sqrt(4) == 2\n\n\ndef test_isqrt_negative_raises():\n    with pytest.raises(ValueError):\n        integer_sqrt(-1)\n\n\ndef test_isqrt_large_perfect_square():\n    assert integer_sqrt(1000000) == 1000\n\n\ndef test_isqrt_just_below_square():\n    assert integer_sqrt(999999) == 999\n\n\ndef test_isqrt_just_above_square():\n    assert integer_sqrt(1000001) == 1000\n\n\ndef test_isqrt_big_non_square():\n    assert integer_sqrt(999999999) == 31622"
+    ],
+    "mutant_summary": [
+      {
+        "mid": "M001",
+        "operator": "ROR",
+        "line": 24,
+        "description": "ROR @ line 24: relational operator Lt -> GtE",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M002",
+        "operator": "CRN",
+        "line": 24,
+        "description": "CRN @ line 24: numeric 0 -> 1",
+        "killed_by_b0": false,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M003",
+        "operator": "ROR",
+        "line": 26,
+        "description": "ROR @ line 26: relational operator Lt -> GtE",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M004",
+        "operator": "CRN",
+        "line": 26,
+        "description": "CRN @ line 26: numeric 2 -> 3",
+        "killed_by_b0": false,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M005",
+        "operator": "RTN",
+        "line": 27,
+        "description": "RTN @ line 27: return value -> None",
+        "killed_by_b0": false,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M006",
+        "operator": "CRN",
+        "line": 28,
+        "description": "CRN @ line 28: numeric 1 -> 2",
+        "killed_by_b0": false,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M007",
+        "operator": "AOR",
+        "line": 28,
+        "description": "AOR @ line 28: arithmetic operator Add -> Sub",
+        "killed_by_b0": false,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M008",
+        "operator": "AOR",
+        "line": 28,
+        "description": "AOR @ line 28: arithmetic operator FloorDiv -> Div",
+        "killed_by_b0": false,
+        "killed_by_final": false,
+        "covered": true
+      },
+      {
+        "mid": "M009",
+        "operator": "CRN",
+        "line": 28,
+        "description": "CRN @ line 28: numeric 2 -> 3",
+        "killed_by_b0": false,
+        "killed_by_final": false,
+        "covered": true
+      },
+      {
+        "mid": "M010",
+        "operator": "CRN",
+        "line": 28,
+        "description": "CRN @ line 28: numeric 1 -> 2",
+        "killed_by_b0": false,
+        "killed_by_final": false,
+        "covered": true
+      },
+      {
+        "mid": "M011",
+        "operator": "ROR",
+        "line": 29,
+        "description": "ROR @ line 29: relational operator Lt -> GtE",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M012",
+        "operator": "AOR",
+        "line": 30,
+        "description": "AOR @ line 30: arithmetic operator FloorDiv -> Div",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M013",
+        "operator": "AOR",
+        "line": 30,
+        "description": "AOR @ line 30: arithmetic operator Add -> Sub",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M014",
+        "operator": "AOR",
+        "line": 30,
+        "description": "AOR @ line 30: arithmetic operator Add -> Sub",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M015",
+        "operator": "CRN",
+        "line": 30,
+        "description": "CRN @ line 30: numeric 1 -> 2",
+        "killed_by_b0": false,
+        "killed_by_final": false,
+        "covered": true
+      },
+      {
+        "mid": "M016",
+        "operator": "CRN",
+        "line": 30,
+        "description": "CRN @ line 30: numeric 2 -> 3",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M017",
+        "operator": "ROR",
+        "line": 31,
+        "description": "ROR @ line 31: relational operator LtE -> Gt",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M018",
+        "operator": "AOR",
+        "line": 31,
+        "description": "AOR @ line 31: arithmetic operator Mult -> Div",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M019",
+        "operator": "AOR",
+        "line": 34,
+        "description": "AOR @ line 34: arithmetic operator Sub -> Add",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M020",
+        "operator": "CRN",
+        "line": 34,
+        "description": "CRN @ line 34: numeric 1 -> 2",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M021",
+        "operator": "RTN",
+        "line": 35,
+        "description": "RTN @ line 35: return value -> None",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      }
+    ],
+    "gate_log": [
+      {
+        "cid": "R0C1",
+        "accepted": true,
+        "new_kills": 5
+      },
+      {
+        "cid": "R0C2",
+        "accepted": false,
+        "reasons": [
+          "falsifiable"
+        ]
+      },
+      {
+        "cid": "R0C3",
+        "accepted": false,
+        "reasons": [
+          "falsifiable"
+        ]
+      },
+      {
+        "cid": "R0C4",
+        "accepted": false,
+        "reasons": [
+          "falsifiable"
+        ]
+      },
+      {
+        "cid": "R1C1",
+        "accepted": false,
+        "reasons": [
+          "falsifiable"
+        ]
+      },
+      {
+        "cid": "R1C2",
+        "accepted": false,
+        "reasons": [
+          "falsifiable"
+        ]
+      },
+      {
+        "cid": "R1C3",
+        "accepted": false,
+        "reasons": [
+          "falsifiable"
+        ]
+      },
+      {
+        "cid": "R1C4",
+        "accepted": false,
+        "reasons": [
+          "falsifiable"
+        ]
+      },
+      {
+        "cid": "R2C1",
+        "accepted": false,
+        "reasons": [
+          "falsifiable"
+        ]
+      },
+      {
+        "cid": "R2C2",
+        "accepted": false,
+        "reasons": [
+          "falsifiable"
+        ]
+      },
+      {
+        "cid": "R2C3",
+        "accepted": false,
+        "reasons": [
+          "falsifiable"
+        ]
+      },
+      {
+        "cid": "R2C4",
+        "accepted": false,
+        "reasons": [
+          "falsifiable"
+        ]
+      },
+      {
+        "cid": "R3C1",
+        "accepted": false,
+        "reasons": [
+          "falsifiable"
+        ]
+      },
+      {
+        "cid": "R3C2",
+        "accepted": false,
+        "reasons": [
+          "falsifiable"
+        ]
+      },
+      {
+        "cid": "R3C3",
+        "accepted": false,
+        "reasons": [
+          "falsifiable"
+        ]
+      },
+      {
+        "cid": "R3C4",
+        "accepted": false,
+        "reasons": [
+          "falsifiable"
+        ]
+      }
+    ],
+    "ms_all": 0.8095,
+    "ms_covered": 0.8095,
+    "cost": {
+      "model": "qwen3.8-27b",
+      "calls": 4,
+      "tokens_in": 4946,
+      "tokens_out": 9236,
+      "cost_usd": null,
+      "price_source": ""
+    }
+  },
+  {
+    "target_id": "numeric.moving_average",
+    "variant": "B0",
+    "mutants_total": 11,
+    "killed_final": 9,
+    "mutants_covered": 10,
+    "killed_covered": 9,
+    "b0_killed_final": 9,
+    "n_generated": 0,
+    "n_accepted": 0,
+    "n_repaired": 0,
+    "rejection_reasons": {},
+    "flaky_rejects": 0,
+    "rounds_used": 0,
+    "n_final_tests": 0,
+    "final_suite_passes": true,
+    "coverage_pct": 75.0,
+    "b0_coverage_pct": 75.0,
+    "llm_calls": 0,
+    "tokens_in": 0,
+    "tokens_out": 0,
+    "cost_usd": null,
+    "price_source": "",
+    "wall_sec": 5.2,
+    "accepted_codes": [],
+    "mutant_summary": [
+      {
+        "mid": "M001",
+        "operator": "ROR",
+        "line": 45,
+        "description": "ROR @ line 45: relational operator Lt -> GtE",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M002",
+        "operator": "CRN",
+        "line": 45,
+        "description": "CRN @ line 45: numeric 1 -> 2",
+        "killed_by_b0": false,
+        "killed_by_final": false,
+        "covered": true
+      },
+      {
+        "mid": "M003",
+        "operator": "UOR",
+        "line": 47,
+        "description": "UOR @ line 47: unary '' removed",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M004",
+        "operator": "RTN",
+        "line": 48,
+        "description": "RTN @ line 48: return value -> None",
+        "killed_by_b0": false,
+        "killed_by_final": false,
+        "covered": false
+      },
+      {
+        "mid": "M005",
+        "operator": "ROR",
+        "line": 49,
+        "description": "ROR @ line 49: relational operator Gt -> LtE",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M006",
+        "operator": "AOR",
+        "line": 52,
+        "description": "AOR @ line 52: arithmetic operator Add -> Sub",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M007",
+        "operator": "AOR",
+        "line": 52,
+        "description": "AOR @ line 52: arithmetic operator Sub -> Add",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M008",
+        "operator": "CRN",
+        "line": 52,
+        "description": "CRN @ line 52: numeric 1 -> 2",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M009",
+        "operator": "AOR",
+        "line": 53,
+        "description": "AOR @ line 53: arithmetic operator Add -> Sub",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M010",
+        "operator": "AOR",
+        "line": 54,
+        "description": "AOR @ line 54: arithmetic operator Div -> Mult",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M011",
+        "operator": "RTN",
+        "line": 55,
+        "description": "RTN @ line 55: return value -> None",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      }
+    ],
+    "gate_log": [],
+    "ms_all": 0.8182,
+    "ms_covered": 0.9,
+    "cost": {
+      "model": "qwen3.8-27b",
+      "calls": 0,
+      "tokens_in": 0,
+      "tokens_out": 0,
+      "cost_usd": null,
+      "price_source": ""
+    }
+  },
+  {
+    "target_id": "numeric.moving_average",
+    "variant": "B2",
+    "mutants_total": 11,
+    "killed_final": 11,
+    "mutants_covered": 11,
+    "killed_covered": 11,
+    "b0_killed_final": 9,
+    "n_generated": 1,
+    "n_accepted": 1,
+    "n_repaired": 1,
+    "rejection_reasons": {},
+    "flaky_rejects": 0,
+    "rounds_used": 1,
+    "n_final_tests": 1,
+    "final_suite_passes": true,
+    "coverage_pct": 100.0,
+    "b0_coverage_pct": 75.0,
+    "llm_calls": 1,
+    "tokens_in": 1296,
+    "tokens_out": 4765,
+    "cost_usd": null,
+    "price_source": "",
+    "wall_sec": 196.5,
+    "accepted_codes": [
+      "\nimport pytest\n\nfrom numeric import moving_average\n\n\ndef test_empty_values_returns_empty():\n    assert moving_average([], 1) == []\n\n\ndef test_window_zero_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3], 0)\n\n\ndef test_window_negative_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3], -1)\n\n\ndef test_window_larger_than_values_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2], 3)\n\n\ndef test_window_equals_len_returns_single_mean():\n    assert moving_average([1, 2, 3, 4], 4) == [2.5]\n\n\ndef test_window_one_returns_original_values_as_floats():\n    assert moving_average([1, 2, 3], 1) == [1.0, 2.0, 3.0]\n\n\ndef test_single_element_window_one():\n    assert moving_average([7], 1) == [7.0]\n\n\ndef test_negative_values():\n    assert moving_average([-1, -2, -3], 2) == [-1.5, -2.5]\n\n\ndef test_mixed_positive_negative():\n    assert moving_average([1, -1, 1, -1], 2) == [0.0, 0.0, 0.0]\n\n\ndef test_float_values():\n    assert moving_average([1.5, 2.5, 3.5], 2) == [2.0, 3.0]\n\n\ndef test_large_window_result_length():\n    result = moving_average(list(range(1, 11)), 5)\n    assert len(result) == 6\n    assert result[0] == 3.0\n    assert result[1] == 4.0\n    assert result[2] == 5.0\n    assert result[3] == 6.0\n    assert result[4] == 7.0\n    assert result[5] == 8.0\n\n\ndef test_window_boundary_one():\n    assert moving_average([10, 20, 30], 1) == [10.0, 20.0, 30.0]\n\n\ndef test_window_boundary_full_length():\n    assert moving_average([10, 20, 30], 3) == [20.0]\n\n\ndef test_window_one_on_empty():\n    assert moving_average([], 1) == []\n\n\ndef test_window_zero_on_empty_raises():\n    with pytest.raises(ValueError):\n        moving_average([], 0)\n\n\ndef test_result_type_is_list():\n    result = moving_average([1, 2, 3], 2)\n    assert isinstance(result, list)\n    assert all(isinstance(x, float) for x in result)\n\n\ndef test_window_one_preserves_order():\n    assert moving_average([5, 3, 8, 1], 1) == [5.0, 3.0, 8.0, 1.0]\n\n\ndef test_all_same_values():\n    assert moving_average([4, 4, 4, 4], 3) == [4.0, 4.0]\n\n\ndef test_window_equals_len_minus_one():\n    assert moving_average([1, 2, 3, 4, 5], 4) == [2.5, 3.5]\n\n\ndef test_large_values():\n    assert moving_average([1000000, 2000000, 3000000], 2) == [1500000.0, 2500000.0]\n\n\ndef test_zero_values():\n    assert moving_average([0, 0, 0], 2) == [0.0, 0.0]\n\n\ndef test_window_one_single_element():\n    assert moving_average([0], 1) == [0.0]\n\n\ndef test_window_one_two_elements():\n    assert moving_average([1, 2], 1) == [1.0, 2.0]\n\n\ndef test_window_two_two_elements():\n    assert moving_average([1, 2], 2) == [1.5]\n\n\ndef test_window_three_three_elements():\n    assert moving_average([1, 2, 3], 3) == [2.0]\n\n\ndef test_window_four_four_elements():\n    assert moving_average([1, 2, 3, 4], 4) == [2.5]\n\n\ndef test_window_two_three_elements():\n    assert moving_average([1, 2, 3], 2) == [1.5, 2.5]\n\n\ndef test_window_three_four_elements():\n    assert moving_average([1, 2, 3, 4], 3) == [2.0, 3.0]\n\n\ndef test_window_four_five_elements():\n    assert moving_average([1, 2, 3, 4, 5], 4) == [2.5, 3.5]\n\n\ndef test_window_five_five_elements():\n    assert moving_average([1, 2, 3, 4, 5], 5) == [3.0]\n\n\ndef test_window_six_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 6)\n\n\ndef test_window_ten_eight_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5, 6, 7, 8], 10)\n\n\ndef test_window_negative_large_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3], -100)\n\n\ndef test_window_zero_on_single_element_raises():\n    with pytest.raises(ValueError):\n        moving_average([5], 0)\n\n\ndef test_window_one_on_single_element():\n    assert moving_average([5], 1) == [5.0]\n\n\ndef test_window_two_on_single_element_raises():\n    with pytest.raises(ValueError):\n        moving_average([5], 2)\n\n\ndef test_window_three_on_two_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2], 3)\n\n\ndef test_window_two_on_three_elements():\n    assert moving_average([10, 20, 30], 2) == [15.0, 25.0]\n\n\ndef test_window_three_on_three_elements():\n    assert moving_average([10, 20, 30], 3) == [20.0]\n\n\ndef test_window_one_on_four_elements():\n    assert moving_average([1, 2, 3, 4], 1) == [1.0, 2.0, 3.0, 4.0]\n\n\ndef test_window_four_on_four_elements():\n    assert moving_average([1, 2, 3, 4], 4) == [2.5]\n\n\ndef test_window_two_on_four_elements():\n    assert moving_average([1, 2, 3, 4], 2) == [1.5, 2.5, 3.5]\n\n\ndef test_window_three_on_four_elements():\n    assert moving_average([1, 2, 3, 4], 3) == [2.0, 3.0]\n\n\ndef test_window_one_on_five_elements():\n    assert moving_average([1, 2, 3, 4, 5], 1) == [1.0, 2.0, 3.0, 4.0, 5.0]\n\n\ndef test_window_five_on_five_elements():\n    assert moving_average([1, 2, 3, 4, 5], 5) == [3.0]\n\n\ndef test_window_two_on_five_elements():\n    assert moving_average([1, 2, 3, 4, 5], 2) == [1.5, 2.5, 3.5, 4.5]\n\n\ndef test_window_three_on_five_elements():\n    assert moving_average([1, 2, 3, 4, 5], 3) == [2.0, 3.0, 4.0]\n\n\ndef test_window_four_on_five_elements():\n    assert moving_average([1, 2, 3, 4, 5], 4) == [2.5, 3.5]\n\n\ndef test_window_six_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 6)\n\n\ndef test_window_seven_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 7)\n\n\ndef test_window_eight_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 8)\n\n\ndef test_window_nine_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 9)\n\n\ndef test_window_ten_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 10)\n\n\ndef test_window_eleven_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 11)\n\n\ndef test_window_twelve_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 12)\n\n\ndef test_window_thirteen_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 13)\n\n\ndef test_window_fourteen_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 14)\n\n\ndef test_window_fifteen_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 15)\n\n\ndef test_window_sixteen_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 16)\n\n\ndef test_window_seventeen_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 17)\n\n\ndef test_window_eighteen_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 18)\n\n\ndef test_window_nineteen_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 19)\n\n\ndef test_window_twenty_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 20)\n\n\ndef test_window_twenty_one_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 21)\n\n\ndef test_window_twenty_two_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 22)\n\n\ndef test_window_twenty_three_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 23)\n\n\ndef test_window_twenty_four_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 24)\n\n\ndef test_window_twenty_five_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 25)\n\n\ndef test_window_twenty_six_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 26)\n\n\ndef test_window_twenty_seven_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 27)\n\n\ndef test_window_twenty_eight_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 28)\n\n\ndef test_window_twenty_nine_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 29)\n\n\ndef test_window_thirty_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 30)\n\n\ndef test_window_thirty_one_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 31)\n\n\ndef test_window_thirty_two_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 32)\n\n\ndef test_window_thirty_three_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 33)\n\n\ndef test_window_thirty_four_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 34)\n\n\ndef test_window_thirty_five_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 35)\n\n\ndef test_window_thirty_six_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 36)\n\n\ndef test_window_thirty_seven_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 37)\n\n\ndef test_window_thirty_eight_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 38)\n\n\ndef test_window_thirty_nine_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 39)\n\n\ndef test_window_forty_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 40)\n\n\ndef test_window_forty_one_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 41)\n\n\ndef test_window_forty_two_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 42)\n\n\ndef test_window_forty_three_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 43)\n\n\ndef test_window_forty_four_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 44)\n\n\ndef test_window_forty_five_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 45)\n\n\ndef test_window_forty_six_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 46)\n\n\ndef test_window_forty_seven_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 47)\n\n\ndef test_window_forty_eight_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 48)\n\n\ndef test_window_forty_nine_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 49)\n\n\ndef test_window_fifty_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 50)\n\n\ndef test_window_fifty_one_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 51)\n\n\ndef test_window_fifty_two_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 52)\n\n\ndef test_window_fifty_three_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 53)\n\n\ndef test_window_fifty_four_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 54)\n\n\ndef test_window_fifty_five_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 55)\n\n\ndef test_window_fifty_six_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 56)\n\n\ndef test_window_fifty_seven_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 57)\n\n\ndef test_window_fifty_eight_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 58)\n\n\ndef test_window_fifty_nine_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 59)\n\n\ndef test_window_sixty_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 60)\n\n\ndef test_window_sixty_one_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 61)\n\n\ndef test_window_sixty_two_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 62)\n\n\ndef test_window_sixty_three_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 63)\n\n\ndef test_window_sixty_four_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 64)\n\n\ndef test_window_sixty_five_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 65)\n\n\ndef test_window_sixty_six_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 66)\n\n\ndef test_window_sixty_seven_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 67)\n\n\ndef test_window_sixty_eight_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 68)\n\n\ndef test_window_sixty_nine_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 69)\n\n\ndef test_window_seventy_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 70)\n\n\ndef test_window_seventy_one_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 71)\n\n\ndef test_window_seventy_two_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 72)\n\n\ndef test_window_seventy_three_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 73)\n"
+    ],
+    "mutant_summary": [
+      {
+        "mid": "M001",
+        "operator": "ROR",
+        "line": 45,
+        "description": "ROR @ line 45: relational operator Lt -> GtE",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M002",
+        "operator": "CRN",
+        "line": 45,
+        "description": "CRN @ line 45: numeric 1 -> 2",
+        "killed_by_b0": false,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M003",
+        "operator": "UOR",
+        "line": 47,
+        "description": "UOR @ line 47: unary '' removed",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M004",
+        "operator": "RTN",
+        "line": 48,
+        "description": "RTN @ line 48: return value -> None",
+        "killed_by_b0": false,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M005",
+        "operator": "ROR",
+        "line": 49,
+        "description": "ROR @ line 49: relational operator Gt -> LtE",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M006",
+        "operator": "AOR",
+        "line": 52,
+        "description": "AOR @ line 52: arithmetic operator Add -> Sub",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M007",
+        "operator": "AOR",
+        "line": 52,
+        "description": "AOR @ line 52: arithmetic operator Sub -> Add",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M008",
+        "operator": "CRN",
+        "line": 52,
+        "description": "CRN @ line 52: numeric 1 -> 2",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M009",
+        "operator": "AOR",
+        "line": 53,
+        "description": "AOR @ line 53: arithmetic operator Add -> Sub",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M010",
+        "operator": "AOR",
+        "line": 54,
+        "description": "AOR @ line 54: arithmetic operator Div -> Mult",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M011",
+        "operator": "RTN",
+        "line": 55,
+        "description": "RTN @ line 55: return value -> None",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      }
+    ],
+    "gate_log": [
+      {
+        "cid": "R0C1",
+        "accepted": true,
+        "new_kills": 2
+      }
+    ],
+    "ms_all": 1.0,
+    "ms_covered": 1.0,
+    "cost": {
+      "model": "qwen3.8-27b",
+      "calls": 1,
+      "tokens_in": 1296,
+      "tokens_out": 4765,
+      "cost_usd": null,
+      "price_source": ""
+    }
+  },
+  {
+    "target_id": "numeric.moving_average",
+    "variant": "B5",
+    "mutants_total": 11,
+    "killed_final": 11,
+    "mutants_covered": 11,
+    "killed_covered": 11,
+    "b0_killed_final": 9,
+    "n_generated": 1,
+    "n_accepted": 1,
+    "n_repaired": 1,
+    "rejection_reasons": {},
+    "flaky_rejects": 0,
+    "rounds_used": 1,
+    "n_final_tests": 1,
+    "final_suite_passes": true,
+    "coverage_pct": 100.0,
+    "b0_coverage_pct": 75.0,
+    "llm_calls": 1,
+    "tokens_in": 1296,
+    "tokens_out": 4765,
+    "cost_usd": null,
+    "price_source": "",
+    "wall_sec": 9.4,
+    "accepted_codes": [
+      "\nimport pytest\n\nfrom numeric import moving_average\n\n\ndef test_empty_values_returns_empty():\n    assert moving_average([], 1) == []\n\n\ndef test_window_zero_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3], 0)\n\n\ndef test_window_negative_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3], -1)\n\n\ndef test_window_larger_than_values_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2], 3)\n\n\ndef test_window_equals_len_returns_single_mean():\n    assert moving_average([1, 2, 3, 4], 4) == [2.5]\n\n\ndef test_window_one_returns_original_values_as_floats():\n    assert moving_average([1, 2, 3], 1) == [1.0, 2.0, 3.0]\n\n\ndef test_single_element_window_one():\n    assert moving_average([7], 1) == [7.0]\n\n\ndef test_negative_values():\n    assert moving_average([-1, -2, -3], 2) == [-1.5, -2.5]\n\n\ndef test_mixed_positive_negative():\n    assert moving_average([1, -1, 1, -1], 2) == [0.0, 0.0, 0.0]\n\n\ndef test_float_values():\n    assert moving_average([1.5, 2.5, 3.5], 2) == [2.0, 3.0]\n\n\ndef test_large_window_result_length():\n    result = moving_average(list(range(1, 11)), 5)\n    assert len(result) == 6\n    assert result[0] == 3.0\n    assert result[1] == 4.0\n    assert result[2] == 5.0\n    assert result[3] == 6.0\n    assert result[4] == 7.0\n    assert result[5] == 8.0\n\n\ndef test_window_boundary_one():\n    assert moving_average([10, 20, 30], 1) == [10.0, 20.0, 30.0]\n\n\ndef test_window_boundary_full_length():\n    assert moving_average([10, 20, 30], 3) == [20.0]\n\n\ndef test_window_one_on_empty():\n    assert moving_average([], 1) == []\n\n\ndef test_window_zero_on_empty_raises():\n    with pytest.raises(ValueError):\n        moving_average([], 0)\n\n\ndef test_result_type_is_list():\n    result = moving_average([1, 2, 3], 2)\n    assert isinstance(result, list)\n    assert all(isinstance(x, float) for x in result)\n\n\ndef test_window_one_preserves_order():\n    assert moving_average([5, 3, 8, 1], 1) == [5.0, 3.0, 8.0, 1.0]\n\n\ndef test_all_same_values():\n    assert moving_average([4, 4, 4, 4], 3) == [4.0, 4.0]\n\n\ndef test_window_equals_len_minus_one():\n    assert moving_average([1, 2, 3, 4, 5], 4) == [2.5, 3.5]\n\n\ndef test_large_values():\n    assert moving_average([1000000, 2000000, 3000000], 2) == [1500000.0, 2500000.0]\n\n\ndef test_zero_values():\n    assert moving_average([0, 0, 0], 2) == [0.0, 0.0]\n\n\ndef test_window_one_single_element():\n    assert moving_average([0], 1) == [0.0]\n\n\ndef test_window_one_two_elements():\n    assert moving_average([1, 2], 1) == [1.0, 2.0]\n\n\ndef test_window_two_two_elements():\n    assert moving_average([1, 2], 2) == [1.5]\n\n\ndef test_window_three_three_elements():\n    assert moving_average([1, 2, 3], 3) == [2.0]\n\n\ndef test_window_four_four_elements():\n    assert moving_average([1, 2, 3, 4], 4) == [2.5]\n\n\ndef test_window_two_three_elements():\n    assert moving_average([1, 2, 3], 2) == [1.5, 2.5]\n\n\ndef test_window_three_four_elements():\n    assert moving_average([1, 2, 3, 4], 3) == [2.0, 3.0]\n\n\ndef test_window_four_five_elements():\n    assert moving_average([1, 2, 3, 4, 5], 4) == [2.5, 3.5]\n\n\ndef test_window_five_five_elements():\n    assert moving_average([1, 2, 3, 4, 5], 5) == [3.0]\n\n\ndef test_window_six_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 6)\n\n\ndef test_window_ten_eight_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5, 6, 7, 8], 10)\n\n\ndef test_window_negative_large_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3], -100)\n\n\ndef test_window_zero_on_single_element_raises():\n    with pytest.raises(ValueError):\n        moving_average([5], 0)\n\n\ndef test_window_one_on_single_element():\n    assert moving_average([5], 1) == [5.0]\n\n\ndef test_window_two_on_single_element_raises():\n    with pytest.raises(ValueError):\n        moving_average([5], 2)\n\n\ndef test_window_three_on_two_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2], 3)\n\n\ndef test_window_two_on_three_elements():\n    assert moving_average([10, 20, 30], 2) == [15.0, 25.0]\n\n\ndef test_window_three_on_three_elements():\n    assert moving_average([10, 20, 30], 3) == [20.0]\n\n\ndef test_window_one_on_four_elements():\n    assert moving_average([1, 2, 3, 4], 1) == [1.0, 2.0, 3.0, 4.0]\n\n\ndef test_window_four_on_four_elements():\n    assert moving_average([1, 2, 3, 4], 4) == [2.5]\n\n\ndef test_window_two_on_four_elements():\n    assert moving_average([1, 2, 3, 4], 2) == [1.5, 2.5, 3.5]\n\n\ndef test_window_three_on_four_elements():\n    assert moving_average([1, 2, 3, 4], 3) == [2.0, 3.0]\n\n\ndef test_window_one_on_five_elements():\n    assert moving_average([1, 2, 3, 4, 5], 1) == [1.0, 2.0, 3.0, 4.0, 5.0]\n\n\ndef test_window_five_on_five_elements():\n    assert moving_average([1, 2, 3, 4, 5], 5) == [3.0]\n\n\ndef test_window_two_on_five_elements():\n    assert moving_average([1, 2, 3, 4, 5], 2) == [1.5, 2.5, 3.5, 4.5]\n\n\ndef test_window_three_on_five_elements():\n    assert moving_average([1, 2, 3, 4, 5], 3) == [2.0, 3.0, 4.0]\n\n\ndef test_window_four_on_five_elements():\n    assert moving_average([1, 2, 3, 4, 5], 4) == [2.5, 3.5]\n\n\ndef test_window_six_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 6)\n\n\ndef test_window_seven_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 7)\n\n\ndef test_window_eight_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 8)\n\n\ndef test_window_nine_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 9)\n\n\ndef test_window_ten_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 10)\n\n\ndef test_window_eleven_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 11)\n\n\ndef test_window_twelve_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 12)\n\n\ndef test_window_thirteen_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 13)\n\n\ndef test_window_fourteen_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 14)\n\n\ndef test_window_fifteen_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 15)\n\n\ndef test_window_sixteen_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 16)\n\n\ndef test_window_seventeen_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 17)\n\n\ndef test_window_eighteen_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 18)\n\n\ndef test_window_nineteen_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 19)\n\n\ndef test_window_twenty_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 20)\n\n\ndef test_window_twenty_one_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 21)\n\n\ndef test_window_twenty_two_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 22)\n\n\ndef test_window_twenty_three_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 23)\n\n\ndef test_window_twenty_four_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 24)\n\n\ndef test_window_twenty_five_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 25)\n\n\ndef test_window_twenty_six_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 26)\n\n\ndef test_window_twenty_seven_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 27)\n\n\ndef test_window_twenty_eight_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 28)\n\n\ndef test_window_twenty_nine_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 29)\n\n\ndef test_window_thirty_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 30)\n\n\ndef test_window_thirty_one_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 31)\n\n\ndef test_window_thirty_two_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 32)\n\n\ndef test_window_thirty_three_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 33)\n\n\ndef test_window_thirty_four_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 34)\n\n\ndef test_window_thirty_five_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 35)\n\n\ndef test_window_thirty_six_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 36)\n\n\ndef test_window_thirty_seven_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 37)\n\n\ndef test_window_thirty_eight_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 38)\n\n\ndef test_window_thirty_nine_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 39)\n\n\ndef test_window_forty_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 40)\n\n\ndef test_window_forty_one_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 41)\n\n\ndef test_window_forty_two_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 42)\n\n\ndef test_window_forty_three_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 43)\n\n\ndef test_window_forty_four_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 44)\n\n\ndef test_window_forty_five_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 45)\n\n\ndef test_window_forty_six_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 46)\n\n\ndef test_window_forty_seven_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 47)\n\n\ndef test_window_forty_eight_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 48)\n\n\ndef test_window_forty_nine_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 49)\n\n\ndef test_window_fifty_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 50)\n\n\ndef test_window_fifty_one_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 51)\n\n\ndef test_window_fifty_two_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 52)\n\n\ndef test_window_fifty_three_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 53)\n\n\ndef test_window_fifty_four_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 54)\n\n\ndef test_window_fifty_five_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 55)\n\n\ndef test_window_fifty_six_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 56)\n\n\ndef test_window_fifty_seven_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 57)\n\n\ndef test_window_fifty_eight_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 58)\n\n\ndef test_window_fifty_nine_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 59)\n\n\ndef test_window_sixty_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 60)\n\n\ndef test_window_sixty_one_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 61)\n\n\ndef test_window_sixty_two_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 62)\n\n\ndef test_window_sixty_three_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 63)\n\n\ndef test_window_sixty_four_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 64)\n\n\ndef test_window_sixty_five_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 65)\n\n\ndef test_window_sixty_six_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 66)\n\n\ndef test_window_sixty_seven_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 67)\n\n\ndef test_window_sixty_eight_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 68)\n\n\ndef test_window_sixty_nine_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 69)\n\n\ndef test_window_seventy_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 70)\n\n\ndef test_window_seventy_one_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 71)\n\n\ndef test_window_seventy_two_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 72)\n\n\ndef test_window_seventy_three_on_five_elements_raises():\n    with pytest.raises(ValueError):\n        moving_average([1, 2, 3, 4, 5], 73)\n"
+    ],
+    "mutant_summary": [
+      {
+        "mid": "M001",
+        "operator": "ROR",
+        "line": 45,
+        "description": "ROR @ line 45: relational operator Lt -> GtE",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M002",
+        "operator": "CRN",
+        "line": 45,
+        "description": "CRN @ line 45: numeric 1 -> 2",
+        "killed_by_b0": false,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M003",
+        "operator": "UOR",
+        "line": 47,
+        "description": "UOR @ line 47: unary '' removed",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M004",
+        "operator": "RTN",
+        "line": 48,
+        "description": "RTN @ line 48: return value -> None",
+        "killed_by_b0": false,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M005",
+        "operator": "ROR",
+        "line": 49,
+        "description": "ROR @ line 49: relational operator Gt -> LtE",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M006",
+        "operator": "AOR",
+        "line": 52,
+        "description": "AOR @ line 52: arithmetic operator Add -> Sub",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M007",
+        "operator": "AOR",
+        "line": 52,
+        "description": "AOR @ line 52: arithmetic operator Sub -> Add",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M008",
+        "operator": "CRN",
+        "line": 52,
+        "description": "CRN @ line 52: numeric 1 -> 2",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M009",
+        "operator": "AOR",
+        "line": 53,
+        "description": "AOR @ line 53: arithmetic operator Add -> Sub",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M010",
+        "operator": "AOR",
+        "line": 54,
+        "description": "AOR @ line 54: arithmetic operator Div -> Mult",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M011",
+        "operator": "RTN",
+        "line": 55,
+        "description": "RTN @ line 55: return value -> None",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      }
+    ],
+    "gate_log": [
+      {
+        "cid": "R0C1",
+        "accepted": true,
+        "new_kills": 2
+      }
+    ],
+    "ms_all": 1.0,
+    "ms_covered": 1.0,
+    "cost": {
+      "model": "qwen3.8-27b",
+      "calls": 1,
+      "tokens_in": 1296,
+      "tokens_out": 4765,
+      "cost_usd": null,
+      "price_source": ""
+    }
+  },
+  {
+    "target_id": "date_utils.is_leap_year",
+    "variant": "B0",
+    "mutants_total": 17,
+    "killed_final": 14,
+    "mutants_covered": 17,
+    "killed_covered": 14,
+    "b0_killed_final": 14,
+    "n_generated": 0,
+    "n_accepted": 0,
+    "n_repaired": 0,
+    "rejection_reasons": {},
+    "flaky_rejects": 0,
+    "rounds_used": 0,
+    "n_final_tests": 0,
+    "final_suite_passes": true,
+    "coverage_pct": 100.0,
+    "b0_coverage_pct": 100.0,
+    "llm_calls": 0,
+    "tokens_in": 0,
+    "tokens_out": 0,
+    "cost_usd": null,
+    "price_source": "",
+    "wall_sec": 6.1,
+    "accepted_codes": [],
+    "mutant_summary": [
+      {
+        "mid": "M001",
+        "operator": "ROR",
+        "line": 9,
+        "description": "ROR @ line 9: relational operator NotEq -> Eq",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M002",
+        "operator": "AOR",
+        "line": 9,
+        "description": "AOR @ line 9: arithmetic operator Mod -> FloorDiv",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M003",
+        "operator": "CRN",
+        "line": 9,
+        "description": "CRN @ line 9: numeric 4 -> 5",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M004",
+        "operator": "CRN",
+        "line": 9,
+        "description": "CRN @ line 9: numeric 0 -> 1",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M005",
+        "operator": "RTN",
+        "line": 10,
+        "description": "RTN @ line 10: return value -> None",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M006",
+        "operator": "BCR",
+        "line": 10,
+        "description": "BCR @ line 10: boolean False -> True",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M007",
+        "operator": "ROR",
+        "line": 11,
+        "description": "ROR @ line 11: relational operator NotEq -> Eq",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M008",
+        "operator": "AOR",
+        "line": 11,
+        "description": "AOR @ line 11: arithmetic operator Mod -> FloorDiv",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M009",
+        "operator": "CRN",
+        "line": 11,
+        "description": "CRN @ line 11: numeric 100 -> 101",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M010",
+        "operator": "CRN",
+        "line": 11,
+        "description": "CRN @ line 11: numeric 0 -> 1",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M011",
+        "operator": "RTN",
+        "line": 12,
+        "description": "RTN @ line 12: return value -> None",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M012",
+        "operator": "BCR",
+        "line": 12,
+        "description": "BCR @ line 12: boolean True -> False",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M013",
+        "operator": "RTN",
+        "line": 13,
+        "description": "RTN @ line 13: return value -> None",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M014",
+        "operator": "ROR",
+        "line": 13,
+        "description": "ROR @ line 13: relational operator Eq -> NotEq",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M015",
+        "operator": "AOR",
+        "line": 13,
+        "description": "AOR @ line 13: arithmetic operator Mod -> FloorDiv",
+        "killed_by_b0": false,
+        "killed_by_final": false,
+        "covered": true
+      },
+      {
+        "mid": "M016",
+        "operator": "CRN",
+        "line": 13,
+        "description": "CRN @ line 13: numeric 400 -> 401",
+        "killed_by_b0": false,
+        "killed_by_final": false,
+        "covered": true
+      },
+      {
+        "mid": "M017",
+        "operator": "CRN",
+        "line": 13,
+        "description": "CRN @ line 13: numeric 0 -> 1",
+        "killed_by_b0": false,
+        "killed_by_final": false,
+        "covered": true
+      }
+    ],
+    "gate_log": [],
+    "ms_all": 0.8235,
+    "ms_covered": 0.8235,
+    "cost": {
+      "model": "qwen3.8-27b",
+      "calls": 0,
+      "tokens_in": 0,
+      "tokens_out": 0,
+      "cost_usd": null,
+      "price_source": ""
+    }
+  },
+  {
+    "target_id": "date_utils.is_leap_year",
+    "variant": "B2",
+    "mutants_total": 17,
+    "killed_final": 14,
+    "mutants_covered": 17,
+    "killed_covered": 14,
+    "b0_killed_final": 14,
+    "n_generated": 1,
+    "n_accepted": 0,
+    "n_repaired": 1,
+    "rejection_reasons": {
+      "failing_on_original": 1
+    },
+    "flaky_rejects": 0,
+    "rounds_used": 1,
+    "n_final_tests": 0,
+    "final_suite_passes": true,
+    "coverage_pct": 100.0,
+    "b0_coverage_pct": 100.0,
+    "llm_calls": 1,
+    "tokens_in": 1135,
+    "tokens_out": 5551,
+    "cost_usd": null,
+    "price_source": "",
+    "wall_sec": 171.1,
+    "accepted_codes": [],
+    "mutant_summary": [
+      {
+        "mid": "M001",
+        "operator": "ROR",
+        "line": 9,
+        "description": "ROR @ line 9: relational operator NotEq -> Eq",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M002",
+        "operator": "AOR",
+        "line": 9,
+        "description": "AOR @ line 9: arithmetic operator Mod -> FloorDiv",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M003",
+        "operator": "CRN",
+        "line": 9,
+        "description": "CRN @ line 9: numeric 4 -> 5",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M004",
+        "operator": "CRN",
+        "line": 9,
+        "description": "CRN @ line 9: numeric 0 -> 1",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M005",
+        "operator": "RTN",
+        "line": 10,
+        "description": "RTN @ line 10: return value -> None",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M006",
+        "operator": "BCR",
+        "line": 10,
+        "description": "BCR @ line 10: boolean False -> True",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M007",
+        "operator": "ROR",
+        "line": 11,
+        "description": "ROR @ line 11: relational operator NotEq -> Eq",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M008",
+        "operator": "AOR",
+        "line": 11,
+        "description": "AOR @ line 11: arithmetic operator Mod -> FloorDiv",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M009",
+        "operator": "CRN",
+        "line": 11,
+        "description": "CRN @ line 11: numeric 100 -> 101",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M010",
+        "operator": "CRN",
+        "line": 11,
+        "description": "CRN @ line 11: numeric 0 -> 1",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M011",
+        "operator": "RTN",
+        "line": 12,
+        "description": "RTN @ line 12: return value -> None",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M012",
+        "operator": "BCR",
+        "line": 12,
+        "description": "BCR @ line 12: boolean True -> False",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M013",
+        "operator": "RTN",
+        "line": 13,
+        "description": "RTN @ line 13: return value -> None",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M014",
+        "operator": "ROR",
+        "line": 13,
+        "description": "ROR @ line 13: relational operator Eq -> NotEq",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M015",
+        "operator": "AOR",
+        "line": 13,
+        "description": "AOR @ line 13: arithmetic operator Mod -> FloorDiv",
+        "killed_by_b0": false,
+        "killed_by_final": false,
+        "covered": true
+      },
+      {
+        "mid": "M016",
+        "operator": "CRN",
+        "line": 13,
+        "description": "CRN @ line 13: numeric 400 -> 401",
+        "killed_by_b0": false,
+        "killed_by_final": false,
+        "covered": true
+      },
+      {
+        "mid": "M017",
+        "operator": "CRN",
+        "line": 13,
+        "description": "CRN @ line 13: numeric 0 -> 1",
+        "killed_by_b0": false,
+        "killed_by_final": false,
+        "covered": true
+      }
+    ],
+    "gate_log": [
+      {
+        "cid": "R0C1",
+        "accepted": false,
+        "reason": "correctness",
+        "runs": [
+          "fail"
+        ]
+      }
+    ],
+    "ms_all": 0.8235,
+    "ms_covered": 0.8235,
+    "cost": {
+      "model": "qwen3.8-27b",
+      "calls": 1,
+      "tokens_in": 1135,
+      "tokens_out": 5551,
+      "cost_usd": null,
+      "price_source": ""
+    }
+  },
+  {
+    "target_id": "date_utils.is_leap_year",
+    "variant": "B5",
+    "mutants_total": 17,
+    "killed_final": 17,
+    "mutants_covered": 17,
+    "killed_covered": 17,
+    "b0_killed_final": 14,
+    "n_generated": 5,
+    "n_accepted": 1,
+    "n_repaired": 1,
+    "rejection_reasons": {
+      "failing_on_original": 1,
+      "falsifiable": 3
+    },
+    "flaky_rejects": 0,
+    "rounds_used": 2,
+    "n_final_tests": 1,
+    "final_suite_passes": true,
+    "coverage_pct": 100.0,
+    "b0_coverage_pct": 100.0,
+    "llm_calls": 2,
+    "tokens_in": 2210,
+    "tokens_out": 6723,
+    "cost_usd": null,
+    "price_source": "",
+    "wall_sec": 56.2,
+    "accepted_codes": [
+      "import pytest\nfrom date_utils import is_leap_year\n\n\ndef test_non_leap_non_divisible_by_4():\n    assert is_leap_year(2023) is False\n\n\ndef test_leap_divisible_by_4_not_century():\n    assert is_leap_year(2024) is True\n\n\ndef test_century_not_divisible_by_400():\n    assert is_leap_year(1900) is False\n\n\ndef test_century_divisible_by_400():\n    assert is_leap_year(2000) is True\n\n\ndef test_boundary_year_100():\n    assert is_leap_year(100) is False\n\n\ndef test_boundary_year_400():\n    assert is_leap_year(400) is True\n\n\ndef test_negative_year_divisible_by_400():\n    # -400 is divisible by 400 in Python modulo semantics\n    assert is_leap_year(-400) is True\n\n\ndef test_negative_year_not_divisible_by_4():\n    assert is_leap_year(-1) is False"
+    ],
+    "mutant_summary": [
+      {
+        "mid": "M001",
+        "operator": "ROR",
+        "line": 9,
+        "description": "ROR @ line 9: relational operator NotEq -> Eq",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M002",
+        "operator": "AOR",
+        "line": 9,
+        "description": "AOR @ line 9: arithmetic operator Mod -> FloorDiv",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M003",
+        "operator": "CRN",
+        "line": 9,
+        "description": "CRN @ line 9: numeric 4 -> 5",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M004",
+        "operator": "CRN",
+        "line": 9,
+        "description": "CRN @ line 9: numeric 0 -> 1",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M005",
+        "operator": "RTN",
+        "line": 10,
+        "description": "RTN @ line 10: return value -> None",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M006",
+        "operator": "BCR",
+        "line": 10,
+        "description": "BCR @ line 10: boolean False -> True",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M007",
+        "operator": "ROR",
+        "line": 11,
+        "description": "ROR @ line 11: relational operator NotEq -> Eq",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M008",
+        "operator": "AOR",
+        "line": 11,
+        "description": "AOR @ line 11: arithmetic operator Mod -> FloorDiv",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M009",
+        "operator": "CRN",
+        "line": 11,
+        "description": "CRN @ line 11: numeric 100 -> 101",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M010",
+        "operator": "CRN",
+        "line": 11,
+        "description": "CRN @ line 11: numeric 0 -> 1",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M011",
+        "operator": "RTN",
+        "line": 12,
+        "description": "RTN @ line 12: return value -> None",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M012",
+        "operator": "BCR",
+        "line": 12,
+        "description": "BCR @ line 12: boolean True -> False",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M013",
+        "operator": "RTN",
+        "line": 13,
+        "description": "RTN @ line 13: return value -> None",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M014",
+        "operator": "ROR",
+        "line": 13,
+        "description": "ROR @ line 13: relational operator Eq -> NotEq",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M015",
+        "operator": "AOR",
+        "line": 13,
+        "description": "AOR @ line 13: arithmetic operator Mod -> FloorDiv",
+        "killed_by_b0": false,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M016",
+        "operator": "CRN",
+        "line": 13,
+        "description": "CRN @ line 13: numeric 400 -> 401",
+        "killed_by_b0": false,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M017",
+        "operator": "CRN",
+        "line": 13,
+        "description": "CRN @ line 13: numeric 0 -> 1",
+        "killed_by_b0": false,
+        "killed_by_final": true,
+        "covered": true
+      }
+    ],
+    "gate_log": [
+      {
+        "cid": "R0C1",
+        "accepted": false,
+        "reason": "correctness",
+        "runs": [
+          "fail"
+        ]
+      },
+      {
+        "cid": "R1C1",
+        "accepted": true,
+        "new_kills": 3
+      },
+      {
+        "cid": "R1C2",
+        "accepted": false,
+        "reasons": [
+          "falsifiable"
+        ]
+      },
+      {
+        "cid": "R1C3",
+        "accepted": false,
+        "reasons": [
+          "falsifiable"
+        ]
+      },
+      {
+        "cid": "R1C4",
+        "accepted": false,
+        "reasons": [
+          "falsifiable"
+        ]
+      }
+    ],
+    "ms_all": 1.0,
+    "ms_covered": 1.0,
+    "cost": {
+      "model": "qwen3.8-27b",
+      "calls": 2,
+      "tokens_in": 2210,
+      "tokens_out": 6723,
+      "cost_usd": null,
+      "price_source": ""
+    }
+  },
+  {
+    "target_id": "date_utils.days_in_month",
+    "variant": "B0",
+    "mutants_total": 9,
+    "killed_final": 8,
+    "mutants_covered": 9,
+    "killed_covered": 8,
+    "b0_killed_final": 8,
+    "n_generated": 0,
+    "n_accepted": 0,
+    "n_repaired": 0,
+    "rejection_reasons": {},
+    "flaky_rejects": 0,
+    "rounds_used": 0,
+    "n_final_tests": 0,
+    "final_suite_passes": true,
+    "coverage_pct": 83.3,
+    "b0_coverage_pct": 83.3,
+    "llm_calls": 0,
+    "tokens_in": 0,
+    "tokens_out": 0,
+    "cost_usd": null,
+    "price_source": "",
+    "wall_sec": 6.4,
+    "accepted_codes": [],
+    "mutant_summary": [
+      {
+        "mid": "M001",
+        "operator": "ROR",
+        "line": 28,
+        "description": "ROR @ line 28: relational operator Lt -> GtE",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M002",
+        "operator": "CRN",
+        "line": 28,
+        "description": "CRN @ line 28: numeric 1 -> 2",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M003",
+        "operator": "ROR",
+        "line": 28,
+        "description": "ROR @ line 28: relational operator Gt -> LtE",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M004",
+        "operator": "CRN",
+        "line": 28,
+        "description": "CRN @ line 28: numeric 12 -> 13",
+        "killed_by_b0": false,
+        "killed_by_final": false,
+        "covered": true
+      },
+      {
+        "mid": "M005",
+        "operator": "ROR",
+        "line": 30,
+        "description": "ROR @ line 30: relational operator Eq -> NotEq",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M006",
+        "operator": "CRN",
+        "line": 30,
+        "description": "CRN @ line 30: numeric 2 -> 3",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M007",
+        "operator": "RTN",
+        "line": 31,
+        "description": "RTN @ line 31: return value -> None",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M008",
+        "operator": "CRN",
+        "line": 31,
+        "description": "CRN @ line 31: numeric 29 -> 30",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M009",
+        "operator": "RTN",
+        "line": 32,
+        "description": "RTN @ line 32: return value -> None",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      }
+    ],
+    "gate_log": [],
+    "ms_all": 0.8889,
+    "ms_covered": 0.8889,
+    "cost": {
+      "model": "qwen3.8-27b",
+      "calls": 0,
+      "tokens_in": 0,
+      "tokens_out": 0,
+      "cost_usd": null,
+      "price_source": ""
+    }
+  },
+  {
+    "target_id": "date_utils.days_in_month",
+    "variant": "B2",
+    "mutants_total": 9,
+    "killed_final": 9,
+    "mutants_covered": 9,
+    "killed_covered": 9,
+    "b0_killed_final": 8,
+    "n_generated": 4,
+    "n_accepted": 1,
+    "n_repaired": 4,
+    "rejection_reasons": {
+      "failing_on_original": 1,
+      "falsifiable": 2
+    },
+    "flaky_rejects": 0,
+    "rounds_used": 1,
+    "n_final_tests": 1,
+    "final_suite_passes": true,
+    "coverage_pct": 100.0,
+    "b0_coverage_pct": 83.3,
+    "llm_calls": 1,
+    "tokens_in": 1197,
+    "tokens_out": 3185,
+    "cost_usd": null,
+    "price_source": "",
+    "wall_sec": 154.8,
+    "accepted_codes": [
+      "\nimport pytest\n\nfrom date_utils import days_in_month\n\n\n@pytest.mark.parametrize(\n    \"month,expected\",\n    [\n        (1, 31),\n        (2, 28),  # common year\n        (3, 31),\n        (4, 30),\n        (5, 31),\n        (6, 30),\n        (7, 31),\n        (8, 31),\n        (9, 30),\n        (10, 31),\n        (11, 30),\n        (12, 31),\n    ],\n)\ndef test_all_months_common_year(month, expected):\n    \"\"\"All months in a common year return the correct number of days.\"\"\"\n    assert days_in_month(2023, month) == expected\n\n\n@pytest.mark.parametrize(\n    \"month,expected\",\n    [\n        (1, 31),\n        (2, 29),  # leap year\n        (3, 31),\n        (4, 30),\n        (5, 31),\n        (6, 30),\n        (7, 31),\n        (8, 31),\n        (9, 30),\n        (10, 31),\n        (11, 30),\n        (12, 31),\n    ],\n)\ndef test_all_months_leap_year(month, expected):\n    \"\"\"All months in a leap year return the correct number of days.\"\"\"\n    assert days_in_month(2024, month) == expected\n\n\ndef test_february_leap_year_divisible_by_4_not_100():\n    \"\"\"Year 2028 is divisible by 4 but not 100, so it is a leap year.\"\"\"\n    assert days_in_month(2028, 2) == 29\n\n\ndef test_february_century_not_divisible_by_400():\n    \"\"\"Year 1800 is a century year not divisible by 400, so it is not a leap year.\"\"\"\n    assert days_in_month(1800, 2) == 28\n\n\ndef test_february_century_divisible_by_400():\n    \"\"\"Year 1600 is a century year divisible by 400, so it is a leap year.\"\"\"\n    assert days_in_month(1600, 2) == 29\n\n\ndef test_month_below_range_raises():\n    \"\"\"Month values below 1 raise ValueError.\"\"\"\n    with pytest.raises(ValueError):\n        days_in_month(2023, 0)\n    with pytest.raises(ValueError):\n        days_in_month(2023, -5)\n\n\ndef test_month_above_range_raises():\n    \"\"\"Month values above 12 raise ValueError.\"\"\"\n    with pytest.raises(ValueError):\n        days_in_month(2023, 13)\n    with pytest.raises(ValueError):\n        days_in_month(2023, 99)\n"
+    ],
+    "mutant_summary": [
+      {
+        "mid": "M001",
+        "operator": "ROR",
+        "line": 28,
+        "description": "ROR @ line 28: relational operator Lt -> GtE",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M002",
+        "operator": "CRN",
+        "line": 28,
+        "description": "CRN @ line 28: numeric 1 -> 2",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M003",
+        "operator": "ROR",
+        "line": 28,
+        "description": "ROR @ line 28: relational operator Gt -> LtE",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M004",
+        "operator": "CRN",
+        "line": 28,
+        "description": "CRN @ line 28: numeric 12 -> 13",
+        "killed_by_b0": false,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M005",
+        "operator": "ROR",
+        "line": 30,
+        "description": "ROR @ line 30: relational operator Eq -> NotEq",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M006",
+        "operator": "CRN",
+        "line": 30,
+        "description": "CRN @ line 30: numeric 2 -> 3",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M007",
+        "operator": "RTN",
+        "line": 31,
+        "description": "RTN @ line 31: return value -> None",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M008",
+        "operator": "CRN",
+        "line": 31,
+        "description": "CRN @ line 31: numeric 29 -> 30",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M009",
+        "operator": "RTN",
+        "line": 32,
+        "description": "RTN @ line 32: return value -> None",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      }
+    ],
+    "gate_log": [
+      {
+        "cid": "R0C1",
+        "accepted": false,
+        "reason": "correctness",
+        "runs": [
+          "fail"
+        ]
+      },
+      {
+        "cid": "R0C2",
+        "accepted": true,
+        "new_kills": 1
+      },
+      {
+        "cid": "R0C3",
+        "accepted": false,
+        "reasons": [
+          "falsifiable"
+        ]
+      },
+      {
+        "cid": "R0C4",
+        "accepted": false,
+        "reasons": [
+          "falsifiable"
+        ]
+      }
+    ],
+    "ms_all": 1.0,
+    "ms_covered": 1.0,
+    "cost": {
+      "model": "qwen3.8-27b",
+      "calls": 1,
+      "tokens_in": 1197,
+      "tokens_out": 3185,
+      "cost_usd": null,
+      "price_source": ""
+    }
+  },
+  {
+    "target_id": "date_utils.days_in_month",
+    "variant": "B5",
+    "mutants_total": 9,
+    "killed_final": 9,
+    "mutants_covered": 9,
+    "killed_covered": 9,
+    "b0_killed_final": 8,
+    "n_generated": 4,
+    "n_accepted": 1,
+    "n_repaired": 4,
+    "rejection_reasons": {
+      "failing_on_original": 1,
+      "falsifiable": 2
+    },
+    "flaky_rejects": 0,
+    "rounds_used": 1,
+    "n_final_tests": 1,
+    "final_suite_passes": true,
+    "coverage_pct": 100.0,
+    "b0_coverage_pct": 83.3,
+    "llm_calls": 1,
+    "tokens_in": 1197,
+    "tokens_out": 3185,
+    "cost_usd": null,
+    "price_source": "",
+    "wall_sec": 21.6,
+    "accepted_codes": [
+      "\nimport pytest\n\nfrom date_utils import days_in_month\n\n\n@pytest.mark.parametrize(\n    \"month,expected\",\n    [\n        (1, 31),\n        (2, 28),  # common year\n        (3, 31),\n        (4, 30),\n        (5, 31),\n        (6, 30),\n        (7, 31),\n        (8, 31),\n        (9, 30),\n        (10, 31),\n        (11, 30),\n        (12, 31),\n    ],\n)\ndef test_all_months_common_year(month, expected):\n    \"\"\"All months in a common year return the correct number of days.\"\"\"\n    assert days_in_month(2023, month) == expected\n\n\n@pytest.mark.parametrize(\n    \"month,expected\",\n    [\n        (1, 31),\n        (2, 29),  # leap year\n        (3, 31),\n        (4, 30),\n        (5, 31),\n        (6, 30),\n        (7, 31),\n        (8, 31),\n        (9, 30),\n        (10, 31),\n        (11, 30),\n        (12, 31),\n    ],\n)\ndef test_all_months_leap_year(month, expected):\n    \"\"\"All months in a leap year return the correct number of days.\"\"\"\n    assert days_in_month(2024, month) == expected\n\n\ndef test_february_leap_year_divisible_by_4_not_100():\n    \"\"\"Year 2028 is divisible by 4 but not 100, so it is a leap year.\"\"\"\n    assert days_in_month(2028, 2) == 29\n\n\ndef test_february_century_not_divisible_by_400():\n    \"\"\"Year 1800 is a century year not divisible by 400, so it is not a leap year.\"\"\"\n    assert days_in_month(1800, 2) == 28\n\n\ndef test_february_century_divisible_by_400():\n    \"\"\"Year 1600 is a century year divisible by 400, so it is a leap year.\"\"\"\n    assert days_in_month(1600, 2) == 29\n\n\ndef test_month_below_range_raises():\n    \"\"\"Month values below 1 raise ValueError.\"\"\"\n    with pytest.raises(ValueError):\n        days_in_month(2023, 0)\n    with pytest.raises(ValueError):\n        days_in_month(2023, -5)\n\n\ndef test_month_above_range_raises():\n    \"\"\"Month values above 12 raise ValueError.\"\"\"\n    with pytest.raises(ValueError):\n        days_in_month(2023, 13)\n    with pytest.raises(ValueError):\n        days_in_month(2023, 99)\n"
+    ],
+    "mutant_summary": [
+      {
+        "mid": "M001",
+        "operator": "ROR",
+        "line": 28,
+        "description": "ROR @ line 28: relational operator Lt -> GtE",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M002",
+        "operator": "CRN",
+        "line": 28,
+        "description": "CRN @ line 28: numeric 1 -> 2",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M003",
+        "operator": "ROR",
+        "line": 28,
+        "description": "ROR @ line 28: relational operator Gt -> LtE",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M004",
+        "operator": "CRN",
+        "line": 28,
+        "description": "CRN @ line 28: numeric 12 -> 13",
+        "killed_by_b0": false,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M005",
+        "operator": "ROR",
+        "line": 30,
+        "description": "ROR @ line 30: relational operator Eq -> NotEq",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M006",
+        "operator": "CRN",
+        "line": 30,
+        "description": "CRN @ line 30: numeric 2 -> 3",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M007",
+        "operator": "RTN",
+        "line": 31,
+        "description": "RTN @ line 31: return value -> None",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M008",
+        "operator": "CRN",
+        "line": 31,
+        "description": "CRN @ line 31: numeric 29 -> 30",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M009",
+        "operator": "RTN",
+        "line": 32,
+        "description": "RTN @ line 32: return value -> None",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      }
+    ],
+    "gate_log": [
+      {
+        "cid": "R0C1",
+        "accepted": false,
+        "reason": "correctness",
+        "runs": [
+          "fail"
+        ]
+      },
+      {
+        "cid": "R0C2",
+        "accepted": true,
+        "new_kills": 1
+      },
+      {
+        "cid": "R0C3",
+        "accepted": false,
+        "reasons": [
+          "falsifiable"
+        ]
+      },
+      {
+        "cid": "R0C4",
+        "accepted": false,
+        "reasons": [
+          "falsifiable"
+        ]
+      }
+    ],
+    "ms_all": 1.0,
+    "ms_covered": 1.0,
+    "cost": {
+      "model": "qwen3.8-27b",
+      "calls": 1,
+      "tokens_in": 1197,
+      "tokens_out": 3185,
+      "cost_usd": null,
+      "price_source": ""
+    }
+  },
+  {
+    "target_id": "date_utils.age_in_days",
+    "variant": "B0",
+    "mutants_total": 3,
+    "killed_final": 3,
+    "mutants_covered": 3,
+    "killed_covered": 3,
+    "b0_killed_final": 3,
+    "n_generated": 0,
+    "n_accepted": 0,
+    "n_repaired": 0,
+    "rejection_reasons": {},
+    "flaky_rejects": 0,
+    "rounds_used": 0,
+    "n_final_tests": 0,
+    "final_suite_passes": true,
+    "coverage_pct": 83.3,
+    "b0_coverage_pct": 83.3,
+    "llm_calls": 0,
+    "tokens_in": 0,
+    "tokens_out": 0,
+    "cost_usd": null,
+    "price_source": "",
+    "wall_sec": 6.1,
+    "accepted_codes": [],
+    "mutant_summary": [
+      {
+        "mid": "M001",
+        "operator": "ROR",
+        "line": 42,
+        "description": "ROR @ line 42: relational operator Gt -> LtE",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M002",
+        "operator": "RTN",
+        "line": 44,
+        "description": "RTN @ line 44: return value -> None",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M003",
+        "operator": "AOR",
+        "line": 44,
+        "description": "AOR @ line 44: arithmetic operator Sub -> Add",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      }
+    ],
+    "gate_log": [],
+    "ms_all": 1.0,
+    "ms_covered": 1.0,
+    "cost": {
+      "model": "qwen3.8-27b",
+      "calls": 0,
+      "tokens_in": 0,
+      "tokens_out": 0,
+      "cost_usd": null,
+      "price_source": ""
+    }
+  },
+  {
+    "target_id": "date_utils.age_in_days",
+    "variant": "B2",
+    "mutants_total": 3,
+    "killed_final": 3,
+    "mutants_covered": 3,
+    "killed_covered": 3,
+    "b0_killed_final": 3,
+    "n_generated": 0,
+    "n_accepted": 0,
+    "n_repaired": 0,
+    "rejection_reasons": {},
+    "flaky_rejects": 0,
+    "rounds_used": 0,
+    "n_final_tests": 0,
+    "final_suite_passes": true,
+    "coverage_pct": 83.3,
+    "b0_coverage_pct": 83.3,
+    "llm_calls": 0,
+    "tokens_in": 0,
+    "tokens_out": 0,
+    "cost_usd": null,
+    "price_source": "",
+    "wall_sec": 6.8,
+    "accepted_codes": [],
+    "mutant_summary": [
+      {
+        "mid": "M001",
+        "operator": "ROR",
+        "line": 42,
+        "description": "ROR @ line 42: relational operator Gt -> LtE",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M002",
+        "operator": "RTN",
+        "line": 44,
+        "description": "RTN @ line 44: return value -> None",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M003",
+        "operator": "AOR",
+        "line": 44,
+        "description": "AOR @ line 44: arithmetic operator Sub -> Add",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      }
+    ],
+    "gate_log": [],
+    "ms_all": 1.0,
+    "ms_covered": 1.0,
+    "cost": {
+      "model": "qwen3.8-27b",
+      "calls": 0,
+      "tokens_in": 0,
+      "tokens_out": 0,
+      "cost_usd": null,
+      "price_source": ""
+    }
+  },
+  {
+    "target_id": "date_utils.age_in_days",
+    "variant": "B5",
+    "mutants_total": 3,
+    "killed_final": 3,
+    "mutants_covered": 3,
+    "killed_covered": 3,
+    "b0_killed_final": 3,
+    "n_generated": 0,
+    "n_accepted": 0,
+    "n_repaired": 0,
+    "rejection_reasons": {},
+    "flaky_rejects": 0,
+    "rounds_used": 0,
+    "n_final_tests": 0,
+    "final_suite_passes": true,
+    "coverage_pct": 83.3,
+    "b0_coverage_pct": 83.3,
+    "llm_calls": 0,
+    "tokens_in": 0,
+    "tokens_out": 0,
+    "cost_usd": null,
+    "price_source": "",
+    "wall_sec": 5.8,
+    "accepted_codes": [],
+    "mutant_summary": [
+      {
+        "mid": "M001",
+        "operator": "ROR",
+        "line": 42,
+        "description": "ROR @ line 42: relational operator Gt -> LtE",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M002",
+        "operator": "RTN",
+        "line": 44,
+        "description": "RTN @ line 44: return value -> None",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M003",
+        "operator": "AOR",
+        "line": 44,
+        "description": "AOR @ line 44: arithmetic operator Sub -> Add",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      }
+    ],
+    "gate_log": [],
+    "ms_all": 1.0,
+    "ms_covered": 1.0,
+    "cost": {
+      "model": "qwen3.8-27b",
+      "calls": 0,
+      "tokens_in": 0,
+      "tokens_out": 0,
+      "cost_usd": null,
+      "price_source": ""
+    }
+  },
+  {
+    "target_id": "containers.flatten",
+    "variant": "B0",
+    "mutants_total": 6,
+    "killed_final": 2,
+    "mutants_covered": 6,
+    "killed_covered": 2,
+    "b0_killed_final": 2,
+    "n_generated": 0,
+    "n_accepted": 0,
+    "n_repaired": 0,
+    "rejection_reasons": {},
+    "flaky_rejects": 0,
+    "rounds_used": 0,
+    "n_final_tests": 0,
+    "final_suite_passes": true,
+    "coverage_pct": 88.9,
+    "b0_coverage_pct": 88.9,
+    "llm_calls": 0,
+    "tokens_in": 0,
+    "tokens_out": 0,
+    "cost_usd": null,
+    "price_source": "",
+    "wall_sec": 6.3,
+    "accepted_codes": [],
+    "mutant_summary": [
+      {
+        "mid": "M001",
+        "operator": "CRN",
+        "line": 4,
+        "description": "CRN @ line 4: numeric 8 -> 9",
+        "killed_by_b0": false,
+        "killed_by_final": false,
+        "covered": true
+      },
+      {
+        "mid": "M002",
+        "operator": "ROR",
+        "line": 14,
+        "description": "ROR @ line 14: relational operator LtE -> Gt",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M003",
+        "operator": "CRN",
+        "line": 14,
+        "description": "CRN @ line 14: numeric 0 -> 1",
+        "killed_by_b0": false,
+        "killed_by_final": false,
+        "covered": true
+      },
+      {
+        "mid": "M004",
+        "operator": "AOR",
+        "line": 16,
+        "description": "AOR @ line 16: arithmetic operator Sub -> Add",
+        "killed_by_b0": false,
+        "killed_by_final": false,
+        "covered": true
+      },
+      {
+        "mid": "M005",
+        "operator": "CRN",
+        "line": 16,
+        "description": "CRN @ line 16: numeric 1 -> 2",
+        "killed_by_b0": false,
+        "killed_by_final": false,
+        "covered": true
+      },
+      {
+        "mid": "M006",
+        "operator": "RTN",
+        "line": 19,
+        "description": "RTN @ line 19: return value -> None",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      }
+    ],
+    "gate_log": [],
+    "ms_all": 0.3333,
+    "ms_covered": 0.3333,
+    "cost": {
+      "model": "qwen3.8-27b",
+      "calls": 0,
+      "tokens_in": 0,
+      "tokens_out": 0,
+      "cost_usd": null,
+      "price_source": ""
+    }
+  },
+  {
+    "target_id": "containers.flatten",
+    "variant": "B2",
+    "mutants_total": 6,
+    "killed_final": 2,
+    "mutants_covered": 6,
+    "killed_covered": 2,
+    "b0_killed_final": 2,
+    "n_generated": 4,
+    "n_accepted": 0,
+    "n_repaired": 1,
+    "rejection_reasons": {
+      "failing_on_original": 4
+    },
+    "flaky_rejects": 0,
+    "rounds_used": 1,
+    "n_final_tests": 0,
+    "final_suite_passes": true,
+    "coverage_pct": 88.9,
+    "b0_coverage_pct": 88.9,
+    "llm_calls": 1,
+    "tokens_in": 1200,
+    "tokens_out": 2717,
+    "cost_usd": null,
+    "price_source": "",
+    "wall_sec": 76.7,
+    "accepted_codes": [],
+    "mutant_summary": [
+      {
+        "mid": "M001",
+        "operator": "CRN",
+        "line": 4,
+        "description": "CRN @ line 4: numeric 8 -> 9",
+        "killed_by_b0": false,
+        "killed_by_final": false,
+        "covered": true
+      },
+      {
+        "mid": "M002",
+        "operator": "ROR",
+        "line": 14,
+        "description": "ROR @ line 14: relational operator LtE -> Gt",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M003",
+        "operator": "CRN",
+        "line": 14,
+        "description": "CRN @ line 14: numeric 0 -> 1",
+        "killed_by_b0": false,
+        "killed_by_final": false,
+        "covered": true
+      },
+      {
+        "mid": "M004",
+        "operator": "AOR",
+        "line": 16,
+        "description": "AOR @ line 16: arithmetic operator Sub -> Add",
+        "killed_by_b0": false,
+        "killed_by_final": false,
+        "covered": true
+      },
+      {
+        "mid": "M005",
+        "operator": "CRN",
+        "line": 16,
+        "description": "CRN @ line 16: numeric 1 -> 2",
+        "killed_by_b0": false,
+        "killed_by_final": false,
+        "covered": true
+      },
+      {
+        "mid": "M006",
+        "operator": "RTN",
+        "line": 19,
+        "description": "RTN @ line 19: return value -> None",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      }
+    ],
+    "gate_log": [
+      {
+        "cid": "R0C1",
+        "accepted": false,
+        "reason": "correctness",
+        "runs": [
+          "fail"
+        ]
+      },
+      {
+        "cid": "R0C2",
+        "accepted": false,
+        "reason": "correctness",
+        "runs": [
+          "fail"
+        ]
+      },
+      {
+        "cid": "R0C3",
+        "accepted": false,
+        "reason": "correctness",
+        "runs": [
+          "fail"
+        ]
+      },
+      {
+        "cid": "R0C4",
+        "accepted": false,
+        "reason": "correctness",
+        "runs": [
+          "fail"
+        ]
+      }
+    ],
+    "ms_all": 0.3333,
+    "ms_covered": 0.3333,
+    "cost": {
+      "model": "qwen3.8-27b",
+      "calls": 1,
+      "tokens_in": 1200,
+      "tokens_out": 2717,
+      "cost_usd": null,
+      "price_source": ""
+    }
+  }
+]

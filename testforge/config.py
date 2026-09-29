@@ -146,6 +146,9 @@ class ForgeConfig:
         mt = os.environ.get("TESTFORGE_MAX_TOKENS")
         if mt:
             cfg.max_tokens = int(mt)
+        lr = os.environ.get("TESTFORGE_LLM_RETRIES")
+        if lr:
+            cfg.llm_retries = int(lr)
         # Point at a different directory to force fresh LLM samples: an
         # unchanged cache replays responses bit-for-bit, which is exactly what
         # a replication run must avoid.

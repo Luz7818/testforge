@@ -113,6 +113,13 @@ def test_repo_pricing_json_is_valid_and_ships_unpriced():
         assert {"model", "input_per_m", "output_per_m", "source", "effective"} <= set(entry)
 
 
+def test_env_retry_hook_overrides_llm_retries(monkeypatch):
+    monkeypatch.delenv("TESTFORGE_LLM_RETRIES", raising=False)
+    assert cfg.ForgeConfig.from_env().llm_retries == 3
+    monkeypatch.setenv("TESTFORGE_LLM_RETRIES", "5")
+    assert cfg.ForgeConfig.from_env().llm_retries == 5
+
+
 def test_client_cost_is_none_without_price():
     c = SimpleNamespace(_cfg=cfg.ForgeConfig())
     assert OpenAICompatClient._cost(c, 1000, 2000) is None
