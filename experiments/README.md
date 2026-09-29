@@ -13,7 +13,7 @@
 | `run_experiment.py` | 跑（目标 × 变体）网格，崩溃可续 | 每格跑完立刻重写整份 `results.json`；重启时已完成格打印 `skip ... (cached)`；带 `error` 键的格先归档到同目录 `errors.json` 再重跑；结束时写 `summary.md` |
 | `analyze.py` | 配对统计 → `analysis.md` + `analysis.json` | 手写 Wilcoxon 符号秩（正态近似 + 并列校正）与 bootstrap 95% CI（10,000 次重采样，种子 7）；跳过带 `error` 的格 |
 | `plots.py` | 6 张 PNG 到 `<exp>/plots/` | 条件不满足时直接不画那张图（见下） |
-| `compare_grids.py` | 两网格重复性检验 → 写到 A 目录的 `compare.md` | `--treat` / `--base` 默认 B1/B0；已发表的 `results/exp_api_rq2full/compare.md` 用的是 `--treat B5 --base B2` |
+| `compare_grids.py` | 两网格重复性检验 → 写到 A 目录的 `compare.md` | `--treat` / `--base` 默认 B1/B0；已发表的 `results/exp_api27b_full/compare.md`（RQ1 pooled）与 `results/exp_api27b_rq2full/compare.md`（`--treat B5 --base B2`） |
 
 ## 参数
 

@@ -25,7 +25,7 @@
 | CI | 5 个 job：4 格测试矩阵（ubuntu 3.10/3.11/3.12 + windows 3.12，`pip install -e .[dev]` + pytest + CLI 冒烟）、`mutation-loop-smoke`（pyflakes + 一格 Mock 全链路冒烟 + 结果断言）、`api-smoke`（仅手动触发，无密钥自动跳过）。**这里不写"最近一次是哪个提交"**——分支每推一次它就变，写进文档同一次提交里就作废了；当前分支 HEAD 的徽章为 `passing`（复核见右）。本机没有 `gh`，但徽章与 Actions 接口对**公开仓都免认证**；要提交号再用 `/actions/runs`（匿名限 60 次/小时/IP，别拿它轮询） | `python -c "import urllib.request as u;b=u.urlopen(u.Request('https://github.com/Luz7818/testforge/workflows/CI/badge.svg',headers={'User-Agent':'Mozilla/5.0'}),timeout=30).read().decode();print('passing' in b)"` 应为 `True`；步骤读 `.github/workflows/ci.yml` |
 | 运行时依赖 | 4 项：`pytest>=8.0`、`coverage>=7.4`、`openai>=1.30`、`matplotlib>=3.8` | 读 `pyproject.toml` 的 `[project] dependencies` |
 | 依赖安装位置 | 仓库根 `pyproject.toml`，无 `requirements.txt`；`testforge` 已以 editable 装进 `.venv`（0.2 起），从任意 cwd 都能 `python -m testforge.cli` | `.venv/Scripts/python.exe -m pip list`（有 `testforge 0.2.0` 条目） |
-| prompt 缓存 | `llm_cache/`（8B 时代）与 `llm_cache_27b_full/`、`llm_cache_27b_rq2/`（0.3 网格，独立采样）；缓存键含 `TESTFORGE_EXTRA_BODY`（0.3 起），不同请求体设置不互串 | `python -c "import pathlib;print(len(list(pathlib.Path('llm_cache_27b_full').glob('*.json'))))"` |
+| prompt 缓存 | `llm_cache/`（8B 时代）与 `llm_cache_27b_{full,rq2,full_rep,rq2_rep}/`（四轮网格各一，采样间隔离）；缓存键含 `TESTFORGE_EXTRA_BODY`（0.3 起），不同请求体设置不互串 | `python -c "import pathlib;print(len(list(pathlib.Path('llm_cache_27b_full').glob('*.json'))))"` |
 
 ## 仓库地图
 
@@ -59,7 +59,7 @@
    要一次独立采样就把缓存目录指到空目录（已发表的两轮真实网格即如此）。Mock 后端不读写缓存。
 3. **逐格落盘、可续跑**：`run_experiment.py` 每跑完一个（目标 × 变体）就把整份 `results.json` 重写一次。
    重启时已完成格打印 `skip ... (cached)`；带 `error` 键的格会被移出 `results.json` 归档到同目录
-   `errors.json` 后重跑（`results/exp_api_rq2full/errors.json` 就是这么来的）。
+   `errors.json` 后重跑（`results/exp_api27b_full/errors.json` 就是这么来的——首跑 36 格撞网关 420 限流后靠续跑补齐）。
 4. **变异体分层采样上限**：候选超过 `max_mutants`（默认 24）时按算子分组轮转取样，组内用种子洗牌，
    目的是保住算子多样性而不是取前 N 个。每格种子 = `mutation_seed + crc32(target_id) % 10000`，
    所以换个 target_id 就会挑到不同的子集。编号 `M001…` 在采样之后按行号重排，换上限即换编号。
@@ -100,12 +100,14 @@
   压力限流——27B 主网格首跑因此丢过 36 格，靠「重跑同一命令只补错误格」的续跑机制 + 10 秒节流补齐。
   长限流窗口不要指望进程内重试，等窗口过去再续跑。
 - `TESTFORGE_MODE` 从 0.2 起对 CLI 与网格脚本生效：`--mode` 缺省时取该环境变量，再退回 `mock`。
-- 已发表的三个 90 格网格（`exp_api_full` / `exp_api_replicate` / `exp_mock_full`）用的是变异体上限 16、
-  每轮 3 候选、最多 2 轮、门禁重跑 ×3；默认值是 24 / 4 / 3 / ×5。0.2 起用 `--preset published` 固化，
-  B5 消融网格对应 `--preset published-b5`；指纹见 `testforge/presets.py`，复跑验收见 REPRODUCE.md。
-- `results/exp_api_full/` 与 `results/exp_mock_full/` 里的 `analysis.md` 是旧脚本产物（缺两节），
-  当前脚本的重算结果已另存为同目录 `analysis_v2.md` / `analysis_v2.json`（旧文件未动）。
-  重算版把 v0.1 占位单价算出的美元列按“未定价”处理，只保留精确 token 数。
+- 已发表的真实 LLM 网格全部来自 **qwen3.8-27B**（v0.4 起单模型口径）：主网格 `exp_api27b_full` +
+  `exp_api27b_replicate`（16/3/2/×3，两采样），B5 网格 `exp_api27b_rq2full` + `exp_api27b_rq2full_rep`
+  （24/4/4/×5，两采样），共 288 格零错误；Mock 网格 `exp_mock_full` 与模型无关。0.2 起用 `--preset published`
+  / `--preset published-b5` 固化；指纹见 `testforge/presets.py`，复跑验收见 REPRODUCE.md。
+  v0.1–v0.3 的 Qwen3-VL-8B 网格（`exp_api_*`）已撤出工作树，完整归档在 tag v0.3.0。
+- `results/exp_mock_full/` 的 `analysis.md` 是旧脚本产物（缺两节），当前脚本的重算结果在
+  同目录 `analysis_v2.md` / `analysis_v2.json`（旧文件未动）。重算版把 v0.1 占位单价算出的
+  美元列按“未定价”处理，只保留精确 token 数。
 - 仓库的 `addopts` 已含 `-q`，再敲 `-q` 就变成 `-qq`，只打印一行圆点、看不到通过数。要数字行就用
   `.venv/Scripts/python.exe -m pytest`。
 - `plots.py` 的标题标签取自 `cost.model`。Mock 运行里 `cfg.model` 仍是默认 `deepseek-chat`，所以

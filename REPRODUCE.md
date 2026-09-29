@@ -29,10 +29,10 @@ python -m pyflakes testforge experiments tests conftest.py
 
 ## Step 2 — run the published grid (offline, zero cost)
 
-The three published 90-cell grids (`results/exp_api_full`, `exp_api_replicate`,
-`exp_mock_full`) were NOT run with the code defaults (24 mutants / 4 candidates /
-3 rounds). They used **16 mutants / target, 3 candidates / round, 2 feedback
-rounds, gate reruns ×3**. That parameter set is pinned as a preset, so you don't
+The published 90-cell grids (`results/exp_api27b_full`, `exp_api27b_replicate`
+for the real model, `exp_mock_full` for the offline mock) were NOT run with the
+code defaults (24 mutants / 4 candidates / 3 rounds). They used **16 mutants /
+target, 3 candidates / round, 2 feedback rounds, gate reruns ×3**. That parameter set is pinned as a preset, so you don't
 have to remember it:
 
 ```bash
@@ -81,6 +81,11 @@ Expected (from `results/exp_mock_full/analysis.md`, committed):
 And RQ1 (B1 − B0, paired on 18 targets): mean uplift **+7.8pp**, 9 wins / 9 ties
 / 0 losses, Wilcoxon p = 0.0076, bootstrap 95% CI [+4.0, +11.8].
 
+The published *real-LLM* grids are reproduced the same way: the archived
+`results/exp_api27b_full` and `exp_api27b_replicate` (two independent samplings
+on qwen3.8-27B) carry the same fingerprint, and their pooled RQ1 is in
+`results/exp_api27b_full/compare.md` (+14.9pp, p<0.0001).
+
 For a single-cell sanity check (~1 min, offline):
 
 ```bash
@@ -92,20 +97,21 @@ python -m testforge.cli run --target numeric.integer_sqrt --variant B3 --mode mo
 ## Reproducing the real-LLM grids
 
 Requires any OpenAI-compatible endpoint (see `.env.example`; the published
-grids used a self-hosted vLLM serving Qwen3-VL-8B):
+grids used the SEU campus gateway serving qwen3.8-27B with thinking disabled —
+if your gateway WAF-blocks the openai SDK, set `TESTFORGE_TRANSPORT=urllib`):
 
 ```bash
 export TESTFORGE_CACHE_DIR=llm_cache_repro   # fresh dir = independent sampling
 python experiments/run_experiment.py --mode api --preset published --out results/repro_api_published
 python experiments/analyze.py --exp results/repro_api_published
-python experiments/analyze.py --exp results/repro_api_published --compare-with results/exp_api_full
+python experiments/compare_grids.py --a results/exp_api27b_full --b results/repro_api_published --treat B1 --base B0
 ```
 
 Expectation: not bit-identical (fresh sampling), but the published *claims*
-should re-appear: B1 > B0 with Wilcoxon p < 0.05, gate (B2/B3) cutting accepted
-tests to roughly half of B1 at equal mutation score. If your endpoint serves a
-different model, treat it as a new experiment — cross-model comparison is what
-`--compare-with` is for (see the 0.3 section of `docs/report.md`).
+should re-appear: B1 > B0 with Wilcoxon p < 0.05, gate (B2) cutting accepted
+tests to roughly 40-44% of B1 at equal mutation score. If your endpoint serves
+a different model, treat it as a new experiment — the model-capability history
+(8B vs 27B) is in `docs/report.md` §6.8.
 
 ## About cost numbers
 

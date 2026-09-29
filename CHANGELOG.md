@@ -5,6 +5,37 @@ All notable changes to TestForge are documented here. The format follows
 [SemVer](https://semver.org/): breaking the documented CLI/config contract
 bumps the major, added capability the minor, fixes the patch.
 
+## [0.4.0] — 2026-09-30
+
+The single-model release: every real-LLM result in the project now comes from
+one model, qwen3.8-27B, with the 8B era archived at tag v0.3.0.
+
+### Added
+
+- Second independent samplings on qwen3.8-27B for both published protocols,
+  completing the two-sampling structure the statistics require:
+  `results/exp_api27b_replicate` (90 cells) and `results/exp_api27b_rq2full_rep`
+  (54 cells) — both zero errors, run with 10 s call pacing after the gateway's
+  HTTP 420 throttling window.
+- Pooled statistics for the unified single-model story
+  (`docs/report.md` rewritten end to end):
+  RQ1 (B1−B0, n=36 pooled): **+14.9pp, 25 wins / 0 losses, p<0.0001,
+  CI [+10.4, +19.8]**; gate: accepted tests cut to 40-44% at equal mutation
+  score; RQ5 (B5−B2, n=36 pooled): **+2.9pp, 5 wins / 0 losses, p=0.0422,
+  CI [+0.7, +5.8]** — with `parse_csv_line`'s quote-escape survivor, the hard
+  core of the 8B era, closed by the feedback loop at round 4.
+
+### Changed
+
+- **Model history unified (§6.8)**: report.md now presents all results as
+  qwen3.8-27B; the v0.1–v0.3 Qwen3-VL-8B grids (`results/exp_api_*`) were
+  removed from the working tree and remain retrievable at tag v0.3.0. B0 —
+  which contains no model randomness — is bit-identical across both eras
+  (77.6% / 77.2%), anchoring protocol invariance.
+- Case studies re-anchored to 27B data: the feedback-loop win is now
+  `numeric.integer_sqrt` (81.2% → 87.5%, round 2, sampling 2); the
+  `parse_csv_line` difficulty marker closes at round 4 under the B5 budget.
+
 ## [0.3.0] — 2026-09-30
 
 The external-validity release: a second, larger model reruns the same grids
