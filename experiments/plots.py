@@ -56,17 +56,23 @@ def ms_by_variant(rows: list[dict], out: Path) -> None:
     plt.close(fig)
 
 
-def uplift_vs_cost(rows: list[dict], out: Path) -> None:
+def uplift_vs_cost(rows: list[dict], out: Path) -> bool:
+    """Uplift vs per-target USD cost. Only meaningful when the grid was run
+    with explicit prices (cost_usd not None); otherwise skipped."""
     by = {(r["target_id"], r["variant"]): r for r in rows if "error" not in r}
     targets = sorted({r["target_id"] for r in rows if "error" not in r})
     xs, ys = [], []
     for t in targets:
         b0, b3 = by.get((t, "B0")), by.get((t, "B3"))
-        if b0 and b3:
-            ys.append(b3["ms_all"] - b0["ms_all"])
-            xs.append(b3.get("cost", {}).get("cost_usd", 0.0) or 1e-6)
+        if not (b0 and b3):
+            continue
+        cost = b3.get("cost", {}).get("cost_usd")
+        if cost is None:
+            continue  # unpriced run: no honest x coordinate
+        ys.append(b3["ms_all"] - b0["ms_all"])
+        xs.append(cost or 1e-6)
     if not xs:
-        return
+        return False
     fig, ax = plt.subplots(figsize=(6.4, 4.2))
     ax.axhline(0, color="#999", lw=0.8)
     ax.plot(xs, ys, "o", color="#4c8f5c", alpha=0.85)
@@ -78,6 +84,7 @@ def uplift_vs_cost(rows: list[dict], out: Path) -> None:
     fig.tight_layout()
     fig.savefig(out, dpi=160)
     plt.close(fig)
+    return True
 
 
 def gate_rejections(rows: list[dict], out: Path) -> None:
@@ -211,7 +218,8 @@ def main() -> None:
     ms_heatmap(rows, plot_dir / "ms_heatmap.png", label=label)
     uplift_per_target(rows, plot_dir / "uplift_per_target.png")
     tokens_by_variant(rows, plot_dir / "tokens_by_variant.png")
-    uplift_vs_cost(rows, plot_dir / "uplift_vs_cost.png")
+    if not uplift_vs_cost(rows, plot_dir / "uplift_vs_cost.png"):
+        print("skipped uplift_vs_cost.png: no priced runs (cost_usd is None without explicit prices)")
     gate_rejections(rows, plot_dir / "gate_rejections.png")
     print(f"plots -> {plot_dir}")
 

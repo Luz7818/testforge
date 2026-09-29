@@ -4,11 +4,11 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "testforge"
-version = "0.1.0"
 description = "Mutation-guided test quality agent: LLM generates tests, mutation testing proves they catch bugs"
 readme = "README.md"
 requires-python = ">=3.10"
 license = { text = "MIT" }
+dynamic = ["version"]
 authors = [{ name = "Luz7818" }]
 keywords = [
     "llm",
@@ -16,12 +16,13 @@ keywords = [
     "test-generation",
     "software-testing",
     "pytest",
-    "deepseek",
+    "openai-compatible",
     "ai-agent",
 ]
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
     "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
@@ -36,13 +37,29 @@ dependencies = [
     "matplotlib>=3.8",
 ]
 
+[project.optional-dependencies]
+# The two repo gates beyond pytest itself: pyflakes (static check) and
+# coverage are listed here so a fresh clone can run every documented gate:
+#   pip install -e .[dev]
+dev = [
+    "pytest>=8.0",
+    "pyflakes>=3.0",
+    "coverage>=7.4",
+]
+
 [project.urls]
 Homepage = "https://github.com/Luz7818/testforge"
 Repository = "https://github.com/Luz7818/testforge"
 Issues = "https://github.com/Luz7818/testforge/issues"
+Changelog = "https://github.com/Luz7818/testforge/blob/main/CHANGELOG.md"
+Reproducing = "https://github.com/Luz7818/testforge/blob/main/REPRODUCE.md"
 
 [tool.setuptools.packages.find]
 include = ["testforge*"]
+
+# Single source of truth for the version is testforge/__init__.py.
+[tool.setuptools.dynamic]
+version = { attr = "testforge.__version__" }
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

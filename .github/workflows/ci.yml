@@ -25,10 +25,78 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install package (validates packaging on ASCII paths)
-        run: pip install -e .
+        run: pip install -e .[dev]
       - name: Run test suite (unit + integration + mock e2e)
         run: python -m pytest tests/ -q
       - name: CLI smoke check
         run: |
           python -m testforge.cli targets
           python -m testforge.cli --version
+
+  # The full agent loop — analysis -> mutation -> generation -> gate -> joint
+  # evaluation — is the part most likely to break silently. One deterministic
+  # mock cell exercises it end to end; breaking gate.py (or anything between)
+  # turns this red via the missing/failed cell or the assertions below.
+  mutation-loop-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install package with dev gates
+        run: pip install -e .[dev]
+      - name: Static check (pyflakes)
+        run: python -m pyflakes testforge experiments tests conftest.py
+      - name: Run one full agent cell (mock, offline)
+        run: python experiments/run_experiment.py --mode mock --targets numeric.integer_sqrt --variants B3 --out results/ci_smoke
+      - name: Assert the loop produced an accepted, passing suite
+        run: |
+          python - <<'EOF'
+          import json
+          rows = json.load(open("results/ci_smoke/results.json", encoding="utf-8"))
+          assert len(rows) == 1 and "error" not in rows[0], rows
+          r = rows[0]
+          assert r["final_suite_passes"], r
+          assert r["n_accepted"] >= 1, f"gate accepted nothing: {r}"
+          assert r["ms_all"] > 0.70, f"mutation score regressed: {r}"
+          print("smoke OK:", r["target_id"], r["variant"],
+                f"MS(all)={r['ms_all']:.1%}", "acc=", r["n_accepted"])
+          EOF
+
+  # Manual real-endpoint smoke: set repo secrets TESTFORGE_API_KEY /
+  # TESTFORGE_API_BASE / TESTFORGE_MODEL, then dispatch this workflow.
+  # Skips (green) when the secrets are not configured.
+  api-smoke:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    env:
+      DEEPSEEK_API_KEY: ${{ secrets.TESTFORGE_API_KEY }}
+      TESTFORGE_API_BASE: ${{ secrets.TESTFORGE_API_BASE }}
+      TESTFORGE_MODEL: ${{ secrets.TESTFORGE_MODEL }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -e .
+      - name: Skip when secrets are not configured
+        run: |
+          if [ -z "$DEEPSEEK_API_KEY" ]; then
+            echo "TESTFORGE_API_KEY secret not set; skipping api smoke."
+            echo "SKIP=true" >> "$GITHUB_ENV"
+          fi
+      - name: Run one real-endpoint cell
+        if: env.SKIP != 'true'
+        run: python experiments/run_experiment.py --mode api --targets numeric.integer_sqrt --variants B3 --out results/ci_api_smoke
+      - name: Assert the cell completed
+        if: env.SKIP != 'true'
+        run: |
+          python - <<'EOF'
+          import json
+          rows = json.load(open("results/ci_api_smoke/results.json", encoding="utf-8"))
+          assert len(rows) == 1 and "error" not in rows[0], rows
+          r = rows[0]
+          assert r["final_suite_passes"], r
+          print("api smoke OK:", r["target_id"], r["variant"], f"MS(all)={r['ms_all']:.1%}")
+          EOF

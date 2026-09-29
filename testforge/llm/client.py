@@ -54,7 +54,9 @@ class LLMResponse:
     text: str
     tokens_in: int = 0
     tokens_out: int = 0
-    cost_usd: float = 0.0
+    # None = no price was configured for this run; token counts stay exact.
+    # Mock keeps 0.0: the offline backend genuinely spends nothing.
+    cost_usd: float | None = 0.0
     cached: bool = False
     model: str = "mock"
 
@@ -95,15 +97,26 @@ class OpenAICompatClient:
         ).hexdigest()
         return self._cache_dir / f"{key}.json"
 
+    def _cost(self, tokens_in: int, tokens_out: int) -> float | None:
+        """USD for one call, or None when no price is configured. Costs are
+        always recomputed from exact token counts — including on cache
+        replay — so a price correction never leaves stale figures behind."""
+        pin, pout = self._cfg.price_input_per_m, self._cfg.price_output_per_m
+        if pin is None and pout is None:
+            return None
+        return tokens_in / 1e6 * (pin or 0.0) + tokens_out / 1e6 * (pout or 0.0)
+
     def generate(self, system: str, prompt: str, purpose: str = "") -> LLMResponse:
         cpath = self._cache_path(system, prompt)
         if cpath.exists():
             data = json.loads(cpath.read_text(encoding="utf-8"))
+            tokens_in = data["tokens_in"]
+            tokens_out = data["tokens_out"]
             return LLMResponse(
                 text=data["text"],
-                tokens_in=data["tokens_in"],
-                tokens_out=data["tokens_out"],
-                cost_usd=data["cost_usd"],
+                tokens_in=tokens_in,
+                tokens_out=tokens_out,
+                cost_usd=self._cost(tokens_in, tokens_out),
                 cached=True,
                 model=self._cfg.model,
             )
@@ -125,24 +138,23 @@ class OpenAICompatClient:
                 usage = resp.usage
                 tokens_in = getattr(usage, "prompt_tokens", 0) or 0
                 tokens_out = getattr(usage, "completion_tokens", 0) or 0
-                cost = (
-                    tokens_in / 1e6 * self._cfg.price_input_per_m
-                    + tokens_out / 1e6 * self._cfg.price_output_per_m
-                )
                 out = LLMResponse(
                     text=text,
                     tokens_in=tokens_in,
                     tokens_out=tokens_out,
-                    cost_usd=cost,
+                    cost_usd=self._cost(tokens_in, tokens_out),
                     model=self._cfg.model,
                 )
+                # Cache stores only the replayable facts (text + exact token
+                # counts). The dollar figure is derived at read time from the
+                # prices in effect, so correcting a price never requires
+                # invalidating the cache.
                 cpath.write_text(
                     json.dumps(
                         {
                             "text": text,
                             "tokens_in": tokens_in,
                             "tokens_out": tokens_out,
-                            "cost_usd": cost,
                         },
                         ensure_ascii=False,
                     ),

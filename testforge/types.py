@@ -134,11 +134,13 @@ class VariantResult:
     final_suite_passes: bool = True
     coverage_pct: float = 0.0      # line coverage of target function, B0+suite
     b0_coverage_pct: float = 0.0
-    # Cost.
+    # Cost. cost_usd is None unless a price was explicitly configured;
+    # price_source records where that price came from (empty = unpriced run).
     llm_calls: int = 0
     tokens_in: int = 0
     tokens_out: int = 0
-    cost_usd: float = 0.0
+    cost_usd: float | None = None
+    price_source: str = ""
     wall_sec: float = 0.0
     # Artifacts (kept for the report; may be large).
     accepted_codes: list[str] = field(default_factory=list)
@@ -160,9 +162,16 @@ class VariantResult:
 
 @dataclass
 class CostLedger:
-    """Every LLM call (or cache hit) with exact token counts."""
+    """Every LLM call (or cache hit) with exact token counts.
+
+    ``cost_usd`` is ``None`` unless a price was explicitly configured for the
+    run (env override or a pricing.json entry); ``price_source`` records where
+    the price came from, so any dollar figure that appears in a report is
+    auditable back to its source.
+    """
 
     model: str = "mock"
+    price_source: str = ""
     entries: list[dict] = field(default_factory=list)
 
     def add(
@@ -170,7 +179,7 @@ class CostLedger:
         purpose: str,
         tokens_in: int,
         tokens_out: int,
-        cost_usd: float,
+        cost_usd: float | None,
         cached: bool = False,
     ) -> None:
         self.entries.append(
@@ -178,14 +187,15 @@ class CostLedger:
                 "purpose": purpose,
                 "tokens_in": tokens_in,
                 "tokens_out": tokens_out,
-                "cost_usd": round(cost_usd, 6),
+                "cost_usd": None if cost_usd is None else round(cost_usd, 6),
                 "cached": cached,
             }
         )
 
     @property
-    def total_cost(self) -> float:
-        return sum(e["cost_usd"] for e in self.entries)
+    def total_cost(self) -> float | None:
+        costs = [e["cost_usd"] for e in self.entries if e["cost_usd"] is not None]
+        return sum(costs) if costs else None
 
     @property
     def tokens_in(self) -> int:
@@ -200,10 +210,12 @@ class CostLedger:
         return len(self.entries)
 
     def summary(self) -> dict:
+        total = self.total_cost
         return {
             "model": self.model,
             "calls": self.n_calls,
             "tokens_in": self.tokens_in,
             "tokens_out": self.tokens_out,
-            "cost_usd": round(self.total_cost, 4),
+            "cost_usd": None if total is None else round(total, 4),
+            "price_source": self.price_source,
         }

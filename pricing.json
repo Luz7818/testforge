@@ -1,0 +1,23 @@
+{
+  "_readme": [
+    "Optional price table for USD cost accounting. Token counts are always",
+    "exact in the ledger; a dollar figure is produced ONLY for a model with an",
+    "entry here (or TESTFORGE_PRICE_INPUT_PER_M / TESTFORGE_PRICE_OUTPUT_PER_M",
+    "env overrides). No entry = no USD figure anywhere in reports, by design:",
+    "an unsourced price must not multiply exact tokens into a fake-exact cost.",
+    "",
+    "Schema per entry:",
+    "  model        exact model id as sent to the endpoint (e.g. \"deepseek-chat\")",
+    "  input_per_m  USD per 1,000,000 input (prompt) tokens",
+    "  output_per_m USD per 1,000,000 output (completion) tokens",
+    "  currency     always \"USD\" (only USD is interpreted)",
+    "  source       where the price came from (provider page URL or quote ref)",
+    "  effective    date the price took effect, YYYY-MM-DD",
+    "",
+    "This file ships with an empty list: the repository does not hard-code any",
+    "provider's prices. Fill in an entry (with its source and effective date)",
+    "before quoting absolute dollar figures. Self-hosted or campus endpoints",
+    "usually have no marginal per-token price and need no entry."
+  ],
+  "prices": []
+}

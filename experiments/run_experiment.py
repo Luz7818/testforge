@@ -10,6 +10,7 @@ the output JSON after each cell so an interrupted run can be inspected.
 from __future__ import annotations
 
 import argparse
+import os
 import sys
 import time
 from pathlib import Path
@@ -20,23 +21,51 @@ from testforge.agent import ForgeAgent
 from testforge.benchmarks import PROJECT_ROOT, load_targets, result_to_dict
 from testforge.config import ForgeConfig
 from testforge.llm import make_client
+from testforge.presets import PRESETS
 from testforge.report import render_summary
 from testforge.types import CostLedger, VariantSpec
 from testforge.utils import write_json
 from testforge.variants import VARIANTS
 
+# Code defaults, expressed with the same keys as PRESETS entries.
+GRID_DEFAULTS = {"max_mutants": 24, "candidates_per_round": 4, "max_rounds": 3, "flaky_runs": 5}
+
+
+def resolve_params(args) -> dict:
+    """Effective grid parameters: explicit flag > preset value > code default."""
+    preset_vals = PRESETS.get(args.preset, {}) if args.preset else {}
+
+    def eff(flag, key):
+        return flag if flag is not None else preset_vals.get(key, GRID_DEFAULTS[key])
+
+    return {
+        "max_mutants": eff(args.max_mutants, "max_mutants"),
+        "candidates": eff(args.candidates, "candidates_per_round"),
+        "rounds": eff(args.rounds, "max_rounds"),
+        "flaky_runs": eff(args.flaky_runs, "flaky_runs"),
+    }
+
 
 def main() -> None:
     ap = argparse.ArgumentParser(description="TestForge experiment grid")
-    ap.add_argument("--mode", default="mock", choices=["mock", "api"])
+    ap.add_argument("--mode", default=None, choices=["mock", "api"],
+                    help="backend; default: TESTFORGE_MODE env, else mock")
+    ap.add_argument("--preset", default=None, choices=sorted(PRESETS),
+                    help="named parameter set; flags below override preset values. "
+                         "'published' = the 90-cell grids (16 mutants / 3 candidates / "
+                         "2 rounds / gate reruns x3)")
     ap.add_argument("--targets", default="all", help="'all' or comma-separated target ids")
     ap.add_argument("--variants", default="B0,B1,B2,B3,B4")
-    ap.add_argument("--flaky-runs", type=int, default=5)
-    ap.add_argument("--candidates", type=int, default=4)
-    ap.add_argument("--rounds", type=int, default=3, help="max feedback rounds for B3/B4")
-    ap.add_argument("--max-mutants", type=int, default=24)
+    ap.add_argument("--flaky-runs", type=int, default=None)
+    ap.add_argument("--candidates", type=int, default=None)
+    ap.add_argument("--rounds", type=int, default=None,
+                    help="max feedback rounds for B3/B4/B5 (B0-B2 use their own definition)")
+    ap.add_argument("--max-mutants", type=int, default=None)
     ap.add_argument("--out", default=None)
     args = ap.parse_args()
+
+    mode = args.mode or os.environ.get("TESTFORGE_MODE", "mock")
+    params = resolve_params(args)
 
     specs = load_targets()
     if args.targets != "all":
@@ -52,9 +81,18 @@ def main() -> None:
             raise SystemExit(f"unknown variant {v!r}")
 
     stamp = time.strftime("%Y%m%d_%H%M%S")
-    out_dir = PROJECT_ROOT / (args.out or f"results/exp_{args.mode}_{stamp}")
+    out_dir = PROJECT_ROOT / (args.out or f"results/exp_{mode}_{stamp}")
     out_dir.mkdir(parents=True, exist_ok=True)
     results_path = out_dir / "results.json"
+
+    probe = ForgeConfig.from_env(mode=mode)
+    print(
+        f"grid: mode={mode} preset={args.preset or 'none'} "
+        f"mutants={params['max_mutants']} candidates={params['candidates']} "
+        f"rounds={params['rounds']} flaky_runs={params['flaky_runs']} "
+        f"targets={len(specs)} variants={','.join(vnames)} model={probe.model}"
+    )
+    print(f"out -> {out_dir}")
 
     rows: list[dict] = []
     if results_path.exists():
@@ -81,23 +119,23 @@ def main() -> None:
             if (spec.target_id, vname) in done:
                 print(f"[{cell}/{total_cells}] skip {spec.target_id} {vname} (cached)")
                 continue
-            cfg = ForgeConfig.from_env(mode=args.mode)
-            cfg.flaky_runs = args.flaky_runs
-            cfg.candidates_per_round = args.candidates
-            cfg.max_mutants = args.max_mutants
+            cfg = ForgeConfig.from_env(mode=mode)
+            cfg.flaky_runs = params["flaky_runs"]
+            cfg.candidates_per_round = params["candidates"]
+            cfg.max_mutants = params["max_mutants"]
             cfg.validate()
 
             base = VARIANTS[vname]
             variant = VariantSpec(
                 name=base.name,
-                rounds=args.rounds if vname in ("B3", "B4", "B5") else base.rounds,
+                rounds=params["rounds"] if vname in ("B3", "B4", "B5") else base.rounds,
                 gate_enabled=base.gate_enabled,
                 feedback_mode=base.feedback_mode,
                 continue_on_zero_accept=base.continue_on_zero_accept,
             )
 
             t0 = time.perf_counter()
-            ledger = CostLedger(model=cfg.model)
+            ledger = CostLedger(model=cfg.model, price_source=cfg.price_source)
             client = make_client(cfg, PROJECT_ROOT)
             try:
                 res = ForgeAgent(cfg, client, ledger).run_target(spec, variant)

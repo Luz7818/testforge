@@ -1,0 +1,57 @@
+{
+  "aggregate": {
+    "B3": {
+      "ms_all": 0.8095,
+      "ms_covered": 0.8095,
+      "ms_all_median": 0.8095,
+      "cov": 100.0,
+      "acc": 1.0,
+      "cost": 0,
+      "n_priced": 0
+    }
+  },
+  "cross_model": {
+    "grid_a": "qwen3.8-27b",
+    "grid_b": "qwen3-vl-8b",
+    "variants": {
+      "B3": {
+        "ms_all_mean_a": 0.8095,
+        "ms_all_mean_b": 0.9125333333333333,
+        "delta_b_minus_a": 0.10303333333333331
+      }
+    },
+    "rq1_b1_minus_b0": {
+      "qwen3-vl-8b": {
+        "mean_uplift": 0.13625,
+        "wilcoxon_p": 0.0033,
+        "ci": {
+          "lo": 0.0778,
+          "hi": 0.1974
+        },
+        "wins_ties_losses": [
+          11,
+          7,
+          0
+        ],
+        "n": 18
+      }
+    },
+    "gate_b1_vs_b2": {
+      "qwen3-vl-8b": {
+        "b1_acc": 1.2777777777777777,
+        "b2_acc": 0.6111111111111112,
+        "ratio": 0.47826086956521746
+      }
+    },
+    "tokens": {
+      "qwen3.8-27b": {
+        "tokens_in": 2480,
+        "tokens_out": 4096
+      },
+      "qwen3-vl-8b": {
+        "tokens_in": 79896,
+        "tokens_out": 76106
+      }
+    }
+  }
+}

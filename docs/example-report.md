@@ -1,3 +1,9 @@
+<!-- Rendered from results/exp_api27b_smoke/results.json (in version control): a
+     one-cell real-endpoint run (SEU campus gateway, model qwen3.8-27b, 2026-09-29).
+     Re-render with:  python - <<'EOF'  (see REPRODUCE.md) or testforge.cli report
+     after extracting the row. Token counts are exact; no price was configured
+     for this self-hosted endpoint, so no USD figure is claimed. -->
+
 # TestForge report — `numeric.integer_sqrt` (variant B3)
 
 ## Headline
@@ -8,18 +14,18 @@
 | Mutation score (all) | 81.0% |
 | Mutation score (covered) | 81.0% |
 | Coverage of target (B0 -> B0+suite) | 83.3% -> 100.0% |
-| Candidates generated / accepted | 8 / 1 |
+| Candidates generated / accepted | 3 / 1 |
 | Feedback rounds used | 2 |
 | Final suite passes on original | True |
-| Wall time | 162s |
-| LLM calls / tokens in / out | 2 / 2357 / 2483 |
-| Estimated cost (USD) | 0.0034 |
+| Wall time | 112s |
+| LLM calls / tokens in / out | 2 / 2,480 / 4,096 |
+| Estimated cost (USD) | n/a — no price configured for this model; token counts above are exact |
 
 ## Gate rejections
 
 | Reason | Count |
 |---|---|
-| falsifiable | 7 |
+| falsifiable | 2 |
 
 ## Mutants
 
@@ -57,32 +63,37 @@ import pytest
 from numeric import integer_sqrt
 
 
-def test_integer_sqrt_negative():
+def test_negative_one_raises_valueerror():
     with pytest.raises(ValueError, match="n must be non-negative"):
         integer_sqrt(-1)
 
 
-def test_integer_sqrt_zero():
+def test_large_negative_raises_valueerror():
+    with pytest.raises(ValueError):
+        integer_sqrt(-10**12)
+
+
+def test_zero_returns_zero():
     assert integer_sqrt(0) == 0
 
 
-def test_integer_sqrt_one():
+def test_one_returns_one():
     assert integer_sqrt(1) == 1
 
 
-def test_integer_sqrt_small_positive():
+def test_two_returns_one():
     assert integer_sqrt(2) == 1
+
+
+def test_three_returns_one():
     assert integer_sqrt(3) == 1
+
+
+def test_four_returns_two():
     assert integer_sqrt(4) == 2
 
 
-def test_integer_sqrt_large_perfect_square():
-    assert integer_sqrt(100) == 10
-    assert integer_sqrt(10000) == 100
-
-
-def test_integer_sqrt_large_non_perfect_square():
-    assert integer_sqrt(99) == 9
-    assert integer_sqrt(1000) == 31
-    assert integer_sqrt(1000000) == 1000
+def test_negative_zero_not_applicable():
+    # In Python, -0 is just 0; ensure 0 is handled
+    assert integer_sqrt(0) == 0
 ```

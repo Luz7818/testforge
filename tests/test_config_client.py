@@ -35,3 +35,18 @@ def test_strip_think_passes_plain_text_through():
     assert strip_think("# ==== CANDIDATE 0 ====\nimport pytest\n") == (
         "# ==== CANDIDATE 0 ====\nimport pytest\n"
     )
+
+
+def test_from_env_respects_testforge_mode(monkeypatch):
+    # 0.2: --mode is None unless passed explicitly, so the env var works as
+    # the default for both the CLI and the experiment runner.
+    monkeypatch.delenv("DEEPSEEK_API_KEY", raising=False)
+    monkeypatch.setenv("TESTFORGE_MODE", "mock")
+    assert ForgeConfig.from_env(None).mode == "mock"
+
+
+def test_testforge_mode_api_without_key_still_stops_before_network(monkeypatch):
+    monkeypatch.delenv("DEEPSEEK_API_KEY", raising=False)
+    monkeypatch.setenv("TESTFORGE_MODE", "api")
+    with pytest.raises(SystemExit):
+        ForgeConfig.from_env(None)

@@ -14,17 +14,17 @@
 
 | 项 | 值 | 复核命令 |
 |---|---|---|
-| 测试数 | 49 个测试（全部收集成功） | `.venv/Scripts/python.exe -m pytest --collect-only`，末行 `49 tests collected` |
-| 测试全通过 | 49 项通过，退出码 0，末行 `49 passed`（本机两次实测 46.5 秒与 45.7 秒） | `.venv/Scripts/python.exe -m pytest` |
-| 静态检查 | pyflakes 0 项（它未写进依赖清单，是 `.venv` 里现成的开发工具） | `.venv/Scripts/python.exe -m pyflakes testforge experiments tests conftest.py` |
+| 测试数 | 70 个测试（全部收集成功） | `.venv/Scripts/python.exe -m pytest --collect-only`，末行 `70 tests collected` |
+| 测试全通过 | 70 项通过，退出码 0（0.2 新增预设与成本口径测试） | `.venv/Scripts/python.exe -m pytest` |
+| 静态检查 | pyflakes 0 项；它已在 `[project.optional-dependencies].dev` 里，`pip install -e .[dev]` 即恢复 | `.venv/Scripts/python.exe -m pyflakes testforge experiments tests conftest.py` |
 | CLI 可用 | 退出码 0，三个子命令 `targets` / `run` / `report` | `.venv/Scripts/python.exe -m testforge.cli --help` |
 | 基准规模 | 18 个目标函数 / 6 个模块 | `.venv/Scripts/python.exe -m testforge.cli targets`（输出 18 行） |
 | 变异体候选总数 | 197 个（未加上限时的全量） | `.venv/Scripts/python.exe -c "from testforge.benchmarks import load_targets; from testforge.analysis import inspect_target; from testforge.mutation import generate_mutants; print(sum(len(generate_mutants(inspect_target(s).module_source, s.function_name, max_mutants=10**6)) for s in load_targets()))"` |
 | 离线单格 | `numeric.integer_sqrt` B3：MS 76.2%、gen 8、acc 2，49 秒 | `.venv/Scripts/python.exe -m testforge.cli run --target numeric.integer_sqrt --variant B3 --mode mock` |
 | Mock 可复现 | 同命令跑两遍，JSON 仅 `wall_sec` 不同 | 跑两遍到两个 `--out` 目录后逐字段比较 |
-| CI | 4 格矩阵：ubuntu 3.10/3.11/3.12 + windows 3.12；步骤为 `pip install -e .`、`python -m pytest tests/ -q`、`cli targets`、`cli --version`。**这里不写"最近一次是哪个提交"**——分支每推一次它就变，写进文档同一次提交里就作废了；当前分支 HEAD 的徽章为 `passing`（复核见右）。本机没有 `gh`，但徽章与 Actions 接口对**公开仓都免认证**；要提交号再用 `/actions/runs`（匿名限 60 次/小时/IP，别拿它轮询） | `python -c "import urllib.request as u;b=u.urlopen(u.Request('https://github.com/Luz7818/testforge/workflows/CI/badge.svg',headers={'User-Agent':'Mozilla/5.0'}),timeout=30).read().decode();print('passing' in b)"` 应为 `True`；步骤读 `.github/workflows/ci.yml` |
+| CI | 5 个 job：4 格测试矩阵（ubuntu 3.10/3.11/3.12 + windows 3.12，`pip install -e .[dev]` + pytest + CLI 冒烟）、`mutation-loop-smoke`（pyflakes + 一格 Mock 全链路冒烟 + 结果断言）、`api-smoke`（仅手动触发，无密钥自动跳过）。**这里不写"最近一次是哪个提交"**——分支每推一次它就变，写进文档同一次提交里就作废了；当前分支 HEAD 的徽章为 `passing`（复核见右）。本机没有 `gh`，但徽章与 Actions 接口对**公开仓都免认证**；要提交号再用 `/actions/runs`（匿名限 60 次/小时/IP，别拿它轮询） | `python -c "import urllib.request as u;b=u.urlopen(u.Request('https://github.com/Luz7818/testforge/workflows/CI/badge.svg',headers={'User-Agent':'Mozilla/5.0'}),timeout=30).read().decode();print('passing' in b)"` 应为 `True`；步骤读 `.github/workflows/ci.yml` |
 | 运行时依赖 | 4 项：`pytest>=8.0`、`coverage>=7.4`、`openai>=1.30`、`matplotlib>=3.8` | 读 `pyproject.toml` 的 `[project] dependencies` |
-| 依赖安装位置 | 仓库根 `pyproject.toml`，无 `requirements.txt`；`testforge` 本身未装进 `.venv` | `.venv/Scripts/python.exe -m pip list`（查不到 testforge 条目） |
+| 依赖安装位置 | 仓库根 `pyproject.toml`，无 `requirements.txt`；`testforge` 已以 editable 装进 `.venv`（0.2 起），从任意 cwd 都能 `python -m testforge.cli` | `.venv/Scripts/python.exe -m pip list`（有 `testforge 0.2.0` 条目） |
 | prompt 缓存 | 本机 `llm_cache/` 78 个 JSON（`--mode api` 才会写） | `.venv/Scripts/python.exe -c "import pathlib;print(len(list(pathlib.Path('llm_cache').glob('*.json'))))"` |
 
 ## 仓库地图
@@ -46,7 +46,7 @@
 | `testforge/utils.py` | 临时工作区、子进程、diff、JSON | `workspace()`（一次性目录，退出即删）、`run_cmd()`（超时返回 -9） |
 | `benchmarks/` | 目标函数 + 每模块一份既有测试（B0） | `manifest.json` 是目标清单的唯一来源 |
 | `experiments/` | 网格、统计、图、跨网格比较 | `run_experiment.py` / `analyze.py` / `plots.py` / `compare_grids.py` |
-| `tests/` | 自身测试 | 9 个文件、49 项，见 `tests/README.md` |
+| `tests/` | 自身测试 | 11 个文件、70 项，见 `tests/README.md` |
 | `results/` | 实验产物 | 只读。`.gitignore` 用白名单只放行 `results/exp_*` 里的 JSON/MD/PNG |
 
 ## 关键约定
@@ -73,13 +73,13 @@
 8. **`n_accepted` 是最终套件里的文件数**：联合评估若整体不通过，会按“和 B0 一起跑不过”逐个剔除，
    最多三轮。所以 `n_accepted` 可能小于回路中验收过的数量。
 9. **数字口径**：README 与 `docs/report.md` 里的“36 个单元”“pooled n=36”指实验格数
-   （18 目标 × 2 轮网格），不是测试数。测试数是 49，两处不要互相引用。
+   （18 目标 × 2 轮网格），不是测试数。测试数是 70，两处不要互相引用。
 
 ## 改动后的验证
 
 | 你动了 | 必须跑 |
 |---|---|
-| `testforge/**` 任意文件 | `.venv/Scripts/python.exe -m pytest`（49 项通过，约 47 秒） |
+| `testforge/**` 任意文件 | `.venv/Scripts/python.exe -m pytest`（70 项通过，约 1 分钟） |
 | `mutation/operators.py` / `engine.py` | `.venv/Scripts/python.exe -m pytest tests/test_operators.py tests/test_engine.py`；再核对上面那条 197 的计数是否变化 |
 | `gate/` | `.venv/Scripts/python.exe -m pytest tests/test_gate.py` |
 | `agent/orchestrator.py` / `llm/client.py` | `.venv/Scripts/python.exe -m pytest tests/test_e2e.py tests/test_mock_client.py`，再跑一次离线单格看 MS 是否漂移 |
@@ -91,27 +91,28 @@
 
 ## 已知坑
 
-- 本地 `.env` 里 `DEEPSEEK_API_KEY=` 是空值。此时 `--mode api` 在建客户端之前就退出，退出码 1，
-  原文为：`mode=api requires DEEPSEEK_API_KEY (any non-empty string for unauthenticated internal
-  endpoints, see .env.example). Or run with mode=mock for the offline pipeline.`
-  不会发出任何网络请求，这是设计行为。
-- `TESTFORGE_MODE=api` 对 CLI 不起作用：`cli.py` 的 `--mode` 默认值是字符串 `"mock"`，总会显式传给
-  `from_env()`。要切后端只能写 `--mode api`。
-- 已发表的三个 90 格网格（`exp_api_full` / `exp_api_replicate` / `exp_mock_full`）用的是
-  变异体上限 16、每轮 3 候选、最多 2 轮；今天的默认值是 24 / 4 / 3。直接 `run_experiment.py --mode mock`
-  不会复现它们。复核：读对应 `results.json` 里 `mutants_total` 的最大值与 `n_generated` 的最大值。
-- `results/exp_api_full/analysis.md` 与 `results/exp_mock_full/analysis.md` 缺当前 `analyze.py` 会写的
-  两节（`LLM usage per variant`、`Per-target uplift`）。已有数字未变，只是文件比脚本旧。
+- 本地 `.env` 现已配置 SEU 校园网关（`https://openapi.seu.edu.cn/v1`，模型 `qwen3.8-27b`，0.3 网格的
+  真实后端）。该文件不入库；换机器要重配，或只跑 Mock。`DEEPSEEK_API_KEY` 为空时 `--mode api` 在建
+  客户端之前就退出（退出码 1），不会带着空凭据发请求，这是设计行为。
+- `TESTFORGE_MODE` 从 0.2 起对 CLI 与网格脚本生效：`--mode` 缺省时取该环境变量，再退回 `mock`。
+- 已发表的三个 90 格网格（`exp_api_full` / `exp_api_replicate` / `exp_mock_full`）用的是变异体上限 16、
+  每轮 3 候选、最多 2 轮、门禁重跑 ×3；默认值是 24 / 4 / 3 / ×5。0.2 起用 `--preset published` 固化，
+  B5 消融网格对应 `--preset published-b5`；指纹见 `testforge/presets.py`，复跑验收见 REPRODUCE.md。
+- `results/exp_api_full/` 与 `results/exp_mock_full/` 里的 `analysis.md` 是旧脚本产物（缺两节），
+  当前脚本的重算结果已另存为同目录 `analysis_v2.md` / `analysis_v2.json`（旧文件未动）。
+  重算版把 v0.1 占位单价算出的美元列按“未定价”处理，只保留精确 token 数。
 - 仓库的 `addopts` 已含 `-q`，再敲 `-q` 就变成 `-qq`，只打印一行圆点、看不到通过数。要数字行就用
   `.venv/Scripts/python.exe -m pytest`。
 - `plots.py` 的标题标签取自 `cost.model`。Mock 运行里 `cfg.model` 仍是默认 `deepseek-chat`，所以
   mock 网格的热力图标题会写成 `LLM: deepseek-chat`；跑 mock 网格时显式传 `--label "mock grid"`。
 - 两个 `--out` 参数（CLI 与 `run_experiment.py`）都以仓库根为基准拼接，不是当前工作目录。
+  0.2 起本包已 editable 安装，从非仓库根跑 `python -m testforge.cli` 不再依赖 cwd；`--module`
+  这类用户文件路径仍按 cwd 解析。
 - `results/` 下只有 `exp_*` 目录的 JSON/MD/PNG 被 git 跟踪；`results/demo/`、`results/demo_owncode/`、
   `results/api_smoke/`、`results/*.log` 是本机历史运行残留，新克隆的仓库里没有。
   `docs/example-report.md` 就是 `results/api_smoke/numeric.integer_sqrt__B3.json` 的渲染结果，
   克隆后无法重跑该核对。
-- `docs/report.md` 末尾“36 个自测”与 `docs/interview.md` 的“全管线 36 个自测通过”是旧数字（现为 49）。
+- `docs/report.md` 末尾“36 个自测”与 `docs/interview.md` 的“全管线 36 个自测通过”是旧数字（现为 70）。
   这两份按要求保持原样，引用测试数时以本文件为准。
 - 加一个新目标函数会让 `tests/test_inspector.py` 里“18 个目标”的断言失败——那是有意的登记闸门，
   改基准就要同时改断言。
@@ -126,4 +127,5 @@
 - 不要把 `zlib.crc32` 换成内建 `hash()`（`orchestrator.py` 的两处、`llm/client.py` 里 Mock 的测试名
   后缀）：内建 hash 按进程加盐，换一次进程就换一批变异体，历史网格全部失去可比性。
 - 不要在 README 与手册里另写一套数字。测试数、命令、路径的口径改到本文件。
-- 不要为了“看起来有 CI”增加打包/发布流水线；CI 只做安装校验、测试与 CLI 冒烟。
+- CI 只做安装校验、测试、CLI 冒烟、pyflakes 与一格 Mock 全链路冒烟（`mutation-loop-smoke`），
+  外加一个需手动触发、无密钥自动跳过的 `api-smoke`；不要往里加打包/发布流水线。

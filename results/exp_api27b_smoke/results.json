@@ -1,0 +1,254 @@
+[
+  {
+    "target_id": "numeric.integer_sqrt",
+    "variant": "B3",
+    "mutants_total": 21,
+    "killed_final": 17,
+    "mutants_covered": 21,
+    "killed_covered": 17,
+    "b0_killed_final": 12,
+    "n_generated": 3,
+    "n_accepted": 1,
+    "n_repaired": 1,
+    "rejection_reasons": {
+      "falsifiable": 2
+    },
+    "flaky_rejects": 0,
+    "rounds_used": 2,
+    "n_final_tests": 1,
+    "final_suite_passes": true,
+    "coverage_pct": 100.0,
+    "b0_coverage_pct": 83.3,
+    "llm_calls": 2,
+    "tokens_in": 2480,
+    "tokens_out": 4096,
+    "cost_usd": null,
+    "price_source": "",
+    "wall_sec": 111.5,
+    "accepted_codes": [
+      "import pytest\n\nfrom numeric import integer_sqrt\n\n\ndef test_negative_one_raises_valueerror():\n    with pytest.raises(ValueError, match=\"n must be non-negative\"):\n        integer_sqrt(-1)\n\n\ndef test_large_negative_raises_valueerror():\n    with pytest.raises(ValueError):\n        integer_sqrt(-10**12)\n\n\ndef test_zero_returns_zero():\n    assert integer_sqrt(0) == 0\n\n\ndef test_one_returns_one():\n    assert integer_sqrt(1) == 1\n\n\ndef test_two_returns_one():\n    assert integer_sqrt(2) == 1\n\n\ndef test_three_returns_one():\n    assert integer_sqrt(3) == 1\n\n\ndef test_four_returns_two():\n    assert integer_sqrt(4) == 2\n\n\ndef test_negative_zero_not_applicable():\n    # In Python, -0 is just 0; ensure 0 is handled\n    assert integer_sqrt(0) == 0"
+    ],
+    "mutant_summary": [
+      {
+        "mid": "M001",
+        "operator": "ROR",
+        "line": 24,
+        "description": "ROR @ line 24: relational operator Lt -> GtE",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M002",
+        "operator": "CRN",
+        "line": 24,
+        "description": "CRN @ line 24: numeric 0 -> 1",
+        "killed_by_b0": false,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M003",
+        "operator": "ROR",
+        "line": 26,
+        "description": "ROR @ line 26: relational operator Lt -> GtE",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M004",
+        "operator": "CRN",
+        "line": 26,
+        "description": "CRN @ line 26: numeric 2 -> 3",
+        "killed_by_b0": false,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M005",
+        "operator": "RTN",
+        "line": 27,
+        "description": "RTN @ line 27: return value -> None",
+        "killed_by_b0": false,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M006",
+        "operator": "CRN",
+        "line": 28,
+        "description": "CRN @ line 28: numeric 1 -> 2",
+        "killed_by_b0": false,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M007",
+        "operator": "AOR",
+        "line": 28,
+        "description": "AOR @ line 28: arithmetic operator Add -> Sub",
+        "killed_by_b0": false,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M008",
+        "operator": "AOR",
+        "line": 28,
+        "description": "AOR @ line 28: arithmetic operator FloorDiv -> Div",
+        "killed_by_b0": false,
+        "killed_by_final": false,
+        "covered": true
+      },
+      {
+        "mid": "M009",
+        "operator": "CRN",
+        "line": 28,
+        "description": "CRN @ line 28: numeric 2 -> 3",
+        "killed_by_b0": false,
+        "killed_by_final": false,
+        "covered": true
+      },
+      {
+        "mid": "M010",
+        "operator": "CRN",
+        "line": 28,
+        "description": "CRN @ line 28: numeric 1 -> 2",
+        "killed_by_b0": false,
+        "killed_by_final": false,
+        "covered": true
+      },
+      {
+        "mid": "M011",
+        "operator": "ROR",
+        "line": 29,
+        "description": "ROR @ line 29: relational operator Lt -> GtE",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M012",
+        "operator": "AOR",
+        "line": 30,
+        "description": "AOR @ line 30: arithmetic operator FloorDiv -> Div",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M013",
+        "operator": "AOR",
+        "line": 30,
+        "description": "AOR @ line 30: arithmetic operator Add -> Sub",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M014",
+        "operator": "AOR",
+        "line": 30,
+        "description": "AOR @ line 30: arithmetic operator Add -> Sub",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M015",
+        "operator": "CRN",
+        "line": 30,
+        "description": "CRN @ line 30: numeric 1 -> 2",
+        "killed_by_b0": false,
+        "killed_by_final": false,
+        "covered": true
+      },
+      {
+        "mid": "M016",
+        "operator": "CRN",
+        "line": 30,
+        "description": "CRN @ line 30: numeric 2 -> 3",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M017",
+        "operator": "ROR",
+        "line": 31,
+        "description": "ROR @ line 31: relational operator LtE -> Gt",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M018",
+        "operator": "AOR",
+        "line": 31,
+        "description": "AOR @ line 31: arithmetic operator Mult -> Div",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M019",
+        "operator": "AOR",
+        "line": 34,
+        "description": "AOR @ line 34: arithmetic operator Sub -> Add",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M020",
+        "operator": "CRN",
+        "line": 34,
+        "description": "CRN @ line 34: numeric 1 -> 2",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      },
+      {
+        "mid": "M021",
+        "operator": "RTN",
+        "line": 35,
+        "description": "RTN @ line 35: return value -> None",
+        "killed_by_b0": true,
+        "killed_by_final": true,
+        "covered": true
+      }
+    ],
+    "gate_log": [
+      {
+        "cid": "R0C1",
+        "accepted": true,
+        "new_kills": 5
+      },
+      {
+        "cid": "R0C2",
+        "accepted": false,
+        "reasons": [
+          "falsifiable"
+        ]
+      },
+      {
+        "cid": "R0C3",
+        "accepted": false,
+        "reasons": [
+          "falsifiable"
+        ]
+      }
+    ],
+    "ms_all": 0.8095,
+    "ms_covered": 0.8095,
+    "cost": {
+      "model": "qwen3.8-27b",
+      "calls": 2,
+      "tokens_in": 2480,
+      "tokens_out": 4096,
+      "cost_usd": null,
+      "price_source": ""
+    }
+  }
+]

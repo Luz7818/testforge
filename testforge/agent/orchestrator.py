@@ -166,7 +166,8 @@ class ForgeAgent:
             res.llm_calls += 1
             res.tokens_in += resp.tokens_in
             res.tokens_out += resp.tokens_out
-            res.cost_usd += resp.cost_usd
+            if resp.cost_usd is not None:
+                res.cost_usd = (res.cost_usd or 0.0) + resp.cost_usd
 
             codes = resp.split_candidates()[: cfg.candidates_per_round]
             accepted_this_round = 0
@@ -322,6 +323,7 @@ class ForgeAgent:
         res.rejection_reasons = dict(reasons)
         res.flaky_rejects = flaky_rejects
         res.rounds_used = rounds_used
+        res.price_source = self.ledger.price_source
         res.wall_sec = round(time.perf_counter() - t0, 1)
         return res
 

@@ -5,6 +5,7 @@ __pycache__/
 .coverage
 .env
 llm_cache/
+llm_cache_*/
 results/**
 !results/**/
 !results/exp_*/results.json
@@ -14,3 +15,8 @@ results/**
 !results/exp_*/compare.md
 !results/exp_*/plots/
 !results/exp_*/plots/*.png
+!results/exp_*/analysis_v2.md
+!results/exp_*/analysis_v2.json
+
+# editable install artifact
+*.egg-info/

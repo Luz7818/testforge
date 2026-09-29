@@ -22,8 +22,15 @@ def render_target_report(res: VariantResult, cost_summary: dict | None = None) -
     lines.append(f"| Final suite passes on original | {res.final_suite_passes} |")
     lines.append(f"| Wall time | {res.wall_sec:.0f}s |")
     if cost_summary:
-        lines.append(f"| LLM calls / tokens in / out | {cost_summary['calls']} / {cost_summary['tokens_in']} / {cost_summary['tokens_out']} |")
-        lines.append(f"| Estimated cost (USD) | {cost_summary['cost_usd']:.4f} |")
+        lines.append(f"| LLM calls / tokens in / out | {cost_summary['calls']} / {cost_summary['tokens_in']:,} / {cost_summary['tokens_out']:,} |")
+        cost = cost_summary.get("cost_usd")
+        if cost is not None:
+            lines.append(f"| Estimated cost (USD) | {cost:.4f} |")
+            source = cost_summary.get("price_source", "")
+            if source:
+                lines.append(f"| Price source | {source} |")
+        else:
+            lines.append("| Estimated cost (USD) | n/a — no price configured for this model; token counts above are exact |")
     lines.append("")
 
     if res.rejection_reasons:
@@ -66,9 +73,10 @@ def render_summary(rows: list[VariantResult]) -> str:
     lines.append("| Target | Variant | MS (all) | MS (covered) | Cov % | Gen | Acc | Cost USD |")
     lines.append("|---|---|---|---|---|---|---|---|")
     for r in rows:
+        cost = "n/a" if r.cost_usd is None else f"{r.cost_usd:.4f}"
         lines.append(
             f"| {r.target_id} | {r.variant} | {r.ms_all:.1%} | {r.ms_covered:.1%} "
-            f"| {r.coverage_pct:.0f} | {r.n_generated} | {r.n_accepted} | {r.cost_usd:.4f} |"
+            f"| {r.coverage_pct:.0f} | {r.n_generated} | {r.n_accepted} | {cost} |"
         )
     lines.append("")
     return "\n".join(lines)

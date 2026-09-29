@@ -121,7 +121,104 @@ def fmt_pct(x):
     return f"{100 * x:.1f}%"
 
 
-def analyze(rows: list[dict], out_dir: Path) -> None:
+def priced(rows: list[dict]) -> list[dict]:
+    """Rows whose cost carries explicit price provenance. Legacy v0.1 archives
+    contain USD numbers computed from undocumented placeholder rates — they are
+    treated as unpriced so a stale figure can never masquerade as sourced."""
+    out = []
+    for r in rows:
+        cost = r.get("cost", {})
+        if cost.get("cost_usd") is not None and cost.get("price_source"):
+            out.append(r)
+    return out
+
+
+def grid_label(rows: list[dict]) -> str:
+    models = sorted({r.get("cost", {}).get("model", "") for r in rows if "error" not in r})
+    model = next((m for m in models if m and m != "mock"), models[0] if models else "")
+    return model or "grid"
+
+
+def cross_model_section(rows_a: list[dict], rows_b: list[dict], label_b: str | None = None):
+    """Paired comparison of two grids (e.g. two model scales) on the shared
+    (target, variant) cells. Returns (markdown lines, json block)."""
+    la, lb = grid_label(rows_a), label_b or grid_label(rows_b)
+    ok_a = [r for r in rows_a if "error" not in r]
+    ok_b = [r for r in rows_b if "error" not in r]
+    variants = sorted({r["variant"] for r in ok_a} & {r["variant"] for r in ok_b})
+
+    lines: list[str] = [f"## Cross-model comparison: {la} vs {lb}\n"]
+    lines.append(f"Grids paired on the (target, variant) cells present in both; grid A = {la} (this analysis), grid B = {lb}.\n")
+    lines.append("| Variant | mean MS(all) A | mean MS(all) B | Δ (B − A) |")
+    lines.append("|---|---|---|---|")
+    variant_json: dict = {}
+    for v in variants:
+        ms_a = _mean([r["ms_all"] for r in ok_a if r["variant"] == v])
+        ms_b = _mean([r["ms_all"] for r in ok_b if r["variant"] == v])
+        lines.append(f"| {v} | {fmt_pct(ms_a)} | {fmt_pct(ms_b)} | {ms_b - ms_a:+.1%} |")
+        variant_json[v] = {"ms_all_mean_a": ms_a, "ms_all_mean_b": ms_b, "delta_b_minus_a": ms_b - ms_a}
+    lines.append("")
+
+    cmp_json: dict = {"grid_a": la, "grid_b": lb, "variants": variant_json}
+
+    def _rq_block(name: str, rows: list[dict], base: str, treat: str) -> dict | None:
+        pairs = paired(rows, treat, base, "ms_all")
+        diffs = [p["diff"] for p in pairs]
+        if not diffs:
+            return None
+        stats = wilcoxon_signed_rank(diffs)
+        ci = bootstrap_ci(diffs)
+        wins = sum(d > 1e-9 for d in diffs)
+        ties = sum(abs(d) <= 1e-9 for d in diffs)
+        losses = sum(d < -1e-9 for d in diffs)
+        lines.append(f"- **{name} — {treat} vs {base}**: mean uplift {_mean(diffs):+.1%} "
+                     f"(median {_median(diffs):+.1%}); {wins}/{ties}/{losses} win/tie/loss; "
+                     f"Wilcoxon p={stats['p']}, bootstrap 95% CI [{ci['lo']:+.1%}, {ci['hi']:+.1%}] (n={len(diffs)})")
+        return {"mean_uplift": _mean(diffs), "wilcoxon_p": stats["p"], "ci": ci,
+                "wins_ties_losses": [wins, ties, losses], "n": len(diffs)}
+
+    lines.append("### Generation uplift per grid (RQ1, B1 − B0)\n")
+    rq1 = {}
+    for name, rows in ((la, rows_a), (lb, rows_b)):
+        block = _rq_block(name, rows, "B0", "B1")
+        if block:
+            rq1[name] = block
+    lines.append("")
+    cmp_json["rq1_b1_minus_b0"] = rq1
+
+    lines.append("### Gate contribution per grid (RQ3, accepted tests/target)\n")
+    lines.append("| Grid | B1 accepted/target | B2 accepted/target | ratio B2/B1 |")
+    lines.append("|---|---|---|---|")
+    gate_json = {}
+    for name, rows in ((la, rows_a), (lb, rows_b)):
+        b1 = [r["n_accepted"] for r in rows if r.get("variant") == "B1" and "error" not in r]
+        b2 = [r["n_accepted"] for r in rows if r.get("variant") == "B2" and "error" not in r]
+        if b1 and b2:
+            m1, m2 = _mean(b1), _mean(b2)
+            ratio = m2 / m1 if m1 > 0 else float("nan")
+            lines.append(f"| {name} | {m1:.2f} | {m2:.2f} | {ratio:.2f} |")
+            gate_json[name] = {"b1_acc": m1, "b2_acc": m2, "ratio": ratio}
+    lines.append("")
+    cmp_json["gate_b1_vs_b2"] = gate_json
+
+    tok = {}
+    for name, rows in ((la, rows_a), (lb, rows_b)):
+        t_in = sum(r.get("cost", {}).get("tokens_in", 0) for r in rows if "error" not in r)
+        t_out = sum(r.get("cost", {}).get("tokens_out", 0) for r in rows if "error" not in r)
+        if t_in or t_out:
+            tok[name] = {"tokens_in": t_in, "tokens_out": t_out}
+    if tok:
+        lines.append("### LLM token totals per grid\n")
+        lines.append("| Grid | tokens in | tokens out |")
+        lines.append("|---|---|---|")
+        for name, t in tok.items():
+            lines.append(f"| {name} | {t['tokens_in']:,} | {t['tokens_out']:,} |")
+        lines.append("")
+        cmp_json["tokens"] = tok
+    return lines, cmp_json
+
+
+def analyze(rows: list[dict], out_dir: Path, compare_rows: list[dict] | None = None, compare_label: str | None = None) -> None:
     variants = sorted({r["variant"] for r in rows if "error" not in r})
     n_targets = len({r["target_id"] for r in rows if "error" not in r})
     errors = [r for r in rows if "error" in r]
@@ -141,25 +238,35 @@ def analyze(rows: list[dict], out_dir: Path) -> None:
 
     # ---- aggregate table ------------------------------------------------
     lines.append("## Aggregate results\n")
-    lines.append("| Variant | mean MS(all) | median | mean MS(covered) | mean cov % | mean tests accepted | total cost USD |")
+    lines.append("| Variant | mean MS(all) | median | mean MS(covered) | mean cov % | mean tests accepted | USD total (priced runs only) |")
     lines.append("|---|---|---|---|---|---|---|")
     agg = {}
     for v in variants:
         rs = [r for r in rows if r.get("variant") == v and "error" not in r]
+        prs = priced(rs)
         agg[v] = {
             "ms_all": [_mean([r["ms_all"] for r in rs])],
             "ms_covered": _mean([r["ms_covered"] for r in rs]),
             "ms_all_median": _median([r["ms_all"] for r in rs]),
             "cov": _mean([r["coverage_pct"] for r in rs]),
             "acc": _mean([r["n_accepted"] for r in rs]),
-            "cost": sum(r.get("cost", {}).get("cost_usd", 0.0) for r in rs),
+            "cost": sum(r["cost"]["cost_usd"] for r in prs),
+            "n_priced": len(prs),
         }
+        cost_cell = f"{agg[v]['cost']:.4f}" if prs else "—"
         lines.append(
             f"| {v} | {fmt_pct(agg[v]['ms_all'][0])} | {fmt_pct(agg[v]['ms_all_median'])} "
             f"| {fmt_pct(agg[v]['ms_covered'])} | {agg[v]['cov']:.1f} | {agg[v]['acc']:.2f} "
-            f"| {agg[v]['cost']:.4f} |"
+            f"| {cost_cell} |"
         )
     lines.append("")
+    lines.append(
+        "The USD column only sums cells whose run carried an explicit price source "
+        "(TESTFORGE_PRICE_* env or a pricing.json entry; see the price source in the "
+        "per-cell ledger). Legacy archives priced with undocumented placeholder rates "
+        "count as unpriced here — their exact token totals are in "
+        "`LLM usage per variant` below.\n"
+    )
 
     # ---- LLM usage per variant -------------------------------------------
     gen_variants = [v for v in variants if any(
@@ -230,9 +337,25 @@ def analyze(rows: list[dict], out_dir: Path) -> None:
             "bootstrap_ci": ci,
         }
         if rq == "RQ2":
-            costs = [r.get("cost", {}).get("cost_usd", 0.0) for r in rows if r.get("variant") == treat and "error" not in r]
-            lines.append(f"Cost of {treat}: total ${sum(costs):.4f} over {n_targets} targets "
-                         f"(mean ${_mean(costs) if costs else 0:.4f}/target; token counts are exact in the ledger, price is configurable).\n")
+            rs = [r for r in rows if r.get("variant") == treat and "error" not in r]
+            prs = priced(rs)
+            t_in = sum(r.get("cost", {}).get("tokens_in", 0) for r in rs)
+            t_out = sum(r.get("cost", {}).get("tokens_out", 0) for r in rs)
+            lines.append(
+                f"LLM usage of {treat}: {sum(r.get('cost', {}).get('calls', 0) for r in rs)} calls, "
+                f"{t_in:,} input / {t_out:,} output tokens over {n_targets} targets — token counts are exact."
+            )
+            if prs:
+                src = prs[0].get("cost", {}).get("price_source", "unspecified source")
+                lines.append(
+                    f"Cost of {treat}: ${sum(r['cost']['cost_usd'] for r in prs):.4f} over "
+                    f"{len(prs)} priced targets (price source: {src}).\n"
+                )
+            else:
+                lines.append(
+                    "No price was configured for this run, so no USD figure is derived; "
+                    "the token counts above are the cost accounting.\n"
+                )
 
     # ---- gate behaviour ----------------------------------------------------
     lines.append("## Gate behaviour (generation variants)\n")
@@ -255,6 +378,12 @@ def analyze(rows: list[dict], out_dir: Path) -> None:
         )
     lines.append("")
 
+    # ---- cross-model comparison (external validity) ------------------------
+    if compare_rows is not None:
+        section, cmp_json = cross_model_section(rows, compare_rows, compare_label)
+        lines.extend(section)
+        analysis["cross_model"] = cmp_json
+
     (out_dir / "analysis.md").write_text("\n".join(lines), encoding="utf-8")
     write_json(out_dir / "analysis.json", analysis)
     print(f"analysis -> {out_dir / 'analysis.md'}")
@@ -263,10 +392,18 @@ def analyze(rows: list[dict], out_dir: Path) -> None:
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--exp", required=True, help="experiment directory containing results.json")
+    ap.add_argument("--compare-with", default=None,
+                    help="second experiment directory; adds a cross-model comparison section")
+    ap.add_argument("--compare-label", default=None,
+                    help="label for the compared grid (default: its model id from the ledger)")
     args = ap.parse_args()
     exp_dir = Path(args.exp)
     rows = json.loads((exp_dir / "results.json").read_text(encoding="utf-8"))
-    analyze(rows, exp_dir)
+    compare_rows = None
+    if args.compare_with:
+        cdir = Path(args.compare_with)
+        compare_rows = json.loads((cdir / "results.json").read_text(encoding="utf-8"))
+    analyze(rows, exp_dir, compare_rows=compare_rows, compare_label=args.compare_label)
 
 
 if __name__ == "__main__":

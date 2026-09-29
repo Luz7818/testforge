@@ -56,6 +56,8 @@ def _spec_from_args(args) -> TargetSpec:
 
 
 def _cmd_run(args) -> None:
+    # args.mode is None unless given explicitly, so TESTFORGE_MODE works as
+    # the default (from_env resolves None -> env -> "mock").
     cfg = ForgeConfig.from_env(mode=args.mode)
     if args.rounds is not None:
         cfg.max_rounds = args.rounds
@@ -72,7 +74,7 @@ def _cmd_run(args) -> None:
 
     rows = []
     for spec in specs:
-        ledger = CostLedger(model=cfg.model)
+        ledger = CostLedger(model=cfg.model, price_source=cfg.price_source)
         client = make_client(cfg, PROJECT_ROOT)
         agent = ForgeAgent(cfg, client, ledger)
         res = agent.run_target(spec, variant)
@@ -123,7 +125,8 @@ def main(argv=None) -> None:
     p_run.add_argument("--tests", help="optional path to the existing pytest file for this module (baseline B0)")
     p_run.add_argument("--all", action="store_true", help="run every benchmark target")
     p_run.add_argument("--variant", default="B3", help="B0 | B1 | B2 | B3 | B4 | B5")
-    p_run.add_argument("--mode", default="mock", choices=["mock", "api"])
+    p_run.add_argument("--mode", default=None, choices=["mock", "api"],
+                       help="backend; default: TESTFORGE_MODE env, else mock")
     p_run.add_argument("--rounds", type=int, default=None, help="override max feedback rounds")
     p_run.add_argument("--candidates", type=int, default=None, help="override candidates per round")
     p_run.add_argument("--mutants", type=int, default=None, help="override max mutants per target")

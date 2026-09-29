@@ -21,7 +21,8 @@
 
 | 参数 | 作用 | 默认 |
 |---|---|---|
-| `--mode` | `mock`（离线）或 `api`（真实端点） | `mock` |
+| `--mode` | `mock`（离线）或 `api`（真实端点）；省略时取 `TESTFORGE_MODE`，再退 `mock` | `mock` |
+| `--preset` | 命名参数集：`published` = 已发表三张 90 格网格（16/3/2 + 门禁重跑 ×3），`published-b5` = B5 消融网格（24/4/4）；显式旗标 > 预设 > 默认 | 无 |
 | `--targets` | `all` 或逗号分隔目标 id | `all` |
 | `--variants` | 逗号分隔变体名，未定义的直接报错 | `B0,B1,B2,B3,B4` |
 | `--max-mutants` | 每目标变异体上限（超过按算子分层采样） | 24 |
@@ -30,7 +31,7 @@
 | `--flaky-runs` | 门禁在原代码上重复几次 | 5 |
 | `--out` | 输出目录，相对仓库根解析 | `results/exp_<mode>_<时间戳>` |
 
-`analyze.py` 与 `plots.py` 都只接 `--exp <目录>`（`plots.py` 另有 `--label`）；
+`analyze.py` 接 `--exp <目录>`，另有 `--compare-with <另一网格目录>` 追加跨模型对比节；`plots.py` 接 `--exp`（另有 `--label`）；
 `compare_grids.py` 接 `--a`、`--b`、`--treat`、`--base`。
 
 ## 冒烟：一次完整的离线实验链
@@ -76,9 +77,10 @@
 
 - 不要把 `analyze.py` 或 `plots.py` 指向 `results/` 下的已发表网格：它们会就地覆写
   `analysis.md`、`analysis.json`、`plots/*.png`、`compare.md`。要重算就先把网格目录拷到临时位置。
-- 不要用当前默认参数去“复现”已发表的三张 90 格网格：那三张用的是
-  `--max-mutants 16 --candidates 3 --rounds 2`，与默认的 24 / 4 / 3 不同（复核：读对应
-  `results.json` 里 `mutants_total` 与 `n_generated` 的最大值）。
+- 不要用当前默认参数去“复现”已发表的三张 90 格网格：那三张用的是 16 变异体 / 每轮 3 候选 /
+  2 轮 / 门禁重跑 ×3，与默认的 24 / 4 / 3 不同。0.2 起用 `--preset published` 固化（指纹与
+  数值见 `testforge/presets.py` 与仓库根 REPRODUCE.md；复核：读对应 `results.json` 里
+  `mutants_total` 与 `n_generated` 的最大值）。
 - 不要给 `analysis.json`、`compare.md` 加构建时间戳或本机绝对路径：它们进版本库，
   加了就会每次重跑都产生幻影 diff。
 - `run_experiment.py` 末尾用 `VariantResult(**{...})` 从 JSON 反推出对象再渲染 `summary.md`，

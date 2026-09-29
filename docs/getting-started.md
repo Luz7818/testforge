@@ -13,7 +13,7 @@
 | 第三方依赖 | `pytest`、`coverage`、`openai`、`matplotlib` 四项（清单在 `pyproject.toml`） | `.venv/Scripts/python.exe -m pip list` |
 | 网络 | 离线 Mock 全流程用不到。`--mode api` 才需要能访问端点 | — |
 | 密钥 | 只有 `--mode api` 需要，见第 4 节；本机 `.env` 里那一项是空的也能跑 Mock | — |
-| 安装本包 | 不需要。命令都从仓库根以 `.venv/Scripts/python.exe -m testforge.cli ...` 或 `... experiments/<脚本>.py` 运行 | `.venv/Scripts/python.exe -m pip list` 查不到 `testforge` 条目 |
+| 安装本包 | 推荐执行 `pip install -e .[dev]`：装上后从任意目录都能 `python -m testforge.cli`，且 `pyflakes` 门禁随依赖组恢复（0.1 版它不在任何依赖组里，重建 venv 会悄悄丢掉）。不装也能从仓库根用 `python -m ...` 跑 | `pip list` 里有 `testforge` 条目；`python -m pyflakes testforge experiments tests conftest.py` 退出码 0 |
 
 依赖没装齐时的最小需求分两档：只跑 `run`/`report` 需要 `pytest` 与 `coverage`；`openai` 只在
 `--mode api` 时才被导入（`testforge/llm/client.py` 里是懒加载）；`matplotlib` 只被
@@ -94,7 +94,7 @@ Mock 后端是种子化的，不掺随机：同一条 `run` 命令跑两遍，�
 | `TESTFORGE_EXTRA_BODY` | 一段 JSON，合并进每次请求体（服务端私有开关） | 不附加任何参数 |
 | `TESTFORGE_MAX_TOKENS` | 单次响应长度上限；一次响应要装下 K 个候选 | 默认 2048，候选数一多尾部候选会被截断 |
 | `TESTFORGE_CACHE_DIR` | prompt 缓存目录 | 默认写到仓库根 `llm_cache/` |
-| `TESTFORGE_MODE` | 只在代码里调 `ForgeConfig.from_env()` 且不传 `mode` 时才起作用 | CLI 总会把 `--mode` 显式传进去，所以写了也没用 |
+| `TESTFORGE_MODE` | 不显式传 `--mode` 时的后端默认值 | 0.2 起 CLI 与网格脚本都会尊重它：省略 `--mode` 即取该变量，再退回 `mock` |
 
 仓库根的 `.env` 在导入 `testforge.config` 时自动读取，优先级是 shell 导出 > `.env` > 代码默认值，
 所以导出过的变量不会被文件覆盖。复制 `.env.example` 为 `.env` 再填即可。
@@ -107,6 +107,8 @@ Mock 后端是种子化的，不掺随机：同一条 `run` 命令跑两遍，�
 
 同一条 prompt 第二次跑会命中 `llm_cache/`：账目里 `cached` 为真、零 API 消耗、逐字节重放。
 要一份独立的新采样，就把 `TESTFORGE_CACHE_DIR` 指到一个空目录——已发表的两轮真实网格就是这么得到的。
+缓存可以整目录删除（不在版本控制内）：删后重跑会重新请求端点得到新采样，历史归档不受影响；
+账目里的美元数按当时配置的单价在读取时重算，纠正单价不需要作废缓存。
 
 ## 5. 跑一份自己的代码
 
@@ -213,10 +215,13 @@ plots -> ..\tf_smoke\plots
 | `--candidates` | 每轮向模型要几个候选 | 4 |
 | `--rounds` | B3/B4/B5 的最大反馈轮数 | 3 |
 | `--flaky-runs` | 门禁在原代码上重复几次 | 5 |
+| `--preset` | 命名参数集，先于上面各旗标、后于默认值生效 | 无 |
 | `--out` | 输出目录，相对仓库根解析 | `results/exp_<模式>_<时间戳>` |
 
-想复现已发表的那三张 90 格网格，参数得写全：它们用的是 `--max-mutants 16 --candidates 3 --rounds 2`，
-与今天的默认值不同。
+想复现已发表的那三张 90 格网格，用 `--preset published`（16 变异体 / 每轮 3 候选 / 2 轮反馈 /
+门禁重跑 ×3，即旧版要手写 `--max-mutants 16 --candidates 3 --rounds 2 --flaky-runs 3` 的那组）；
+B5 消融网格对应 `--preset published-b5`（24 / 4 / 4）。显式旗标 > 预设 > 默认值，启动时打印的
+首行就是本次生效参数。全部命令与逐步判据见仓库根 [REPRODUCE.md](../REPRODUCE.md)。
 
 ## 7. 想改它
 

@@ -6,7 +6,13 @@
 results/
 
 # LLM prompt 缓存：文件名是 prompt 的 sha256，内容是从端点重放回来的响应
+# （llm_cache_* 是给某次运行指定独立缓存目录时产生的变体，性质相同）
 llm_cache/
+llm_cache_27b_full   # 0.3 网格 1 的独立 prompt 缓存（运行时产物，性质同 llm_cache）
+llm_cache_27b_rq2    # 0.3 网格 2 的独立 prompt 缓存（运行时产物，性质同 llm_cache）
+
+# editable 安装（pip install -e .）生成的构建元数据
+testforge.egg-info
 
 # 兜底：本机 Python 直接写在根上的字节码缓存目录（检查脚本也内置跳过它）
 __pycache__

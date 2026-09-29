@@ -58,6 +58,22 @@ def _default_workers() -> int:
     return max(2, min(8, cpus - 2))
 
 
+def _load_price_table() -> dict:
+    """Read pricing.json at the repo root -> {model: entry}. Missing, empty or
+    malformed file means "no prices configured", never an error."""
+    path = PROJECT_ROOT / "pricing.json"
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return {}
+    if not isinstance(data, dict):
+        return {}
+    prices = data.get("prices")
+    if not isinstance(prices, list):
+        return {}
+    return {p["model"]: p for p in prices if isinstance(p, dict) and "model" in p}
+
+
 @dataclass
 class ForgeConfig:
     """All knobs of the agent. Variants in the experiment section override
@@ -101,11 +117,20 @@ class ForgeConfig:
 
     workers: int = field(default_factory=_default_workers)
 
-    # Cost accounting (USD per 1M tokens). Placeholder estimates — update from
-    # the provider pricing page before quoting absolute numbers; token counts
-    # in the ledger are always exact.
-    price_input_per_m: float = 0.27
-    price_output_per_m: float = 1.10
+    # Cost accounting. Token counts in the ledger are always exact; a USD
+    # figure is produced ONLY when a price is explicitly provided, so a
+    # missing price shows up as "no dollar figure" instead of a fake $0.
+    # Sources, in precedence order:
+    #   1. TESTFORGE_PRICE_INPUT_PER_M / TESTFORGE_PRICE_OUTPUT_PER_M env
+    #      (price_source records "env override")
+    #   2. a matching "model" entry in pricing.json at the repo root
+    #      (price_source records that entry's "source" and "effective" date)
+    # v0.1 hard-coded placeholder prices here, which multiplied exact token
+    # counts into seemingly-exact dollar figures — archived results from that
+    # era carry no price provenance and are reported as unpriced.
+    price_input_per_m: float | None = None
+    price_output_per_m: float | None = None
+    price_source: str = ""
 
     # Cache for LLM responses so re-runs are free and reproducible.
     cache_dir: str = ""  # empty -> <project>/llm_cache when mode == "api"
@@ -125,6 +150,21 @@ class ForgeConfig:
         # unchanged cache replays responses bit-for-bit, which is exactly what
         # a replication run must avoid.
         cfg.cache_dir = os.environ.get("TESTFORGE_CACHE_DIR", "")
+        pin = os.environ.get("TESTFORGE_PRICE_INPUT_PER_M")
+        pout = os.environ.get("TESTFORGE_PRICE_OUTPUT_PER_M")
+        if pin or pout:
+            cfg.price_input_per_m = float(pin) if pin else None
+            cfg.price_output_per_m = float(pout) if pout else None
+            cfg.price_source = "TESTFORGE_PRICE_* env override"
+        else:
+            entry = _load_price_table().get(cfg.model)
+            if entry:
+                cfg.price_input_per_m = entry.get("input_per_m")
+                cfg.price_output_per_m = entry.get("output_per_m")
+                cfg.price_source = (
+                    f"pricing.json: {entry.get('source', 'unspecified source')}, "
+                    f"effective {entry.get('effective', 'unspecified date')}"
+                )
         if mode == "api" and not cfg.api_key:
             raise SystemExit(
                 "mode=api requires DEEPSEEK_API_KEY (any non-empty string for "
