@@ -64,9 +64,13 @@ jobs:
                 f"MS(all)={r['ms_all']:.1%}", "acc=", r["n_accepted"])
           EOF
 
-  # Manual real-endpoint smoke: set repo secrets TESTFORGE_API_KEY /
-  # TESTFORGE_API_BASE / TESTFORGE_MODEL, then dispatch this workflow.
-  # Skips (green) when the secrets are not configured.
+  # Manual real-endpoint smoke. Two things must be true for it to run:
+  #   1. repo secrets TESTFORGE_API_KEY / TESTFORGE_API_BASE / TESTFORGE_MODEL set;
+  #   2. secret TESTFORGE_SMOKE_ENABLED = "1" — an explicit opt-in, because the
+  #      endpoint must be reachable from public GitHub runners. Verified
+  #      2026-09-29: the SEU campus gateway (openapi.seu.edu.cn) answers
+  #      non-campus clients with an HTML interstitial, so with that endpoint
+  #      the job would always fail; it therefore skips (green) unless opted in.
   api-smoke:
     if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
@@ -74,16 +78,21 @@ jobs:
       DEEPSEEK_API_KEY: ${{ secrets.TESTFORGE_API_KEY }}
       TESTFORGE_API_BASE: ${{ secrets.TESTFORGE_API_BASE }}
       TESTFORGE_MODEL: ${{ secrets.TESTFORGE_MODEL }}
+      TESTFORGE_SMOKE_ENABLED: ${{ secrets.TESTFORGE_SMOKE_ENABLED }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
       - run: pip install -e .
-      - name: Skip when secrets are not configured
+      - name: Skip unless secrets are configured and the smoke is opted in
         run: |
           if [ -z "$DEEPSEEK_API_KEY" ]; then
             echo "TESTFORGE_API_KEY secret not set; skipping api smoke."
+            echo "SKIP=true" >> "$GITHUB_ENV"
+          elif [ "$TESTFORGE_SMOKE_ENABLED" != "1" ]; then
+            echo "TESTFORGE_SMOKE_ENABLED secret is not '1'; skipping api smoke."
+            echo "(The configured endpoint must be reachable from public runners.)"
             echo "SKIP=true" >> "$GITHUB_ENV"
           fi
       - name: Run one real-endpoint cell

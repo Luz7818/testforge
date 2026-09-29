@@ -20,3 +20,6 @@ results/**
 
 # editable install artifact
 *.egg-info/
+
+# build artifacts (attached to GitHub Releases instead)
+dist/

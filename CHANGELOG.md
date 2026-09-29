@@ -5,6 +5,33 @@ All notable changes to TestForge are documented here. The format follows
 [SemVer](https://semver.org/): breaking the documented CLI/config contract
 bumps the major, added capability the minor, fixes the patch.
 
+## [Unreleased]
+
+### Added
+
+- `TESTFORGE_TRANSPORT=urllib`: a stdlib HTTP transport for the
+  OpenAI-compatible backend, alongside the default SDK transport. Some campus
+  gateways WAF-block the SDK's HTTP stack with an HTML "access denied"
+  interstitial while serving plain requests fine (verified against
+  openapi.seu.edu.cn: curl and urllib pass, the SDK transport is rejected);
+  the urllib transport uses the identical wire format and gets through.
+- `TESTFORGE_MIN_CALL_INTERVAL_SEC`: minimum gap between real (non-cached)
+  API calls, process-wide, for gateways that throttle request bursts.
+- CI `api-smoke` opt-in: the manual job now also requires a
+  `TESTFORGE_SMOKE_ENABLED=1` secret, because an endpoint that is only
+  reachable from campus cannot smoke-test from public runners (it would fail
+  on every dispatch instead of skipping green).
+
+### Fixed
+
+- The prompt-cache key now includes `TESTFORGE_EXTRA_BODY`: it can flip
+  provider-side behavior (e.g. Qwen3 thinking mode), and responses cached
+  under one setting must never replay under another.
+- Reasoning models that spend the whole `max_tokens` budget thinking and
+  return empty content now fail loudly instead of silently producing a
+  zero-candidate cell: an empty response with `finish_reason=length` is a
+  retryable error.
+
 ## [0.2.0] — 2026-09-29
 
 The reproducibility release: the published numbers become one-flag

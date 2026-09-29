@@ -7,11 +7,11 @@
     "mutants_covered": 21,
     "killed_covered": 17,
     "b0_killed_final": 12,
-    "n_generated": 3,
+    "n_generated": 8,
     "n_accepted": 1,
-    "n_repaired": 1,
+    "n_repaired": 0,
     "rejection_reasons": {
-      "falsifiable": 2
+      "falsifiable": 7
     },
     "flaky_rejects": 0,
     "rounds_used": 2,
@@ -20,13 +20,13 @@
     "coverage_pct": 100.0,
     "b0_coverage_pct": 83.3,
     "llm_calls": 2,
-    "tokens_in": 2480,
-    "tokens_out": 4096,
+    "tokens_in": 2484,
+    "tokens_out": 3195,
     "cost_usd": null,
     "price_source": "",
-    "wall_sec": 111.5,
+    "wall_sec": 348.4,
     "accepted_codes": [
-      "import pytest\n\nfrom numeric import integer_sqrt\n\n\ndef test_negative_one_raises_valueerror():\n    with pytest.raises(ValueError, match=\"n must be non-negative\"):\n        integer_sqrt(-1)\n\n\ndef test_large_negative_raises_valueerror():\n    with pytest.raises(ValueError):\n        integer_sqrt(-10**12)\n\n\ndef test_zero_returns_zero():\n    assert integer_sqrt(0) == 0\n\n\ndef test_one_returns_one():\n    assert integer_sqrt(1) == 1\n\n\ndef test_two_returns_one():\n    assert integer_sqrt(2) == 1\n\n\ndef test_three_returns_one():\n    assert integer_sqrt(3) == 1\n\n\ndef test_four_returns_two():\n    assert integer_sqrt(4) == 2\n\n\ndef test_negative_zero_not_applicable():\n    # In Python, -0 is just 0; ensure 0 is handled\n    assert integer_sqrt(0) == 0"
+      "import pytest\n\nfrom numeric import integer_sqrt\n\n\ndef test_isqrt_zero():\n    assert integer_sqrt(0) == 0\n\n\ndef test_isqrt_one():\n    assert integer_sqrt(1) == 1\n\n\ndef test_isqrt_two():\n    assert integer_sqrt(2) == 1\n\n\ndef test_isqrt_three():\n    assert integer_sqrt(3) == 1\n\n\ndef test_isqrt_four():\n    assert integer_sqrt(4) == 2\n\n\ndef test_isqrt_negative_raises():\n    with pytest.raises(ValueError):\n        integer_sqrt(-1)\n\n\ndef test_isqrt_large_perfect_square():\n    assert integer_sqrt(1000000) == 1000\n\n\ndef test_isqrt_just_below_square():\n    assert integer_sqrt(999999) == 999\n\n\ndef test_isqrt_just_above_square():\n    assert integer_sqrt(1000001) == 1000\n\n\ndef test_isqrt_big_non_square():\n    assert integer_sqrt(999999999) == 31622"
     ],
     "mutant_summary": [
       {
@@ -238,6 +238,41 @@
         "reasons": [
           "falsifiable"
         ]
+      },
+      {
+        "cid": "R0C4",
+        "accepted": false,
+        "reasons": [
+          "falsifiable"
+        ]
+      },
+      {
+        "cid": "R1C1",
+        "accepted": false,
+        "reasons": [
+          "falsifiable"
+        ]
+      },
+      {
+        "cid": "R1C2",
+        "accepted": false,
+        "reasons": [
+          "falsifiable"
+        ]
+      },
+      {
+        "cid": "R1C3",
+        "accepted": false,
+        "reasons": [
+          "falsifiable"
+        ]
+      },
+      {
+        "cid": "R1C4",
+        "accepted": false,
+        "reasons": [
+          "falsifiable"
+        ]
       }
     ],
     "ms_all": 0.8095,
@@ -245,8 +280,8 @@
     "cost": {
       "model": "qwen3.8-27b",
       "calls": 2,
-      "tokens_in": 2480,
-      "tokens_out": 4096,
+      "tokens_in": 2484,
+      "tokens_out": 3195,
       "cost_usd": null,
       "price_source": ""
     }

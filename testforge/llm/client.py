@@ -21,16 +21,24 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import random
 import re
 import time
+import urllib.error
+import urllib.request
 import zlib
 from dataclasses import dataclass
 from pathlib import Path
+from types import SimpleNamespace
 
 from ..config import ForgeConfig
 
 CANDIDATE_MARKER = re.compile(r"^# ==== CANDIDATE \d+ ====\s*$", re.MULTILINE)
+
+# Module-level so pacing survives across cells: the experiment runner builds a
+# fresh client per (target, variant) cell but keeps one process.
+_last_real_call_monotonic = 0.0
 
 SYSTEM_PROMPT = (
     "You are a meticulous Python test engineer. You write pytest unit tests "
@@ -80,22 +88,47 @@ class OpenAICompatClient:
     """OpenAI-compatible chat client (DeepSeek etc.) with disk cache."""
 
     def __init__(self, config: ForgeConfig, cache_dir: Path):
-        from openai import OpenAI  # imported lazily so mock mode needs no SDK
-
         self._cfg = config
-        self._client = OpenAI(
-            api_key=config.api_key,
-            base_url=config.api_base,
-            timeout=config.llm_timeout_sec,
-        )
+        # TESTFORGE_TRANSPORT: "sdk" (default, the openai package) or "urllib"
+        # (zero-dependency POST, same wire format). Some campus gateways WAF-
+        # block the SDK's HTTP stack with an HTML "access denied" page while
+        # serving plain requests fine — the urllib transport gets through.
+        self._transport = os.environ.get("TESTFORGE_TRANSPORT", "sdk")
+        if self._transport not in ("sdk", "urllib"):
+            raise SystemExit(f"unknown TESTFORGE_TRANSPORT {self._transport!r}; use sdk or urllib")
+        if self._transport == "sdk":
+            from openai import OpenAI  # imported lazily so mock mode needs no SDK
+
+            self._client = OpenAI(
+                api_key=config.api_key,
+                base_url=config.api_base,
+                timeout=config.llm_timeout_sec,
+            )
         self._cache_dir = cache_dir
         self._cache_dir.mkdir(parents=True, exist_ok=True)
 
     def _cache_path(self, system: str, prompt: str) -> Path:
+        # extra_body is part of the key: it can flip provider-side behavior
+        # (e.g. Qwen3 thinking mode) and must never cross-replay.
         key = hashlib.sha256(
-            f"{self._cfg.model}|{system}|{prompt}|{self._cfg.temperature}|{self._cfg.max_tokens}".encode()
+            f"{self._cfg.model}|{system}|{prompt}|{self._cfg.temperature}|{self._cfg.max_tokens}|{self._cfg.extra_body}".encode()
         ).hexdigest()
         return self._cache_dir / f"{key}.json"
+
+    def _pace(self) -> None:
+        """Optionally space real API calls out: some campus gateways answer
+        request bursts with an HTML 'access denied' interstitial instead of
+        the API. TESTFORGE_MIN_CALL_INTERVAL_SEC enforces a minimum gap
+        between non-cached calls, process-wide."""
+        raw = os.environ.get("TESTFORGE_MIN_CALL_INTERVAL_SEC", "")
+        try:
+            min_interval = float(raw) if raw else 0.0
+        except ValueError:
+            min_interval = 0.0
+        if min_interval > 0:
+            wait = _last_real_call_monotonic + min_interval - time.monotonic()
+            if wait > 0:
+                time.sleep(wait)
 
     def _cost(self, tokens_in: int, tokens_out: int) -> float | None:
         """USD for one call, or None when no price is configured. Costs are
@@ -105,6 +138,67 @@ class OpenAICompatClient:
         if pin is None and pout is None:
             return None
         return tokens_in / 1e6 * (pin or 0.0) + tokens_out / 1e6 * (pout or 0.0)
+
+    def _call_api(self, prompt: str, extra: dict):
+        """One chat-completions call over the configured transport. Returns an
+        object with ``.choices[0].message.content``, ``.finish_reason`` and
+        ``.usage.prompt_tokens`` / ``.completion_tokens``. Transport errors
+        raise; the caller retries."""
+        if self._transport == "sdk":
+            return self._client.chat.completions.create(
+                model=self._cfg.model,
+                messages=[
+                    {"role": "system", "content": SYSTEM_PROMPT},
+                    {"role": "user", "content": prompt},
+                ],
+                temperature=self._cfg.temperature,
+                max_tokens=self._cfg.max_tokens,
+                **({"extra_body": extra} if extra else {}),
+            )
+        # urllib transport: identical wire format, plain stdlib HTTP.
+        from .. import __version__
+
+        body = {
+            "model": self._cfg.model,
+            "messages": [
+                {"role": "system", "content": SYSTEM_PROMPT},
+                {"role": "user", "content": prompt},
+            ],
+            "temperature": self._cfg.temperature,
+            "max_tokens": self._cfg.max_tokens,
+            **extra,
+        }
+        req = urllib.request.Request(
+            self._cfg.api_base.rstrip("/") + "/chat/completions",
+            data=json.dumps(body).encode("utf-8"),
+            method="POST",
+            headers={
+                "Authorization": f"Bearer {self._cfg.api_key}",
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+                "User-Agent": f"testforge/{__version__}",
+            },
+        )
+        try:
+            with urllib.request.urlopen(req, timeout=self._cfg.llm_timeout_sec) as r:
+                data = json.load(r)
+        except urllib.error.HTTPError as e:
+            snippet = e.read(200).decode("utf-8", "replace")
+            raise RuntimeError(f"HTTP {e.code}: {snippet}") from e
+        choice = data["choices"][0]
+        usage = data.get("usage") or {}
+        return SimpleNamespace(
+            choices=[
+                SimpleNamespace(
+                    message=SimpleNamespace(content=choice["message"].get("content")),
+                    finish_reason=choice.get("finish_reason"),
+                )
+            ],
+            usage=SimpleNamespace(
+                prompt_tokens=usage.get("prompt_tokens", 0),
+                completion_tokens=usage.get("completion_tokens", 0),
+            ),
+        )
 
     def generate(self, system: str, prompt: str, purpose: str = "") -> LLMResponse:
         cpath = self._cache_path(system, prompt)
@@ -124,17 +218,23 @@ class OpenAICompatClient:
         extra = self._cfg.extra_body_dict()
         for attempt in range(self._cfg.llm_retries):
             try:
-                resp = self._client.chat.completions.create(
-                    model=self._cfg.model,
-                    messages=[
-                        {"role": "system", "content": system},
-                        {"role": "user", "content": prompt},
-                    ],
-                    temperature=self._cfg.temperature,
-                    max_tokens=self._cfg.max_tokens,
-                    **({"extra_body": extra} if extra else {}),
-                )
-                text = strip_think(resp.choices[0].message.content or "")
+                self._pace()
+                global _last_real_call_monotonic
+                _last_real_call_monotonic = time.monotonic()
+                resp = self._call_api(prompt, extra)
+                choice = resp.choices[0]
+                text = strip_think(choice.message.content or "")
+                if not text and getattr(choice, "finish_reason", None) == "length":
+                    # Reasoning models can spend the entire budget thinking and
+                    # return content=None. A silent empty response would look
+                    # like "the model generated nothing" and poison the cell;
+                    # fail loudly so the retry sees a fresh outcome or the cell
+                    # is recorded as an error.
+                    raise RuntimeError(
+                        "response hit max_tokens before producing any content "
+                        "(reasoning exhausted the budget); raise TESTFORGE_MAX_TOKENS "
+                        "or disable thinking via TESTFORGE_EXTRA_BODY"
+                    )
                 usage = resp.usage
                 tokens_in = getattr(usage, "prompt_tokens", 0) or 0
                 tokens_out = getattr(usage, "completion_tokens", 0) or 0
