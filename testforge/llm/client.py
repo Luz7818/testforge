@@ -299,8 +299,9 @@ class MockLLMClient:
         "bool": [True, False],
     }
 
-    def __init__(self) -> None:
+    def __init__(self, config: ForgeConfig | None = None) -> None:
         self._last_usage = (0, 0)
+        self.property_based = bool(config and getattr(config, "property_based", False))
 
     # -- prompt parsing ----------------------------------------------------
     @staticmethod
@@ -359,7 +360,15 @@ class MockLLMClient:
         params = self._parse_params(sig_line)
 
         seeds_root = f"{function_name}|{round_no}|{'|'.join(mutant_ids)}|{len(module_source)}"
-        candidates: list[str] = []
+        # Property mode is a *hybrid*: each candidate keeps the characterization
+        # exact-value probes (strength on value mutants) and gains a behavioral
+        # envelope property over a frozen input domain (strength on return-type
+        # and exception-contract mutants across the whole domain). Kills are a
+        # strict superset of characterization mode by construction.
+        envelope = (
+            self._envelope_probe(func, function_name, params) if self.property_based else None
+        )
+        candidates = []
         for j in range(count):
             rng = random.Random(f"{seeds_root}|cand{j}")
             tests: list[str] = []
@@ -376,6 +385,8 @@ class MockLLMClient:
                 f"def test_{function_name}_placeholder():\n"
                 f"    assert callable({function_name})\n"
             )
+            if envelope:
+                body = body + "\n\n" + envelope(f"envelope_{j}")
             header = f"import pytest\nfrom {module_name} import {function_name}\n\n\n"
             candidates.append(header + body)
 
@@ -384,6 +395,83 @@ class MockLLMClient:
             f"# ==== CANDIDATE {i} ====\n{code}" for i, code in enumerate(candidates)
         )
         return LLMResponse(text=text, model="mock")
+
+    # -- property-based mode --------------------------------------------------
+    _MAX_PROBE_COMBOS = 160
+
+    def _envelope_probe(self, func, function_name: str, params: list[dict]):
+        """Probe the function over a frozen sampled domain and return a
+        factory producing the behavioral-envelope property source per suffix.
+
+        The property: over the frozen domain the function may only return
+        values of the observed types or raise the observed exception classes,
+        and re-running it must reproduce the same result. A mutant that
+        changes behavior on ANY sampled input dies, even when every single
+        example characterization test still passes. Determinism comes from
+        fixed pools, ``derandomize=True`` and ``database=None``.
+        """
+        from itertools import islice, product
+
+        pools = [list(self._VALUES.get(self._kind_of(p), self._VALUES["int"])) for p in params]
+        if not pools:
+            pools = [[0, 1]]
+        observed_types: set[str] = set()
+        observed_exceptions: set[str] = set()
+        domain = list(islice(product(*pools), self._MAX_PROBE_COMBOS)) or [
+            tuple(p[0] for p in pools)
+        ]
+        for combo in domain:
+            try:
+                result = func(*combo)
+            except TypeError:
+                continue  # wrong shape for this combo
+            except Exception as exc:  # noqa: BLE001 - probe records the contract
+                observed_exceptions.add(type(exc).__name__)
+                continue
+            observed_types.add(type(result).__name__)
+        if not observed_types and not observed_exceptions:
+            return None
+
+        valid_domain = []
+        for combo in domain:
+            try:
+                func(*combo)
+            except Exception:  # noqa: BLE001 - keep only combos the original accepts
+                continue
+            valid_domain.append(combo)
+        if not valid_domain:
+            return None
+
+        def make(suffix: str) -> str:
+            return (
+                f"from hypothesis import HealthCheck, given, settings\n"
+                f"from hypothesis import strategies as st\n\n"
+                f"hypothesis_settings = settings(\n"
+                f"    max_examples=25,\n"
+                f"    derandomize=True,\n"
+                f"    deadline=None,\n"
+                f"    database=None,\n"
+                f"    suppress_health_check=list(HealthCheck),\n"
+                f")\n\n"
+                f"_VALID_INPUTS = {valid_domain!r}\n"
+                f"_OBSERVED_TYPES = {sorted(observed_types)!r}\n"
+                f"_OBSERVED_EXCEPTIONS = {sorted(observed_exceptions)!r}\n\n\n"
+                f"@given(st.sampled_from(_VALID_INPUTS))\n"
+                f"@hypothesis_settings\n"
+                f"def test_{function_name}_behavioral_envelope_{suffix}(args):\n"
+                f"    try:\n"
+                f"        result = {function_name}(*args)\n"
+                f"    except Exception as exc:\n"
+                f"        assert type(exc).__name__ in _OBSERVED_EXCEPTIONS, (\n"
+                f"            'new exception class: ' + type(exc).__name__\n"
+                f"        )\n"
+                f"    else:\n"
+                f"        assert type(result).__name__ in _OBSERVED_TYPES, (\n"
+                f"            'new return type: ' + type(result).__name__\n"
+                f"        )\n"
+                f"        assert {function_name}(*args) == result, 'nondeterministic result'\n"
+            )
+        return make
 
     # -- helpers -------------------------------------------------------------
     @staticmethod
@@ -437,7 +525,7 @@ class MockLLMClient:
 
 def make_client(config: ForgeConfig, project_root: Path) -> OpenAICompatClient | MockLLMClient:
     if config.mode == "mock":
-        return MockLLMClient()
+        return MockLLMClient(config)
     cache_dir = (
         Path(config.cache_dir)
         if config.cache_dir

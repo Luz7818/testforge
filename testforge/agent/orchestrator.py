@@ -90,29 +90,37 @@ class ForgeAgent:
                 f"[{spec.target_id}] existing tests fail on the original code ({outcome})"
             )
 
-        # -- 2. mutants and what B0 already kills -------------------------
-        mutants = generate_mutants(
-            info.module_source,
-            spec.function_name,
-            max_mutants=cfg.max_mutants,
-            seed=cfg.mutation_seed + _stable_hash(spec.target_id) % 10000,
-        )
-        if not mutants:
-            raise RuntimeError(f"[{spec.target_id}] no mutants could be generated")
-        res.mutants_total = len(mutants)
-
-        b0_kills = evaluate_mutants(
-            mutants, module_name, {"test_b0.py": b0_code}, cfg.test_timeout_sec, cfg.workers
-        )
-        killed_by_b0: set[str] = {mid for mid, o in b0_kills.items() if o.killed_mutant}
-        res.b0_killed_final = len(killed_by_b0)
-
+        # -- 2. baseline coverage, then mutants and what B0 already kills --
+        # Coverage comes first so priority sampling can see executed lines.
         _, b0_cov, b0_exec = measure_coverage(
             info.module_source, module_name, {"test_b0.py": b0_code}, cfg.test_timeout_sec
         )
         target_exec = {l for l in b0_exec if info.start_line <= l <= info.end_line}
         res.b0_coverage_pct = round(coverage_pct(b0_cov, b0_exec, range(info.start_line, info.end_line + 1)), 1)
         baseline_covered = b0_cov
+
+        mutants = generate_mutants(
+            info.module_source,
+            spec.function_name,
+            max_mutants=cfg.max_mutants,
+            seed=cfg.mutation_seed + _stable_hash(spec.target_id) % 10000,
+            covered_lines=b0_cov if cfg.mutant_priority else None,
+            priority=cfg.mutant_priority,
+        )
+        if not mutants:
+            raise RuntimeError(f"[{spec.target_id}] no mutants could be generated")
+        res.mutants_total = len(mutants)
+
+        b0_kills = evaluate_mutants(
+            mutants,
+            module_name,
+            {"test_b0.py": b0_code},
+            cfg.test_timeout_sec,
+            cfg.workers,
+            covered_lines=b0_cov if cfg.incremental_execution else None,
+        )
+        killed_by_b0: set[str] = {mid for mid, o in b0_kills.items() if o.killed_mutant}
+        res.b0_killed_final = len(killed_by_b0)
 
         # -- 3. generation / gate / feedback loop --------------------------
         killed: set[str] = set(killed_by_b0)
@@ -229,7 +237,12 @@ class ForgeAgent:
                 if variant.gate_enabled:
                     current_survivors = [m for m in mutants if m.mid not in killed]
                     kill_map = evaluate_mutants(
-                        current_survivors, module_name, {fname: code}, cfg.test_timeout_sec, cfg.workers
+                        current_survivors,
+                        module_name,
+                        {fname: code},
+                        cfg.test_timeout_sec,
+                        cfg.workers,
+                        covered_lines=cand.covered_lines if cfg.incremental_execution else None,
                     )
                     cand.kills = {mid for mid, o in kill_map.items() if o.killed_mutant}
                     cand.new_kills = set(cand.kills)  # survivors are, by definition, un-killed
@@ -289,12 +302,19 @@ class ForgeAgent:
         res.n_final_tests = len(final_gen)
         res.accepted_codes = [f["code"] for f in final_gen]
 
-        final_kills = evaluate_mutants(mutants, module_name, files, cfg.test_timeout_sec, cfg.workers)
-        res.killed_final = sum(1 for o in final_kills.values() if o.killed_mutant)
-
+        # Coverage first so incremental execution can skip uncovered mutants.
         _, final_cov, final_exec = measure_coverage(
             info.module_source, module_name, files, cfg.test_timeout_sec
         )
+        final_kills = evaluate_mutants(
+            mutants,
+            module_name,
+            files,
+            cfg.test_timeout_sec,
+            cfg.workers,
+            covered_lines=final_cov if cfg.incremental_execution else None,
+        )
+        res.killed_final = sum(1 for o in final_kills.values() if o.killed_mutant)
         res.coverage_pct = round(
             coverage_pct(final_cov, final_exec, range(info.start_line, info.end_line + 1)), 1
         )

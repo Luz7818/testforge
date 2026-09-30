@@ -14,8 +14,8 @@
 
 | 项 | 值 | 复核命令 |
 |---|---|---|
-| 测试数 | 74 个测试（全部收集成功） | `.venv/Scripts/python.exe -m pytest --collect-only`，末行 `75 tests collected` |
-| 测试全通过 | 75 项通过，退出码 0（0.3 新增传输/节流/缓存键测试） | `.venv/Scripts/python.exe -m pytest` |
+| 测试数 | 83 个测试（全部收集成功） | `.venv/Scripts/python.exe -m pytest --collect-only`，末行 `83 tests collected` |
+| 测试全通过 | 83 项通过，退出码 0（0.5 新增三项引擎/后端升级测试） | `.venv/Scripts/python.exe -m pytest` |
 | 静态检查 | pyflakes 0 项；它已在 `[project.optional-dependencies].dev` 里，`pip install -e .[dev]` 即恢复 | `.venv/Scripts/python.exe -m pyflakes testforge experiments tests conftest.py` |
 | CLI 可用 | 退出码 0，三个子命令 `targets` / `run` / `report` | `.venv/Scripts/python.exe -m testforge.cli --help` |
 | 基准规模 | 18 个目标函数 / 6 个模块 | `.venv/Scripts/python.exe -m testforge.cli targets`（输出 18 行） |
@@ -36,6 +36,7 @@
 | `testforge/cli.py` | 命令行入口 | `_cmd_run` 依次做：读配置 → 取变体 → 解析目标 → 跑 → 落盘；参数表见 `--help` |
 | `testforge/config.py` | 全部旋钮 + 零依赖 `.env` 读取 | `_load_dotenv()`（模块顶层调用）、`ForgeConfig.from_env()`（缺 key 时 `SystemExit`） |
 | `testforge/variants.py` | 实验条件 B0–B5 的定义 | `VARIANTS` 字典：`rounds` / `gate_enabled` / `feedback_mode` / `continue_on_zero_accept` |
+| `testforge/mutation/engine.py` | 变异体生成与采样 | `priority=True` 时预算先填基线已执行行（PRIMG 式），默认关；`mutation/runner.py` 的 `covered_lines` 参数启用增量执行（未覆盖行免跑、结果恒等） |
 | `testforge/types.py` | 共享数据结构 | `Outcome.killed_mutant`（非 PASS 即杀死）、`VariantResult.ms_all` / `ms_covered` 为派生属性 |
 | `testforge/agent/` | 回路编排与 prompt | `orchestrator.py`（`run_target`：基线 → 变异 → 生成 → 门禁 → 联合评估）、`prompts.py`（`=== BLOCK ===` 结构） |
 | `testforge/gate/` | 验收判定与原代码执行 | `gate.py`（`evaluate_candidate`）、`runner.py`（`run_tests_once` / `measure_coverage`）、`__init__.py` 里定义 `coverage_pct` |
@@ -46,7 +47,7 @@
 | `testforge/utils.py` | 临时工作区、子进程、diff、JSON | `workspace()`（一次性目录，退出即删）、`run_cmd()`（超时返回 -9） |
 | `benchmarks/` | 目标函数 + 每模块一份既有测试（B0） | `manifest.json` 是目标清单的唯一来源 |
 | `experiments/` | 网格、统计、图、跨网格比较 | `run_experiment.py` / `analyze.py` / `plots.py` / `compare_grids.py` |
-| `tests/` | 自身测试 | 11 个文件、75 项，见 `tests/README.md` |
+| `tests/` | 自身测试 | 12 个文件、83 项，见 `tests/README.md` |
 | `results/` | 实验产物 | 只读。`.gitignore` 用白名单只放行 `results/exp_*` 里的 JSON/MD/PNG |
 
 ## 关键约定
@@ -73,13 +74,13 @@
 8. **`n_accepted` 是最终套件里的文件数**：联合评估若整体不通过，会按“和 B0 一起跑不过”逐个剔除，
    最多三轮。所以 `n_accepted` 可能小于回路中验收过的数量。
 9. **数字口径**：README 与 `docs/report.md` 里的“36 个单元”“pooled n=36”指实验格数
-   （18 目标 × 2 轮网格），不是测试数。测试数是 75，两处不要互相引用。
+   （18 目标 × 2 轮网格），不是测试数。测试数是 83，两处不要互相引用。
 
 ## 改动后的验证
 
 | 你动了 | 必须跑 |
 |---|---|
-| `testforge/**` 任意文件 | `.venv/Scripts/python.exe -m pytest`（75 项通过，约 1.5 分钟） |
+| `testforge/**` 任意文件 | `.venv/Scripts/python.exe -m pytest`（83 项通过，约 2.5 分钟） |
 | `mutation/operators.py` / `engine.py` | `.venv/Scripts/python.exe -m pytest tests/test_operators.py tests/test_engine.py`；再核对上面那条 197 的计数是否变化 |
 | `gate/` | `.venv/Scripts/python.exe -m pytest tests/test_gate.py` |
 | `agent/orchestrator.py` / `llm/client.py` | `.venv/Scripts/python.exe -m pytest tests/test_e2e.py tests/test_mock_client.py`，再跑一次离线单格看 MS 是否漂移 |
@@ -119,7 +120,7 @@
   `results/api_smoke/`、`results/*.log` 是本机历史运行残留，新克隆的仓库里没有。
   `docs/example-report.md` 就是 `results/api_smoke/numeric.integer_sqrt__B3.json` 的渲染结果，
   克隆后无法重跑该核对。
-- `docs/report.md` 末尾“36 个自测”与 `docs/interview.md` 的“全管线 36 个自测通过”是旧数字（现为 70）。
+- `docs/report.md` 末尾“36 个自测”与 `docs/interview.md` 的“全管线 36 个自测通过”是旧数字（现为 83）。
   这两份按要求保持原样，引用测试数时以本文件为准。
 - 加一个新目标函数会让 `tests/test_inspector.py` 里“18 个目标”的断言失败——那是有意的登记闸门，
   改基准就要同时改断言。

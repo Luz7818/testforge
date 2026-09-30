@@ -55,7 +55,19 @@ def generate_mutants(
     function_name: str | None = None,
     max_mutants: int = 24,
     seed: int = 0,
+    covered_lines: set[int] | None = None,
+    priority: bool = False,
 ) -> list[Mutant]:
+    """Generate mutants of the target function.
+
+    When ``priority`` is set and ``covered_lines`` (lines executed by the
+    baseline suite) is given, sampling fills the budget with mutants on
+    executed lines first — they are reachable by the existing tests and thus
+    the ones a good candidate suite can actually kill — and only falls back to
+    uncovered-line mutants if the budget is not exhausted. Both tiers keep the
+    seeded operator-stratified rotation; with ``priority=False`` the selection
+    is exactly the historical one, so published grids stay reproducible.
+    """
     tree = ast.parse(module_source)
     root = tree
     if function_name is not None:
@@ -84,7 +96,14 @@ def generate_mutants(
         built.append((c, mutated))
 
     if len(built) > max_mutants:
-        built = _stratified_sample(built, max_mutants, seed)
+        if priority and covered_lines:
+            hot = [t for t in built if t[0].node.lineno in covered_lines]
+            cold = [t for t in built if t[0].node.lineno not in covered_lines]
+            built = _stratified_sample(hot, max_mutants, seed)
+            if len(built) < max_mutants and cold:
+                built += _stratified_sample(cold, max_mutants - len(built), seed + 1)
+        else:
+            built = _stratified_sample(built, max_mutants, seed)
 
     built.sort(key=lambda t: (t[0].node.lineno, t[0].node.col_offset))
 

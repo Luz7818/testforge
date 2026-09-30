@@ -104,6 +104,17 @@ class ForgeConfig:
     # Mutation engine.
     max_mutants: int = 24
     mutation_seed: int = 20260919
+    # Fill the mutant budget with mutants on baseline-executed lines first
+    # (PRIMG-style priority), falling back to uncovered lines only if the
+    # budget allows. Off by default: published grids use the historical
+    # stratified sampling, and priority changes WHICH mutants get sampled.
+    mutant_priority: bool = False
+    # Skip executing mutants whose mutated line the suite under test does not
+    # execute: unreachable code cannot change observed behavior, so those
+    # mutants are recorded as PASS without a subprocess (results identical,
+    # kill-matrix cost drops to the covered fraction). Off by default for
+    # reproducibility bookkeeping; the toggle changes cost, never outcomes.
+    incremental_execution: bool = False
 
     # Test execution.
     test_timeout_sec: float = 8.0
@@ -114,6 +125,14 @@ class ForgeConfig:
     # still detecting new bugs. Set require_coverage_delta=True to mimic
     # TestGen-LLM style acceptance.
     require_coverage_delta: bool = False
+
+    # Property-based generation (Mock backend only): emit deterministic
+    # @given property tests (Hypothesis-style) instead of single-example
+    # characterization tests. Requires the optional `hypothesis` dependency
+    # (pip install -e .[property]); falls back to characterization mode with
+    # a warning when it is not importable. The generation space upgrades,
+    # the feedback signal and the gate stay unchanged.
+    property_based: bool = False
 
     workers: int = field(default_factory=_default_workers)
 
@@ -149,6 +168,12 @@ class ForgeConfig:
         lr = os.environ.get("TESTFORGE_LLM_RETRIES")
         if lr:
             cfg.llm_retries = int(lr)
+        if os.environ.get("TESTFORGE_MUTANT_PRIORITY", "").strip().lower() in ("1", "true", "yes"):
+            cfg.mutant_priority = True
+        if os.environ.get("TESTFORGE_INCREMENTAL", "").strip().lower() in ("1", "true", "yes"):
+            cfg.incremental_execution = True
+        if os.environ.get("TESTFORGE_PROPERTY", "").strip().lower() in ("1", "true", "yes"):
+            cfg.property_based = True
         # Point at a different directory to force fresh LLM samples: an
         # unchanged cache replays responses bit-for-bit, which is exactly what
         # a replication run must avoid.

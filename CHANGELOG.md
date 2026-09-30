@@ -5,6 +5,33 @@ All notable changes to TestForge are documented here. The format follows
 [SemVer](https://semver.org/): breaking the documented CLI/config contract
 bumps the major, added capability the minor, fixes the patch.
 
+## [0.5.0] — 2026-09-30
+
+The efficiency-and-generation-space release: three independent, optional-by-default upgrades from the roadmap (docs/report.md §8), each leaving the published grids' default behavior bit-for-bit unchanged.
+
+### Added
+
+- **Mutant priority sampling** (`--mutant-priority` / `TESTFORGE_MUTANT_PRIORITY`):
+  the mutant budget fills with baseline-covered-line mutants first (PRIMG-style),
+  falling back to uncovered lines only if the budget allows. Priority sampling
+  changes WHICH mutants are sampled — off by default so published grid
+  fingerprints stay valid.
+- **Incremental mutant execution** (`--incremental` / `TESTFORGE_INCREMENTAL`):
+  mutants whose mutated line the suite under test never executes are recorded
+  PASS without spawning a subprocess — unreachable code cannot change observed
+  behavior, so outcomes are provably identical while the kill-matrix cost
+  drops to the covered fraction. The toggle changes cost, never outcomes.
+- **Property-based mock generation** (`--property` / `TESTFORGE_PROPERTY`,
+  optional `hypothesis` dependency in `.[property]`): the Mock backend gains a
+  hybrid generation mode — each candidate keeps the characterization
+  exact-value probes and gains a deterministic behavioral-envelope property
+  (`@given`, `derandomize=True`, `database=None`) asserting that over a frozen
+  input domain the function only returns observed types / raises observed
+  exception classes and is deterministic. Kills are a strict superset of
+  characterization mode; the feedback signal and the gate are unchanged.
+- Toggle-matrix study on the mock benchmark (`results/exp_v05_*`): per-target
+  equivalence of incremental execution, cost/quality of priority sampling.
+
 ## [0.4.0] — 2026-09-30
 
 The single-model release: every real-LLM result in the project now comes from

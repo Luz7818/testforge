@@ -61,6 +61,12 @@ def main() -> None:
     ap.add_argument("--rounds", type=int, default=None,
                     help="max feedback rounds for B3/B4/B5 (B0-B2 use their own definition)")
     ap.add_argument("--max-mutants", type=int, default=None)
+    ap.add_argument("--mutant-priority", action="store_true",
+                    help="sample baseline-covered-line mutants first (changes the mutant set)")
+    ap.add_argument("--incremental", action="store_true",
+                    help="skip executing uncovered mutants (same outcomes, cheaper matrix)")
+    ap.add_argument("--property", action="store_true",
+                    help="mock backend: deterministic @given property tests (needs hypothesis)")
     ap.add_argument("--out", default=None)
     args = ap.parse_args()
 
@@ -86,10 +92,15 @@ def main() -> None:
     results_path = out_dir / "results.json"
 
     probe = ForgeConfig.from_env(mode=mode)
+    probe.mutant_priority = probe.mutant_priority or args.mutant_priority
+    probe.incremental_execution = probe.incremental_execution or args.incremental
+    probe.property_based = probe.property_based or args.property
     print(
         f"grid: mode={mode} preset={args.preset or 'none'} "
         f"mutants={params['max_mutants']} candidates={params['candidates']} "
         f"rounds={params['rounds']} flaky_runs={params['flaky_runs']} "
+        f"priority={probe.mutant_priority} incremental={probe.incremental_execution} "
+        f"property={probe.property_based} "
         f"targets={len(specs)} variants={','.join(vnames)} model={probe.model}"
     )
     print(f"out -> {out_dir}")
@@ -123,6 +134,9 @@ def main() -> None:
             cfg.flaky_runs = params["flaky_runs"]
             cfg.candidates_per_round = params["candidates"]
             cfg.max_mutants = params["max_mutants"]
+            cfg.mutant_priority = cfg.mutant_priority or args.mutant_priority
+            cfg.incremental_execution = cfg.incremental_execution or args.incremental
+            cfg.property_based = cfg.property_based or args.property
             cfg.validate()
 
             base = VARIANTS[vname]

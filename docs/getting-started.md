@@ -215,7 +215,10 @@ plots -> ..\tf_smoke\plots
 | `--candidates` | 每轮向模型要几个候选 | 4 |
 | `--rounds` | B3/B4/B5 的最大反馈轮数 | 3 |
 | `--flaky-runs` | 门禁在原代码上重复几次 | 5 |
-| `--preset` | 命名参数集，先于上面各旗标、后于默认值生效 | 无 |
+| `--preset` | 命名参数集，先于上面各旗标、后于默认值生效（`published` / `published-b5`） | 无 |
+| `--mutant-priority` | 变异体预算先填基线已执行行（PRIMG 式；改变被采样集合） | 关 |
+| `--incremental` | 套件未执行行的变异体免跑（结果恒等） | 关 |
+| `--property` | Mock 生成升级为「精确断言 + `@given` 行为包络」（需 `pip install -e .[property]`） | 关 |
 | `--out` | 输出目录，相对仓库根解析 | `results/exp_<模式>_<时间戳>` |
 
 想复现已发表的那三张 90 格网格，用 `--preset published`（16 变异体 / 每轮 3 候选 / 2 轮反馈 /

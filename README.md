@@ -51,6 +51,9 @@ numeric.integer_sqrt                     B3  MS(all)= 76.2%  MS(cov)= 76.2%  gen
   超上限按算子分层采样（种子化）；杀伤矩阵 `pytest -x` 进程池并行。
 - **多信号验收门禁**：正确性、确定性（抗 flaky）、可证伪性；覆盖率增量默认只报告不强制（理由见报告 §4.3）。
 - **实验框架**：B0–B5 六变体配对实验、18 目标确定性基准、手写 Wilcoxon/bootstrap 统计（零重依赖）、逐格落盘崩溃续跑。
+- **可选引擎升级（0.5 起，默认关闭、不影响已发表网格）**：变异体优先级采样（预算优先填基线已执行行，
+  `--mutant-priority`）；增量变异执行（套件未执行行的变异体免跑、结果恒等，`--incremental`）；
+  property-based Mock 生成（特征化精确断言 + 确定性 `@given` 行为包络性质，击杀数为严格超集，`--property`）。
 - **诚实的成本账目**：token 数恒精确；美元数只在配置了带来源的单价时出现，否则显示 n/a 而非假的 $0。
 - **复现包**：`--preset published` 一条命令固化已发表网格参数，见 [REPRODUCE.md](REPRODUCE.md)。
 
@@ -136,7 +139,9 @@ python experiments/run_experiment.py --mode mock --preset published --out result
 - [x] 0.2 成本口径诚实：无来源不出美元数
 - [x] 门禁进 CI：Mock 全链路冒烟格（0.2 提前落地）＋ 手动触发的 `api-smoke`
 - [x] 0.4 实验统一单模型：全部真实结果由 qwen3.8-27B 给出（288 格零错误），8B 历史归档于 tag v0.3.0
-- [ ] 变异体优先级排序 / 增量变异执行 / property-based 生成扩展 / 跨厂商家族模型
+- [x] 0.5 变异体优先级排序 / 增量变异执行 / property-based 生成扩展（可选开关，含矩阵研究）
+- [ ] 跨厂商家族模型
+
 ## 贡献与许可
 
 改动前请读 [AGENTS.md](AGENTS.md)（事实口径）与 [REPRODUCE.md](REPRODUCE.md)（验收判据）。

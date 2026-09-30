@@ -65,6 +65,12 @@ def _cmd_run(args) -> None:
         cfg.candidates_per_round = args.candidates
     if args.mutants is not None:
         cfg.max_mutants = args.mutants
+    if args.mutant_priority:
+        cfg.mutant_priority = True
+    if args.incremental:
+        cfg.incremental_execution = True
+    if args.property:
+        cfg.property_based = True
     cfg.validate()
     variant = get_variant(args.variant)
 
@@ -130,6 +136,12 @@ def main(argv=None) -> None:
     p_run.add_argument("--rounds", type=int, default=None, help="override max feedback rounds")
     p_run.add_argument("--candidates", type=int, default=None, help="override candidates per round")
     p_run.add_argument("--mutants", type=int, default=None, help="override max mutants per target")
+    p_run.add_argument("--mutant-priority", action="store_true",
+                       help="sample baseline-covered-line mutants first (PRIMG-style); changes the mutant set")
+    p_run.add_argument("--incremental", action="store_true",
+                       help="skip executing mutants on lines the suite never runs (same outcomes, cheaper matrix)")
+    p_run.add_argument("--property", action="store_true",
+                       help="mock backend: emit deterministic @given property tests (needs hypothesis)")
     p_run.add_argument("--out", default="results/runs")
     p_run.set_defaults(func=_cmd_run)
 

@@ -29,6 +29,9 @@
 | `--candidates` | 每轮向模型要几个候选 | 4 |
 | `--rounds` | B3/B4/B5 的最大反馈轮数（B0–B2 用自己的定义） | 3 |
 | `--flaky-runs` | 门禁在原代码上重复几次 | 5 |
+| `--mutant-priority` | 变异体预算先填基线已执行行（改变被采样的变异体集合） | 关 |
+| `--incremental` | 套件未执行行的变异体免跑（结果恒等、只省成本） | 关 |
+| `--property` | Mock 后端混合生成：特征化断言 + 确定性 `@given` 行为包络（需 hypothesis） | 关 |
 | `--out` | 输出目录，相对仓库根解析 | `results/exp_<mode>_<时间戳>` |
 
 `analyze.py` 接 `--exp <目录>`，另有 `--compare-with <另一网格目录>` 追加跨模型对比节；`plots.py` 接 `--exp`（另有 `--label`）；

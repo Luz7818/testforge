@@ -41,10 +41,16 @@ dependencies = [
 # The two repo gates beyond pytest itself: pyflakes (static check) and
 # coverage are listed here so a fresh clone can run every documented gate:
 #   pip install -e .[dev]
+# hypothesis is included so the property-based mock mode and its tests work
+# out of the box in CI; `pip install -e .[property]` installs it alone.
 dev = [
     "pytest>=8.0",
     "pyflakes>=3.0",
     "coverage>=7.4",
+    "hypothesis>=6.100",
+]
+property = [
+    "hypothesis>=6.100",
 ]
 
 [project.urls]

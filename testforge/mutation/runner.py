@@ -53,10 +53,22 @@ def evaluate_mutants(
     test_files: dict[str, str],
     timeout: float,
     workers: int,
+    covered_lines: set[int] | None = None,
 ) -> dict[str, Outcome]:
-    """Run ``test_files`` against every mutant. Returns mid -> Outcome."""
+    """Run ``test_files`` against every mutant. Returns mid -> Outcome.
+
+    With ``covered_lines`` (incremental mode), mutants whose mutated line is
+    not executed by the suite are reported as PASS without spawning a
+    subprocess: code no test runs cannot change observed behavior, so the
+    outcome is identical while the matrix cost drops to the covered fraction.
+    """
     if not mutants:
         return {}
+    if covered_lines is None:
+        to_run, auto_pass = mutants, []
+    else:
+        to_run = [m for m in mutants if m.line in covered_lines]
+        auto_pass = [m for m in mutants if m.line not in covered_lines]
     jobs = [
         {
             "mid": m.mid,
@@ -65,9 +77,11 @@ def evaluate_mutants(
             "test_files": test_files,
             "timeout": timeout,
         }
-        for m in mutants
+        for m in to_run
     ]
-    results: dict[str, Outcome] = {}
+    results: dict[str, Outcome] = {m.mid: Outcome.PASS for m in auto_pass}
+    if not jobs:
+        return results
     n_workers = max(1, min(workers, len(jobs)))
     if n_workers == 1:
         for job in jobs:
