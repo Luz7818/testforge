@@ -29,8 +29,15 @@ The efficiency-and-generation-space release: three independent, optional-by-defa
   input domain the function only returns observed types / raises observed
   exception classes and is deterministic. Kills are a strict superset of
   characterization mode; the feedback signal and the gate are unchanged.
-- Toggle-matrix study on the mock benchmark (`results/exp_v05_*`): per-target
-  equivalence of incremental execution, cost/quality of priority sampling.
+- Toggle-matrix study on the mock benchmark (`results/exp_v05_*`, 9 grids):
+  incremental execution is outcome-identical on all 18 targets x 8 fields
+  (wall 912s -> 884s serial; savings scale with the uncovered share, ~3% on
+  this ~83%-coverage benchmark); priority sampling only binds under budget
+  pressure (identical at the 24-mutant default, where ~11 candidates/target
+  never cap; at a 6-mutant cap MS(all) rises 88.7% -> 90.6%, 2 wins / 0
+  losses); the property hybrid kills a strict superset of characterization
+  kills and adds one grid win (integer_sqrt 76.2% -> 81.0%) at ~+30% test
+  execution time.
 
 ## [0.4.0] — 2026-09-30
 
