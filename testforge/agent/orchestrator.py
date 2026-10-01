@@ -67,10 +67,15 @@ def _read_or_placeholder(path: str | None) -> str:
 
 
 class ForgeAgent:
-    def __init__(self, config: ForgeConfig, client, ledger: CostLedger | None = None):
+    def __init__(self, config: ForgeConfig, client, ledger: CostLedger | None = None, budget=None):
         self.cfg = config
         self.client = client
         self.ledger = ledger or CostLedger(model=config.model)
+        # Optional hard cap (wall clock / tokens). Shared instance = shared
+        # budget across a batch. When exhausted the generation loop stops
+        # cleanly; the final joint evaluation still runs so the target keeps
+        # a mutation score for whatever was accepted.
+        self.budget = budget
 
     # ------------------------------------------------------------------ run
     def run_target(self, spec: TargetSpec, variant: VariantSpec) -> VariantResult:
@@ -138,6 +143,9 @@ class ForgeAgent:
         )
 
         for rnd in range(variant.rounds):
+            if self.budget is not None and self.budget.exhausted(res.tokens_in + res.tokens_out):
+                res.budget_exceeded = True
+                break
             survivors = [m for m in mutants if m.mid not in killed]
             if not survivors:
                 break
@@ -181,6 +189,9 @@ class ForgeAgent:
             accepted_this_round = 0
 
             for i, raw in enumerate(codes):
+                if self.budget is not None and self.budget.exhausted(res.tokens_in + res.tokens_out):
+                    res.budget_exceeded = True
+                    break
                 generated += 1
                 code = raw.strip()
                 if not code:

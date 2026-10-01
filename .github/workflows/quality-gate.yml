@@ -1,0 +1,29 @@
+name: Quality gate (dogfood)
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  gate:
+    # Dogfooding: the action gates testforge's own PRs. Changed benchmark
+    # targets are gated in mock mode (deterministic, zero cost); PRs that
+    # touch no gated function finish quickly with an empty gate report.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: Luz7818/testforge@main
+        with:
+          mode: mock
+          variant: B3
+          max-functions: 5
+          budget-sec: 900
+          base-ref: ${{ github.base_ref || 'main' }}
+          post-comment: 'true'
+          github-token: ${{ secrets.GITHUB_TOKEN }}

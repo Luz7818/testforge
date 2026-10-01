@@ -14,10 +14,10 @@
 
 | 项 | 值 | 复核命令 |
 |---|---|---|
-| 测试数 | 83 个测试（全部收集成功） | `.venv/Scripts/python.exe -m pytest --collect-only`，末行 `83 tests collected` |
-| 测试全通过 | 83 项通过，退出码 0（0.5 新增三项引擎/后端升级测试） | `.venv/Scripts/python.exe -m pytest` |
+| 测试数 | 91 个测试（全部收集成功） | `.venv/Scripts/python.exe -m pytest --collect-only`，末行 `91 tests collected` |
+| 测试全通过 | 91 项通过，退出码 0（0.6 新增 PR 门禁/批处理/预算测试） | `.venv/Scripts/python.exe -m pytest` |
 | 静态检查 | pyflakes 0 项；它已在 `[project.optional-dependencies].dev` 里，`pip install -e .[dev]` 即恢复 | `.venv/Scripts/python.exe -m pyflakes testforge experiments tests conftest.py` |
-| CLI 可用 | 退出码 0，三个子命令 `targets` / `run` / `report` | `.venv/Scripts/python.exe -m testforge.cli --help` |
+| CLI 可用 | 退出码 0，五个子命令 `targets` / `run` / `report` / `ci` / `batch`；`pip install testforge` 后有 `testforge` 命令 | `.venv/Scripts/python.exe -m testforge.cli --help` |
 | 基准规模 | 18 个目标函数 / 6 个模块 | `.venv/Scripts/python.exe -m testforge.cli targets`（输出 18 行） |
 | 变异体候选总数 | 197 个（未加上限时的全量） | `.venv/Scripts/python.exe -c "from testforge.benchmarks import load_targets; from testforge.analysis import inspect_target; from testforge.mutation import generate_mutants; print(sum(len(generate_mutants(inspect_target(s).module_source, s.function_name, max_mutants=10**6)) for s in load_targets()))"` |
 | 离线单格 | `numeric.integer_sqrt` B3：MS 76.2%、gen 8、acc 2，49 秒 | `.venv/Scripts/python.exe -m testforge.cli run --target numeric.integer_sqrt --variant B3 --mode mock` |
@@ -34,6 +34,10 @@
 | 路径 | 职责 | 关键文件 |
 |---|---|---|
 | `testforge/cli.py` | 命令行入口 | `_cmd_run` 依次做：读配置 → 取变体 → 解析目标 → 跑 → 落盘；参数表见 `--help` |
+| `testforge/budget.py` | 硬预算（墙钟/token） | `Budget.exhausted()`；共享实例 = 批内共享预算；耗尽时生成循环干净停止、联合评估照跑（`VariantResult.budget_exceeded`） |
+| `testforge/diff_targets.py` | diff→改动函数 | `parse_diff`（统一 diff 新侧行号）+ `changed_functions`（AST 函数跨度求交）；纯删除不产目标 |
+| `testforge/pr_gate.py` | PR 质量门禁流程 | `ci` 子命令：diff→目标→预算内逐目标跑→summary.md；退出码非 0 仅限基础设施错误（低分是信息不是失败） |
+| `testforge/batch.py` | 整仓批量增强 | `batch` 子命令：扫描公开顶层函数→优先级队列（无测试优先→测试少→名字序）→共享预算逐目标→batch-summary.md |
 | `testforge/config.py` | 全部旋钮 + 零依赖 `.env` 读取 | `_load_dotenv()`（模块顶层调用）、`ForgeConfig.from_env()`（缺 key 时 `SystemExit`） |
 | `testforge/variants.py` | 实验条件 B0–B5 的定义 | `VARIANTS` 字典：`rounds` / `gate_enabled` / `feedback_mode` / `continue_on_zero_accept` |
 | `testforge/mutation/engine.py` | 变异体生成与采样 | `priority=True` 时预算先填基线已执行行（PRIMG 式），默认关；`mutation/runner.py` 的 `covered_lines` 参数启用增量执行（未覆盖行免跑、结果恒等） |
@@ -47,7 +51,7 @@
 | `testforge/utils.py` | 临时工作区、子进程、diff、JSON | `workspace()`（一次性目录，退出即删）、`run_cmd()`（超时返回 -9） |
 | `benchmarks/` | 目标函数 + 每模块一份既有测试（B0） | `manifest.json` 是目标清单的唯一来源 |
 | `experiments/` | 网格、统计、图、跨网格比较 | `run_experiment.py` / `analyze.py` / `plots.py` / `compare_grids.py` |
-| `tests/` | 自身测试 | 12 个文件、83 项，见 `tests/README.md` |
+| `tests/` | 自身测试 | 13 个文件、91 项，见 `tests/README.md` |
 | `results/` | 实验产物 | 只读。`.gitignore` 用白名单只放行 `results/exp_*` 里的 JSON/MD/PNG |
 
 ## 关键约定
@@ -74,7 +78,7 @@
 8. **`n_accepted` 是最终套件里的文件数**：联合评估若整体不通过，会按“和 B0 一起跑不过”逐个剔除，
    最多三轮。所以 `n_accepted` 可能小于回路中验收过的数量。
 9. **数字口径**：README 与 `docs/report.md` 里的“36 个单元”“pooled n=36”指实验格数
-   （18 目标 × 2 轮网格），不是测试数。测试数是 83，两处不要互相引用。
+   （18 目标 × 2 轮网格），不是测试数。测试数是 91，两处不要互相引用。
 
 ## 改动后的验证
 

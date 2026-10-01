@@ -10,6 +10,7 @@
 from __future__ import annotations
 
 import argparse
+import sys
 from pathlib import Path
 
 from .agent import ForgeAgent
@@ -150,8 +151,32 @@ def main(argv=None) -> None:
     p_rep.add_argument("--out", default="report.md")
     p_rep.set_defaults(func=_cmd_report)
 
+    p_ci = sub.add_parser("ci", help="PR quality gate: diff -> targets -> budgeted runs -> summary")
+    p_ci.add_argument("--diff", default=None, help="unified diff file; default: git diff vs --base-ref")
+    p_ci.add_argument("--base-ref", default="main")
+    p_ci.add_argument("--root", default=".", help="repo root the diff applies to")
+    p_ci.add_argument("--mode", default=None, choices=["mock", "api"])
+    p_ci.add_argument("--variant", default="B3")
+    p_ci.add_argument("--max-functions", type=int, default=5)
+    p_ci.add_argument("--budget-sec", type=float, default=0.0)
+    p_ci.add_argument("--budget-tokens", type=int, default=0)
+    p_ci.add_argument("--out", default="results/ci_gate")
+    p_ci.set_defaults(func=lambda a: sys.exit(__import__("testforge.pr_gate", fromlist=["run_ci"]).run_ci(a)))
+
+    p_batch = sub.add_parser("batch", help="whole-package offline batch enhancement")
+    p_batch.add_argument("--package", required=True, help="package dir to scan (recursive)")
+    p_batch.add_argument("--mode", default=None, choices=["mock", "api"])
+    p_batch.add_argument("--variant", default="B3")
+    p_batch.add_argument("--max-functions", type=int, default=0)
+    p_batch.add_argument("--budget-sec", type=float, default=0.0)
+    p_batch.add_argument("--budget-tokens", type=int, default=0)
+    p_batch.add_argument("--out", default="results/batch")
+    p_batch.set_defaults(func=lambda a: __import__("testforge.batch", fromlist=["run_batch"]).run_batch(a) or 0)
+
     args = parser.parse_args(argv)
-    args.func(args)
+    rc = args.func(args)
+    if isinstance(rc, int) and rc:
+        sys.exit(rc)
 
 
 if __name__ == "__main__":

@@ -56,6 +56,8 @@ numeric.integer_sqrt                     B3  MS(all)= 76.2%  MS(cov)= 76.2%  gen
   property-based Mock 生成（特征化精确断言 + 确定性 `@given` 行为包络性质，击杀数为严格超集，`--property`）。
 - **诚实的成本账目**：token 数恒精确；美元数只在配置了带来源的单价时出现，否则显示 n/a 而非假的 $0。
 - **复现包**：`--preset published` 一条命令固化已发表网格参数，见 [REPRODUCE.md](REPRODUCE.md)。
+- **落地外壳（0.6）**：仓库即 GitHub Action（PR 变异分数注解 + 建议测试评论，采纳靠人合并）；
+  `testforge ci` diff 门禁与 `testforge batch` 整仓批量；墙钟/token 硬预算为一等公民（预算耗尽仍出已完成部分的分数）。
 
 ## 用法速查
 
@@ -68,6 +70,8 @@ numeric.integer_sqrt                     B3  MS(all)= 76.2%  MS(cov)= 76.2%  gen
 | 统计分析 / 出图 | `experiments/analyze.py --exp <目录>` ／ `experiments/plots.py --exp <目录>` |
 | 跨模型对比 | `experiments/analyze.py --exp <新网格> --compare-with <旧网格>` |
 | 接真实 LLM 端点 | `.env` 配端点变量（见 [.env.example](.env.example)）＋ `--mode api` |
+| PR 质量门禁 | `testforge ci --diff pr.diff`（diff→改动函数→预算内跑→摘要）；仓库根 [action.yml](action.yml) 可被任何仓库 `uses: Luz7818/testforge@v0.6.0` 引用 |
+| 整仓批量增强 | `testforge batch --package src/ --budget-sec 3600`（扫描公开函数→优先级队列→逐目标报告） |
 
 后端选择优先级：`--mode` 显式传参 > `TESTFORGE_MODE` 环境变量 > `mock`。
 ## 实验结果概览

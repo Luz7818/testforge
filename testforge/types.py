@@ -129,6 +129,7 @@ class VariantResult:
     rejection_reasons: dict = field(default_factory=dict)
     flaky_rejects: int = 0
     rounds_used: int = 0
+    budget_exceeded: bool = False   # generation stopped early by a hard cap
     # Final suite quality.
     n_final_tests: int = 0         # accepted candidates in final suite
     final_suite_passes: bool = True

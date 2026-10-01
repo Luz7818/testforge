@@ -11,4 +11,4 @@ Reference points for the design (see docs/report.md):
 - MutGen, "Mutation-Guided Unit Test Generation with an LLM" (arXiv:2506.02954)
 """
 
-__version__ = "0.5.0"
+__version__ = "0.6.0"

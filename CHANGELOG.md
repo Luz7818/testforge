@@ -5,6 +5,40 @@ All notable changes to TestForge are documented here. The format follows
 [SemVer](https://semver.org/): breaking the documented CLI/config contract
 bumps the major, added capability the minor, fixes the patch.
 
+## [0.6.0] — 2026-09-30
+
+The landing release: the project becomes its own GitHub Action, gains a PR
+quality gate and a whole-package batch mode, and installs a `testforge`
+command.
+
+### Added
+
+- **Repository = Action** (root `action.yml`, composite): inputs for
+  mode/endpoint/variant/caps; computes the PR diff, runs the gate, attaches
+  the summary to `$GITHUB_STEP_SUMMARY` and optionally posts/updates a PR
+  comment (marker-deduplicated). Advisory by default — suggested tests are
+  proposed in the comment, a human merges.
+- **`testforge ci`** (testforge/pr_gate.py): diff → changed-function discovery
+  (testforge/diff_targets.py, stdlib unified-diff parsing + AST spans) →
+  budgeted per-target runs → summary.md. Exit code is non-zero only for
+  infrastructure errors (a target could not be run); a low mutation score is
+  information, not a failure.
+- **`testforge batch`** (testforge/batch.py): whole-package scan for public
+  top-level functions, priority queue (no existing tests first, then fewer
+  existing tests, then name order), one shared Budget, crash-safe per-target
+  results.json + batch-summary.md with suggested tests.
+- **Budget as a first-class control** (testforge/budget.py): wall-clock and
+  token ceilings shared by everything that receives them; an exhausted budget
+  stops the generation loop cleanly while the final joint evaluation still
+  runs, so every started target keeps a mutation score
+  (`VariantResult.budget_exceeded`).
+- **Console entry point**: `pip install testforge` now provides `testforge ...`
+  (`[project.scripts]`).
+- Dogfood workflow (`.github/workflows/quality-gate.yml`): testforge's own PRs
+  are gated by the action in mock mode (deterministic, zero cost).
+- 8 new tests (diff parsing, ci end-to-end, budget early-stop, batch
+  discovery/ordering/execution) — 91 total.
+
 ## [0.5.0] — 2026-09-30
 
 The efficiency-and-generation-space release: three independent, optional-by-default upgrades from the roadmap (docs/report.md §8), each leaving the published grids' default behavior bit-for-bit unchanged.

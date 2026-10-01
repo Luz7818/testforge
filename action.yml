@@ -1,0 +1,153 @@
+name: 'TestForge quality gate'
+description: >
+  Mutation-score quality gate for pull requests: maps the diff to changed
+  functions, runs budgeted mutation-guided test generation, and annotates the
+  PR with mutation scores plus SUGGESTED tests. Advisory by default — a human
+  merges, nothing is auto-committed.
+author: 'Luz7818'
+
+branding:
+  icon: 'shield'
+  color: 'green'
+
+inputs:
+  mode:
+    description: 'Backend: mock (offline, zero cost) or api (OpenAI-compatible endpoint).'
+    required: false
+    default: 'mock'
+  api-key:
+    description: 'API key for mode=api (use a secret). Ignored in mock mode.'
+    required: false
+    default: ''
+  api-base:
+    description: 'OpenAI-compatible base URL for mode=api.'
+    required: false
+    default: 'https://api.deepseek.com'
+  model:
+    description: 'Model name for mode=api.'
+    required: false
+    default: 'deepseek-chat'
+  variant:
+    description: 'Experiment variant to run per target (B1/B2/B3; B3 = gate + feedback loop).'
+    required: false
+    default: 'B3'
+  max-functions:
+    description: 'Cap on how many changed functions are gated per run.'
+    required: false
+    default: '5'
+  budget-sec:
+    description: 'Hard wall-clock ceiling for the whole run (0 = unlimited).'
+    required: false
+    default: '900'
+  budget-tokens:
+    description: 'Hard LLM-token ceiling for the whole run (0 = unlimited).'
+    required: false
+    default: '0'
+  base-ref:
+    description: 'Base branch to diff against (pull_request events: github.base_ref).'
+    required: false
+    default: 'main'
+  diff-file:
+    description: >
+      Optional path to a pre-computed unified diff. When empty, the action
+      diffs the current HEAD against base-ref.
+    required: false
+    default: ''
+  post-comment:
+    description: 'Post the summary as a PR comment (needs github-token with pull-requests:write).'
+    required: false
+    default: 'false'
+  github-token:
+    description: 'Token for post-comment (usually secrets.GITHUB_TOKEN).'
+    required: false
+    default: ''
+  python-version:
+    description: 'Python version used to install and run testforge.'
+    required: false
+    default: '3.12'
+
+outputs:
+  summary-path:
+    description: 'Path to the markdown summary file.'
+    value: ${{ steps.gate.outputs.summary-path }}
+  targets:
+    description: 'Number of changed functions gated.'
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-python@v5
+      with:
+        python-version: ${{ inputs.python-version }}
+    - name: Install testforge from this repository
+      shell: bash
+      run: pip install "${GITHUB_ACTION_PATH}[property]"
+    - name: Compute the diff
+      id: diff
+      shell: bash
+      env:
+        BASE_REF: ${{ inputs.base-ref }}
+        DIFF_FILE: ${{ inputs.diff-file }}
+      run: |
+        if [ -n "$DIFF_FILE" ]; then
+          cp "$DIFF_FILE" /tmp/testforge-pr.diff
+        else
+          git fetch --depth=1 origin "$BASE_REF" || true
+          git diff "origin/$BASE_REF...HEAD" > /tmp/testforge-pr.diff || true
+        fi
+        echo "diff-lines=$(wc -l < /tmp/testforge-pr.diff)" >> "$GITHUB_OUTPUT"
+    - name: Run the gate
+      id: gate
+      shell: bash
+      env:
+        MODE: ${{ inputs.mode }}
+        API_KEY: ${{ inputs.api-key }}
+        API_BASE: ${{ inputs.api-base }}
+        MODEL: ${{ inputs.model }}
+        VARIANT: ${{ inputs.variant }}
+        MAX_FUNCTIONS: ${{ inputs.max-functions }}
+        BUDGET_SEC: ${{ inputs.budget-sec }}
+        BUDGET_TOKENS: ${{ inputs.budget-tokens }}
+        BASE_REF: ${{ inputs.base-ref }}
+        DIFF_FILE: ${{ inputs.diff-file }}
+      run: |
+        ARGS=(--root "$PWD" --variant "$VARIANT" --max-functions "$MAX_FUNCTIONS" \
+              --budget-sec "$BUDGET_SEC" --budget-tokens "$BUDGET_TOKENS" --out testforge-ci)
+        if [ -n "$DIFF_FILE" ]; then ARGS+=(--diff "$DIFF_FILE"); else ARGS+=(--base-ref "$BASE_REF"); fi
+        if [ "$MODE" = "api" ]; then
+          export DEEPSEEK_API_KEY="$API_KEY" TESTFORGE_API_BASE="$API_BASE" TESTFORGE_MODEL="$MODEL"
+          python -m testforge.cli ci --mode api "${ARGS[@]}"
+        else
+          python -m testforge.cli ci --mode mock "${ARGS[@]}"
+        fi
+        echo "summary-path=testforge-ci/summary.md" >> "$GITHUB_OUTPUT"
+    - name: Attach the summary to the job
+      if: always() && hashFiles('testforge-ci/summary.md') != ''
+      shell: bash
+      run: cat testforge-ci/summary.md >> "$GITHUB_STEP_SUMMARY"
+    - name: Post PR comment (optional)
+      if: inputs.post-comment == 'true' && inputs.github-token != '' && hashFiles('testforge-ci/summary.md') != ''
+      uses: actions/github-script@v7
+      with:
+        github-token: ${{ inputs.github-token }}
+        script: |
+          const fs = require('fs');
+          const summary = fs.readFileSync('testforge-ci/summary.md', 'utf8');
+          const marker = '<!-- testforge-gate -->';
+          const body = marker + '\n' + summary;
+          const { data: comments } = await github.rest.issues.listComments({
+            owner: context.repo.owner, repo: context.repo.repo,
+            issue_number: context.issue.number, per_page: 100,
+          });
+          const existing = comments.find(c => c.body && c.body.includes(marker));
+          if (existing) {
+            await github.rest.issues.updateComment({
+              owner: context.repo.owner, repo: context.repo.repo,
+              comment_id: existing.id, body,
+            });
+          } else {
+            await github.rest.issues.createComment({
+              owner: context.repo.owner, repo: context.repo.repo,
+              issue_number: context.issue.number, body,
+            });
+          }
