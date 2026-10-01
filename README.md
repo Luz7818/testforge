@@ -7,7 +7,7 @@
 [![CI](https://github.com/Luz7818/testforge/actions/workflows/ci.yml/badge.svg)](https://github.com/Luz7818/testforge/actions/workflows/ci.yml)
 [![Python](https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12-blue)](https://github.com/Luz7818/testforge)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-[![Tests](https://img.shields.io/badge/tests-75%20passed-brightgreen)](#本地验证)
+[![Tests](https://img.shields.io/badge/tests-91%20passed-brightgreen)](#本地验证)
 [![Reproducible](https://img.shields.io/badge/mock%20grid-bit--identical-informational)](REPRODUCE.md)
 
 </div>
@@ -41,8 +41,7 @@ numeric.integer_sqrt                     B3  MS(all)= 76.2%  MS(cov)= 76.2%  gen
 ```
 
 `MS(all)` 为最终套件的变异分数，`MS(cov)` 只统计被执行到的变异体，`gen`/`acc` 为生成数与被验收数；
-产物在 `results/runs/`，用 `testforge.cli report` 渲染成带逐变异体杀伤归因的报告
-（样例见 [docs/example-report.md](docs/example-report.md)，来源 JSON 已入库）。
+产物在 `results/runs/`，用 `testforge.cli report` 渲染成带逐变异体杀伤归因的报告（样例见 [docs/example-report.md](docs/example-report.md)，来源 JSON 已入库）。
 
 ## 功能特性
 
@@ -51,9 +50,8 @@ numeric.integer_sqrt                     B3  MS(all)= 76.2%  MS(cov)= 76.2%  gen
   超上限按算子分层采样（种子化）；杀伤矩阵 `pytest -x` 进程池并行。
 - **多信号验收门禁**：正确性、确定性（抗 flaky）、可证伪性；覆盖率增量默认只报告不强制（理由见报告 §4.3）。
 - **实验框架**：B0–B5 六变体配对实验、18 目标确定性基准、手写 Wilcoxon/bootstrap 统计（零重依赖）、逐格落盘崩溃续跑。
-- **可选引擎升级（0.5 起，默认关闭、不影响已发表网格）**：变异体优先级采样（预算优先填基线已执行行，
-  `--mutant-priority`）；增量变异执行（套件未执行行的变异体免跑、结果恒等，`--incremental`）；
-  property-based Mock 生成（特征化精确断言 + 确定性 `@given` 行为包络性质，击杀数为严格超集，`--property`）。
+- **可选引擎升级（0.5 起，默认关闭、不影响已发表网格）**：变异体优先级采样、增量变异执行、
+  property-based Mock 生成（`--mutant-priority` / `--incremental` / `--property`）。
 - **诚实的成本账目**：token 数恒精确；美元数只在配置了带来源的单价时出现，否则显示 n/a 而非假的 $0。
 - **复现包**：`--preset published` 一条命令固化已发表网格参数，见 [REPRODUCE.md](REPRODUCE.md)。
 - **落地外壳（0.6）**：仓库即 GitHub Action（PR 变异分数注解 + 建议测试评论，采纳靠人合并）；
@@ -74,6 +72,7 @@ numeric.integer_sqrt                     B3  MS(all)= 76.2%  MS(cov)= 76.2%  gen
 | 整仓批量增强 | `testforge batch --package src/ --budget-sec 3600`（扫描公开函数→优先级队列→逐目标报告） |
 
 后端选择优先级：`--mode` 显式传参 > `TESTFORGE_MODE` 环境变量 > `mock`。
+
 ## 实验结果概览
 
 全部真实 LLM 结果统一来自单一模型 **qwen3.8-27B**（SEU 校园 OpenAI 兼容网关，关闭思考模式）：
@@ -90,8 +89,7 @@ numeric.integer_sqrt                     B3  MS(all)= 76.2%  MS(cov)= 76.2%  gen
 | 离线 Mock | 覆盖率与检出力解耦 | 无门禁多收测试：覆盖率 91.5% 对 87.2%，MS 同为 85.5% |
 | 离线 Mock | 门禁按可证伪性拒掉的候选数 | 53 次，不采纳缺乏证据的测试 |
 
-模型沿革：v0.1–v0.3 曾在 Qwen3-VL-8B 上以完全相同的协议得到方向一致的结果（RQ1 pooled +12.7pp、B5 +4.2pp），
-历史归档见 tag v0.3.0；自 v0.4 起全部结论统一由 27B 给出（报告 §6.8）。
+模型沿革：v0.1–v0.3 曾在 Qwen3-VL-8B 上以完全相同的协议得到方向一致的结果（RQ1 pooled +12.7pp、B5 +4.2pp），历史归档见 tag v0.3.0；自 v0.4 起全部结论统一由 27B 给出（报告 §6.8）。
 
 ## 可复现性
 
@@ -110,7 +108,7 @@ numeric.integer_sqrt                     B3  MS(all)= 76.2%  MS(cov)= 76.2%  gen
 testforge/           包本体：analysis / mutation / gate / llm / agent / report / cli / presets
 benchmarks/          6 模块 × 18 目标函数 + 每模块刻意不完整的 B0 既有测试
 experiments/         run_experiment 网格 / analyze 统计 / plots 出图 / compare_grids
-tests/               74 个自身测试（11 个文件）
+tests/               91 个自身测试（13 个测试文件）
 results/exp_*        实验产物（JSON/MD/PNG），只读不改
 ```
 
@@ -124,7 +122,7 @@ results/exp_*        实验产物（JSON/MD/PNG），只读不改
 ## 本地验证
 
 ```bash
-python -m pytest                                              # 75 项测试
+python -m pytest                                              # 91 项测试
 python -m pyflakes testforge experiments tests conftest.py    # 静态检查，0 项
 python experiments/run_experiment.py --mode mock --preset published --out results/exp_check
                                                               # 复现已发表 Mock 网格（约 1 小时）
@@ -139,12 +137,8 @@ python experiments/run_experiment.py --mode mock --preset published --out result
 
 ## Roadmap
 
-- [x] 0.2 复现包化：`--preset published` + REPRODUCE.md + 指纹验收
-- [x] 0.2 成本口径诚实：无来源不出美元数
-- [x] 门禁进 CI：Mock 全链路冒烟格（0.2 提前落地）＋ 手动触发的 `api-smoke`
-- [x] 0.4 实验统一单模型：全部真实结果由 qwen3.8-27B 给出（288 格零错误），8B 历史归档于 tag v0.3.0
-- [x] 0.5 变异体优先级排序 / 增量变异执行 / property-based 生成扩展（可选开关，含矩阵研究）
-- [ ] 跨厂商家族模型
+已完成：0.2 复现包化与成本口径诚实、门禁进 CI、0.4 实验统一单模型、0.5 可选引擎升级、0.6 落地外壳
+（逐项判据见 [CHANGELOG.md](CHANGELOG.md)）。待做：跨厂商家族模型。
 
 ## 贡献与许可
 
@@ -152,7 +146,7 @@ python experiments/run_experiment.py --mode mock --preset published --out result
 任何改动都要过三条门禁：`pytest` 全绿、`pyflakes` 0 项、`--preset published` Mock 网格指纹不变。
 欢迎 issue / PR。许可证 [MIT](LICENSE)。
 
-## 引用
+## 引用与致谢
 
 ```bibtex
 @misc{testforge2026,
@@ -163,6 +157,4 @@ python experiments/run_experiment.py --mode mock --preset published --out result
   note         = {Open-source reproduction and paired study of mutation-guided LLM test generation}}
 ```
 
-## 致谢
-
-Meta ACH（FSE 2025）与 TestGen-LLM（FSE 2024）；MutGen、PRIMG、MuTAP、GEM；DeMillo & Offutt 的变异测试理论及其工业实现 PIT / mutmut。
+致谢：Meta ACH（FSE 2025）与 TestGen-LLM（FSE 2024）；MutGen、PRIMG、MuTAP、GEM；DeMillo & Offutt 的变异测试理论及其工业实现 PIT / mutmut。
