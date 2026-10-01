@@ -53,3 +53,16 @@ def moving_average(values: list, window: int) -> list:
         chunk = values[i : i + window]
         out.append(sum(chunk) / window)
     return out
+
+
+
+def demo_gate_probe(x: int) -> int:
+    """PR-gate demo target (quality-gate workflow dogfood).
+
+    Deliberately trivial and appended at the end of the module so the 18
+    registered targets' line spans (and therefore the published grids'
+    mutant numbering) are untouched. Safe to remove.
+    """
+    if x < 0:
+        return -1
+    return x * 2
