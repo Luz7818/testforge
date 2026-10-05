@@ -4,7 +4,8 @@
 > 全部脚本从仓库根执行：`.venv/Scripts/python.exe experiments/<脚本>.py ...`。
 
 一条实验链是三步：`run_experiment.py` 跑出网格 → `analyze.py` 出配对统计 → `plots.py` 出图；
-`compare_grids.py` 把两张同设计的网格并到一起做重复性检验。统计部分只用标准库，出图只用 matplotlib。
+`compare_grids.py` 把两张同设计的网格并到一起做重复性检验。统计部分只用标准库；出图只用
+matplotlib（可选依赖组 `plots`：`pip install -e .[plots]`，不装不影响统计与门禁）。
 
 ## 文件清单
 

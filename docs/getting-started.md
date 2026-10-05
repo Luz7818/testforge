@@ -10,14 +10,14 @@
 |---|---|---|
 | 操作系统 | Windows / Linux 均可（CI 两种都跑） | — |
 | 运行时 | Python 3.10 以上；仓库自带 `.venv`，本机为 3.12.0 | `.venv/Scripts/python.exe --version` |
-| 第三方依赖 | `pytest`、`coverage`、`openai`、`matplotlib` 四项（清单在 `pyproject.toml`） | `.venv/Scripts/python.exe -m pip list` |
+| 第三方依赖 | `pytest`、`coverage`、`openai` 三项（清单在 `pyproject.toml`；`matplotlib` 在可选组 `plots`） | `.venv/Scripts/python.exe -m pip list` |
 | 网络 | 离线 Mock 全流程用不到。`--mode api` 才需要能访问端点 | — |
 | 密钥 | 只有 `--mode api` 需要，见第 4 节；本机 `.env` 里那一项是空的也能跑 Mock | — |
 | 安装本包 | 推荐执行 `pip install -e .[dev]`：装上后从任意目录都能 `python -m testforge.cli`，且 `pyflakes` 门禁随依赖组恢复（0.1 版它不在任何依赖组里，重建 venv 会悄悄丢掉）。不装也能从仓库根用 `python -m ...` 跑 | `pip list` 里有 `testforge` 条目；`python -m pyflakes testforge experiments tests conftest.py` 退出码 0 |
 
 依赖没装齐时的最小需求分两档：只跑 `run`/`report` 需要 `pytest` 与 `coverage`；`openai` 只在
-`--mode api` 时才被导入（`testforge/llm/client.py` 里是懒加载）；`matplotlib` 只被
-`experiments/plots.py` 用到。
+`--mode api` 时才被导入（`testforge/llm/client.py` 里是懒加载）；`matplotlib` 在可选组 `plots`
+（`pip install -e .[plots]`），只被 `experiments/plots.py` 用到，不出图可以不装。
 
 ## 2. 认一下目标清单
 
