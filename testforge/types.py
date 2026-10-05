@@ -121,13 +121,10 @@ class VariantResult:
     killed_final: int = 0
     mutants_covered: int = 0
     killed_covered: int = 0
-    b0_killed_final: int = 0       # for reference: kills attributable to B0
     # Agent loop stats.
     n_generated: int = 0
     n_accepted: int = 0
-    n_repaired: int = 0
     rejection_reasons: dict = field(default_factory=dict)
-    flaky_rejects: int = 0
     rounds_used: int = 0
     budget_exceeded: bool = False   # generation stopped early by a hard cap
     # Final suite quality.

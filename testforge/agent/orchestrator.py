@@ -125,16 +125,13 @@ class ForgeAgent:
             covered_lines=b0_cov if cfg.incremental_execution else None,
         )
         killed_by_b0: set[str] = {mid for mid, o in b0_kills.items() if o.killed_mutant}
-        res.b0_killed_final = len(killed_by_b0)
 
         # -- 3. generation / gate / feedback loop --------------------------
         killed: set[str] = set(killed_by_b0)
         accepted: list[Candidate] = []
         seen_hashes: set[int] = {_norm_hash(b0_code)}
         reasons: Counter[str] = Counter()
-        flaky_rejects = 0
         generated = 0
-        repaired = 0
         rounds_used = 0
         policy = GatePolicy(
             gate_enabled=variant.gate_enabled,
@@ -198,7 +195,6 @@ class ForgeAgent:
                     continue
                 if not _parses(code):
                     fixed, did_repair = self._maybe_repair(code)
-                    repaired += int(did_repair)
                     if fixed is None:
                         reasons["syntax_error"] += 1
                         continue
@@ -229,7 +225,6 @@ class ForgeAgent:
                         reasons["timeout"] += 1
                     elif len(outcomes) > 1 and outcomes[0] is Outcome.PASS:
                         reasons["flaky"] += 1
-                        flaky_rejects += 1
                     else:
                         reasons["failing_on_original"] += 1
                     res.gate_log.append(
@@ -349,9 +344,7 @@ class ForgeAgent:
 
         res.n_generated = generated
         res.n_accepted = len(final_gen)
-        res.n_repaired = repaired
         res.rejection_reasons = dict(reasons)
-        res.flaky_rejects = flaky_rejects
         res.rounds_used = rounds_used
         res.price_source = self.ledger.price_source
         res.wall_sec = round(time.perf_counter() - t0, 1)
