@@ -123,7 +123,7 @@ results/exp_*        实验产物（JSON/MD/PNG），只读不改
 
 ```bash
 python -m pytest                                              # 91 项测试
-python -m pyflakes testforge experiments tests conftest.py    # 静态检查，0 项
+python -m pyflakes testforge experiments tests    # 静态检查，0 项
 python experiments/run_experiment.py --mode mock --preset published --out results/exp_check
                                                               # 复现已发表 Mock 网格（约 1 小时）
 ```

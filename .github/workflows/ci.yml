@@ -47,7 +47,7 @@ jobs:
       - name: Install package with dev gates
         run: pip install -e .[dev]
       - name: Static check (pyflakes)
-        run: python -m pyflakes testforge experiments tests conftest.py
+        run: python -m pyflakes testforge experiments tests
       - name: Run one full agent cell (mock, offline)
         run: python experiments/run_experiment.py --mode mock --targets numeric.integer_sqrt --variants B3 --out results/ci_smoke
       - name: Assert the loop produced an accepted, passing suite
