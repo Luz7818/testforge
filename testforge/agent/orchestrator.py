@@ -139,7 +139,6 @@ class ForgeAgent:
         policy = GatePolicy(
             gate_enabled=variant.gate_enabled,
             flaky_runs=cfg.flaky_runs,
-            require_coverage_delta=cfg.require_coverage_delta,
         )
 
         for rnd in range(variant.rounds):

@@ -64,7 +64,7 @@ JSON/Markdown 和 `llm_cache/` 里的 prompt 缓存会留在磁盘上。
 
 | 文件 | 干什么 | 备注 |
 |---|---|---|
-| `gate.py` | `GatePolicy` 与 `evaluate_candidate()`：算出 `GateVerdict` | 开启门禁时两项判据：`runs_on_original`（N 次全过）、`falsifiable`（至少杀一个存活变异体）；`coverage_delta` 仅在 `require_coverage_delta=True` 时才当判据 |
+| `gate.py` | `GatePolicy` 与 `evaluate_candidate()`：算出 `GateVerdict` | 开启门禁时两项判据：`runs_on_original`（N 次全过）、`falsifiable`（至少杀一个存活变异体）；`coverage_delta` 默认仅报告——把 `GatePolicy.require_coverage_delta` 设为 `True`（代码/消融层面，配置无入口）才当判据 |
 | `runner.py` | `run_tests_once()` 跑候选、`measure_coverage()` 量行覆盖 | 后者用 `coverage run --include=<模块>.py` + `coverage json`，返回（结果, 已执行行, 可执行行）；把覆盖数据转成 JSON 那一步固定 60 秒上限（`_COVERAGE_TIMEOUT`） |
 | `__init__.py` | 再导出上面这些，并且在这里定义了 `coverage_pct()` | 别从 `gate.gate` 导 `coverage_pct`，它不在那儿 |
 | `__init__.py` 的 `coverage_pct()` | 分母只算可执行行 | 注释与 docstring 不计入，所以覆盖率不会被空行抬高 |

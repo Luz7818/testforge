@@ -120,12 +120,6 @@ class ForgeConfig:
     test_timeout_sec: float = 8.0
     flaky_runs: int = 5  # reruns against the original code
 
-    # Coverage / acceptance policy. Coverage delta is reported by default but
-    # not enforced: an assertion-strengthening test may add no new lines while
-    # still detecting new bugs. Set require_coverage_delta=True to mimic
-    # TestGen-LLM style acceptance.
-    require_coverage_delta: bool = False
-
     # Property-based generation (Mock backend only): emit deterministic
     # @given property tests (Hypothesis-style) instead of single-example
     # characterization tests. Requires the optional `hypothesis` dependency
