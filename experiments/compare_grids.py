@@ -2,7 +2,7 @@
 design (e.g. results/exp_api_full and results/exp_api_replicate) to report
 replicate consistency and doubled-sample paired statistics.
 
-    python experiments/compare_grids.py --a results/exp_api_full --b results/exp_api_replicate
+    python experiments/compare_grids.py --a results/exp_api27b_full --b results/exp_api27b_replicate
 """
 
 from __future__ import annotations
@@ -15,22 +15,23 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from analyze import bootstrap_ci, wilcoxon_signed_rank, _mean, _median, _stdev  # noqa: E402
+from analyze import (  # noqa: E402
+    bootstrap_ci,
+    paired,
+    wilcoxon_signed_rank,
+    _mean,
+    _median,
+    _stdev,
+)
 
 
 def load(exp_dir: Path) -> list[dict]:
     return json.loads((exp_dir / "results.json").read_text(encoding="utf-8"))
 
 
-def paired(rows: list[dict], va: str, vb: str, metric: str = "ms_all") -> list[float]:
-    by = {(r["target_id"], r["variant"]): r for r in rows if "error" not in r}
-    targets = sorted({r["target_id"] for r in rows if "error" not in r})
-    out = []
-    for t in targets:
-        a, b = by.get((t, va)), by.get((t, vb))
-        if a and b and a.get(metric) is not None and b.get(metric) is not None:
-            out.append(a[metric] - b[metric])
-    return out
+def paired_diffs(rows: list[dict], va: str, vb: str, metric: str = "ms_all") -> list[float]:
+    """配对差值列表:复用 analyze.paired 的筛选与排序,只取 diff 列。"""
+    return [p["diff"] for p in paired(rows, va, vb, metric)]
 
 
 def main() -> None:
@@ -43,8 +44,8 @@ def main() -> None:
 
     ga, gb = Path(args.a), Path(args.b)
     ra, rb = load(ga), load(gb)
-    da = paired(ra, args.treat, args.base)
-    db = paired(rb, args.treat, args.base)
+    da = paired_diffs(ra, args.treat, args.base)
+    db = paired_diffs(rb, args.treat, args.base)
     pooled = da + db
 
     lines: list[str] = []
@@ -69,7 +70,7 @@ def main() -> None:
 
     # RQ2-style consistency check for a second pair (B3 vs B1) if present
     for treat, base in [("B3", "B1"), ("B2", "B1")]:
-        pa, pb = paired(ra, treat, base), paired(rb, treat, base)
+        pa, pb = paired_diffs(ra, treat, base), paired_diffs(rb, treat, base)
         if pa and pb:
             pp = pa + pb
             lines.append(f"- consistency check {treat} vs {base}: grid A mean {_mean(pa):+.1%}, "
