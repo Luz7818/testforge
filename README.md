@@ -116,8 +116,8 @@ results/exp_*        实验产物（JSON/MD/PNG），只读不改
 |---|---|
 | [docs/report.md](docs/report.md) | 技术报告：方法、实验、统计、有效性威胁、后续工作 |
 | [REPRODUCE.md](REPRODUCE.md) | 从 clone 到复现已发表数字的四步判据 |
-| [docs/getting-started.md](docs/getting-started.md) | 上手手册：命令、参数、故障对照 |
-| [CHANGELOG.md](CHANGELOG.md) / [AGENTS.md](AGENTS.md) | 版本变更 ／ 事实与约束（给贡献者与 AI 助手） |
+| [docs/GET-START.md](docs/GET-START.md) | 上手手册：命令、参数、故障对照 |
+| [HISTORY.md](HISTORY.md) / [AGENTS.md](AGENTS.md) | 版本变更 ／ 事实与约束（给贡献者与 AI 助手） |
 
 ## 本地验证
 
@@ -138,7 +138,7 @@ python experiments/run_experiment.py --mode mock --preset published --out result
 ## Roadmap
 
 已完成：0.2 复现包化与成本口径诚实、门禁进 CI、0.4 实验统一单模型、0.5 可选引擎升级、0.6 落地外壳
-（逐项判据见 [CHANGELOG.md](CHANGELOG.md)）。待做：跨厂商家族模型。
+（逐项判据见 [HISTORY.md](HISTORY.md)）。待做：跨厂商家族模型。
 
 ## 贡献与许可
 

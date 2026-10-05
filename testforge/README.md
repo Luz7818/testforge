@@ -51,7 +51,7 @@ JSON/Markdown 和 `llm_cache/` 里的 prompt 缓存会留在磁盘上。
 
 | 文件 | 干什么 | 备注 |
 |---|---|---|
-| `orchestrator.py` | `ForgeAgent.run_target()`：基线 → 变异 → 生成/门禁/反馈循环 → 最终联合评估 | 四段结构对应 `docs/getting-started.md` 第 3 节的表 |
+| `orchestrator.py` | `ForgeAgent.run_target()`：基线 → 变异 → 生成/门禁/反馈循环 → 最终联合评估 | 四段结构对应 `docs/GET-START.md` 第 3 节的表 |
 | `orchestrator.py` 内 `_stable_hash` / `_norm_hash` | 变异采样种子、候选去重 | 用 `zlib.crc32` 而非内建 `hash()`，理由见仓库根 `AGENTS.md` |
 | `orchestrator.py` 内 `_maybe_repair` | 语法坏掉的候选给一次修复机会 | 只在 `mode=api` 生效，Mock 产出的文件必定可解析 |
 | `prompts.py` | `build_initial_prompt` / `build_feedback_prompt` / `build_repair_prompt` | 全文用 `=== BLOCK ===` 分节，真实模型与 Mock 共用同一套解析 |
@@ -118,7 +118,7 @@ Mock 只记录 token 为 0，`CostLedger` 里的 `model` 仍是配置中的模�
 - **下游**：`--out` 目录里的 JSON 与 `summary__<变体>.md`、`llm_cache/` 里的 prompt 缓存、
   临时目录（跑完即删）。
 - **改这里之后要跑**：`.venv/Scripts/python.exe -m pytest`，再跑一遍
-  `docs/getting-started.md` 第 3 节的离线单格，比较 `MS(all)` / `gen` / `acc` 是否漂移。
+  `docs/GET-START.md` 第 3 节的离线单格，比较 `MS(all)` / `gen` / `acc` 是否漂移。
 
 ## 别动
 
