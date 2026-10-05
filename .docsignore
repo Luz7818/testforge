@@ -5,15 +5,17 @@
 # 实验产物：跑一次就变，只有 exp_* 的 JSON/MD/PNG 进版本库（见 .gitignore 白名单）
 results/
 
-# LLM prompt 缓存：文件名是 prompt 的 sha256，内容是从端点重放回来的响应
-# （llm_cache_* 是给某次运行指定独立缓存目录时产生的变体，性质相同）
+# LLM prompt 缓存总目录（2026-10-05 收拢：原先散在根部的 llm_cache_27b_* 四个目录与
+# results/ 里错放的 _cache_* 两个目录都并了进来，根目录不再有散的缓存目录）。
+# 根部直接放默认缓存（文件名 = prompt 的 sha256，内容是从端点重放回来的响应）；
+# 五个子目录 = 当年各次真实网格运行的独立采样缓存，重跑对应网格时把
+# TESTFORGE_CACHE_DIR 指到同名子目录即可命中逐位重放：
+#   27b_full / 27b_full_rep     27B 主网格采样 1 / 采样 2
+#   27b_rq2_rep / rq2_rep       27B B5 网格采样 2 / RQ2 网格采样
+#   rq2full_rep                 27B RQ2full 网格采样 2
 llm_cache/
-llm_cache_27b_full   # 27B 主网格采样 1 的独立 prompt 缓存（运行时产物，性质同 llm_cache）
-llm_cache_27b_rq2    # 27B B5 网格采样 1 的独立 prompt 缓存（运行时产物，性质同 llm_cache）
-llm_cache_27b_full_rep  # 27B 主网格采样 2（独立采样）的 prompt 缓存
-llm_cache_27b_rq2_rep   # 27B B5 网格采样 2（独立采样）的 prompt 缓存
 
-# editable 安装（pip install -e .）生成的构建元数据
+# editable 安装（pip install -e .）生成的构建元数据（删了也会在下次重装时再生，条目留作登记）
 testforge.egg-info
 
 # 兜底：本机 Python 直接写在根上的字节码缓存目录（检查脚本也内置跳过它）
