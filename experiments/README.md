@@ -1,7 +1,7 @@
 # experiments/ —— 网格、统计与图
 
 > 用途：说明这四个脚本各自跑什么、参数怎么写、产物落在哪里、哪些命令会覆写仓库里的文件。
-> 全部脚本从仓库根执行：`.venv/Scripts/python.exe experiments/<脚本>.py ...`。
+> 全部脚本用 `.venv\Scripts\python.exe` 从仓库根执行，具体命令见下文各节。
 
 一条实验链是三步：`run_experiment.py` 跑出网格 → `analyze.py` 出配对统计 → `plots.py` 出图；
 `compare_grids.py` 把两张同设计的网格并到一起做重复性检验。统计部分只用标准库；出图只用

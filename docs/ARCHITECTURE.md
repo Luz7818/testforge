@@ -48,7 +48,7 @@ Python CLI + 实验框架：给一个函数，LLM 生成候选单元测试，只
 - **实验产物的数字口径**："36 个单元"/"pooled n=36" 指实验格数（18 目标 × 2 轮网格），
   不是测试数（91）；两处不要互相引用。
 - `results/exp_mock_full/analysis.md` 是旧脚本产物，重算版在同目录 `analysis_v2.md`；
-  `docs/example-report.md` 来自已跟踪的 `results/api_smoke/` 渲染，克隆后无法重跑该核对。
+  `docs/example-report.md` 来自已跟踪的 `results/exp_api27b_smoke/` 渲染（`results.json` + `summary.md`）。
 
 ## 关键约定（违反会出问题的）
 

@@ -20,7 +20,7 @@ benchmarks/
 |---|---|---|
 | `manifest.json` | 唯一的目标登记表，18 条 `{id, module, function}` | `testforge/benchmarks.py` 按约定拼路径：`targets/<module>.py`、`existing_tests/test_<module>.py`，所以文件名不能随便改 |
 | `targets/string_utils.py` | `slugify`（转 URL slug）、`mask_email`（日志脱敏）、`truncate_with_ellipsis`（按长度截断加省略号） | 三个函数都带 docstring 写明错误契约 |
-| `targets/numeric.py` | `clamp`（夹进闭区间）、`integer_sqrt`（向下取整平方根）、`moving_average`（滑动窗口均值） | — |
+| `targets/numeric.py` | `clamp`（夹进闭区间）、`integer_sqrt`（向下取整平方根）、`moving_average`（滑动窗口均值） | 文件里另有 `demo_gate_probe`，未登记进 manifest、全仓零引用——改动前先确认它是否该进 manifest 或删除 |
 | `targets/date_utils.py` | `is_leap_year`、`days_in_month`、`age_in_days`（两个 ISO 日期之间的整天数） | — |
 | `targets/containers.py` | `flatten`（任意层嵌套展平）、`chunk`（按大小切片）、`most_frequent`（众数，并列取先出现者） | — |
 | `targets/parsers.py` | `parse_csv_line`（含引号与转义）、`parse_version`（点分三段转整数元组）、`parse_kv_pairs` | `parse_csv_line` 是基准里最难杀的目标 |

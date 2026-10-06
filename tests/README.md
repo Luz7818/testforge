@@ -60,7 +60,7 @@
   复核（在仓库根，无输出即没有任何网络引用；`--include` 不能省，否则这条命令会匹配到本说明自己）：
   `grep -rEn "requests|urllib|http" tests --include='*.py'`。
 - **下游**：本套件是全仓库唯一的自动化门禁——CI 在 push/PR 时跑 `python -m pytest tests/ -q`
-  （见 `.github/workflows/ci.yml`，另有 `mutation-loop-smoke` 跑一格 Mock 全链路），仓库根 `AGENTS.md` 的「83 个测试」也取自这里的收集数。
+  （见 `.github/workflows/ci.yml`，另有 `mutation-loop-smoke` 跑一格 Mock 全链路），仓库根 `AGENTS.md` 的「91 个测试」也取自这里的收集数。
 - **改这里之后要跑**（全部在仓库根执行）：
   - 改 `testforge/gate/**` → `.venv/Scripts/python.exe -m pytest tests/test_gate.py`（5 项）
   - 改 `testforge/mutation/**` → `.venv/Scripts/python.exe -m pytest tests/test_operators.py tests/test_engine.py tests/test_matrix.py`（17 项）

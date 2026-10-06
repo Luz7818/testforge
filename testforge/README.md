@@ -9,18 +9,23 @@ JSON/Markdown 和 `llm_cache/` 里的 prompt 缓存会留在磁盘上。
 
 ## 文件清单
 
-顶层 `.py` 共 7 个（复核，在仓库根：`ls testforge/*.py | wc -l`）。这张表只是索引，
+顶层 `.py` 共 12 个（复核，在仓库根：`ls testforge/*.py | wc -l`）。这张表只是索引，
 每个文件的行为细节与坑见下面「顶层文件」一节。
 
 | 文件 | 干什么 | 备注 |
 |---|---|---|
-| `__init__.py` | 包 docstring + `__version__ = "0.1.0"` | `--version` 打印 `testforge 0.1.0`（复核：`.venv/Scripts/python.exe -m testforge.cli --version`） |
-| `cli.py` | argparse 入口，三个子命令 `targets` / `run` / `report` | 参数表见 `.venv/Scripts/python.exe -m testforge.cli --help` |
+| `__init__.py` | 包 docstring + `__version__ = "0.6.0"` | `--version` 打印 `testforge 0.6.0`（复核：`.venv/Scripts/python.exe -m testforge.cli --version`） |
+| `cli.py` | argparse 入口，五个子命令 `targets` / `run` / `report` / `ci` / `batch` | 参数表见 `.venv/Scripts/python.exe -m testforge.cli --help` |
 | `config.py` | `ForgeConfig`：全部旋钮的唯一出处 + 零依赖 `.env` 读取 | `_load_dotenv()` 在模块顶层被调用，先于任何 `from_env()` |
 | `variants.py` | `VARIANTS` 字典（B0–B5 六个实验条件）+ `get_variant()` | 未知名字抛 `SystemExit` 并列出全部合法值 |
 | `types.py` | 10 个共享数据结构（`Outcome` … `CostLedger`，复核：`grep -cE "^class " testforge/types.py`） | 被全部子包读取，改它等于改契约 |
 | `benchmarks.py` | 读 `benchmarks/manifest.json` 拼出 18 个 `TargetSpec` | `load_targets()` / `get_target()` / `result_to_dict()` |
 | `utils.py` | `workspace()` 临时工作区、`run_cmd()` 子进程、`mini_diff()`、`write_json()` | `run_cmd()` 超时返回 -9，被杀伤矩阵与门禁共用 |
+| `presets.py` | 命名网格参数集（`PRESETS`），已发表数字免记旗标即可复现 | 0.6 新增；键名即 `--preset` 取值 |
+| `budget.py` | 智能体运行的硬预算上限（调用数/花费），CI 与 batch 的一等控制 | 0.6 新增 |
+| `diff_targets.py` | 把统一 diff 映射到被改动的函数——PR 门禁的目标发现 | 0.6 新增 |
+| `pr_gate.py` | PR 质量门禁：diff → 目标 → 预算内运行 → 汇总（`cli.py` 的 `ci` 子命令） | 0.6 新增 |
+| `batch.py` | 整包离线批量增强（B5 形态的工程壳，`cli.py` 的 `batch` 子命令） | 0.6 新增 |
 
 ## 子目录
 
@@ -39,8 +44,8 @@ JSON/Markdown 和 `llm_cache/` 里的 prompt 缓存会留在磁盘上。
 
 | 文件 | 干什么 | 备注 |
 |---|---|---|
-| `__init__.py` | 包说明与 `__version__ = "0.1.0"` | CLI 的 `--version` 读它 |
-| `cli.py` | 三个子命令：`targets` / `run` / `report` | `run` 的顺序是读配置 → 取变体 → 解析目标 → 跑 → 落盘；`--variant` 默认 `B3`，`--mode` 默认 `mock`，`--out` 默认 `results/runs`（相对仓库根解析） |
+| `__init__.py` | 包说明与 `__version__ = "0.6.0"` | CLI 的 `--version` 读它 |
+| `cli.py` | 五个子命令：`targets` / `run` / `report` / `ci` / `batch` | `run` 的顺序是读配置 → 取变体 → 解析目标 → 跑 → 落盘；`--variant` 默认 `B3`，`--mode` 默认 `mock`，`--out` 默认 `results/runs`（相对仓库根解析） |
 | `config.py` | 全部旋钮 + 零依赖 `.env` 读取 | `_load_dotenv()` 在模块顶层被调用；`from_env()` 在 `mode=api` 且 key 为空时 `SystemExit`；`workers` 默认 `max(2, min(8, cpus-2))`；两个 `price_*` 是占位单价 |
 | `types.py` | 共享数据结构 | `Outcome`（pass/fail/error/timeout，非 pass 即杀死）、`TargetSpec`、`TargetInfo`、`Mutant`、`Candidate`、`GateVerdict`、`VariantSpec`、`VariantResult`（`ms_all`/`ms_covered` 是派生属性）、`CostLedger` |
 | `variants.py` | 实验条件 B0–B5 的唯一定义 | `VARIANTS` + `get_variant()`；`--variant` 与 `run_experiment.py --variants` 都读这张表 |

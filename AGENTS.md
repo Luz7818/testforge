@@ -105,7 +105,7 @@
 | Mock 可复现 | 同命令跑两遍，JSON 仅 `wall_sec` 不同 | 跑两遍到两个 `--out` 目录后逐字段比较 |
 | CI | 5 个 job：4 格测试矩阵（ubuntu 3.10/3.11/3.12 + windows 3.12，`pip install -e .[dev]` + pytest + CLI 冒烟）、`mutation-loop-smoke`（pyflakes + 一格 Mock 全链路冒烟 + 结果断言）、`api-smoke`（仅手动触发，无密钥自动跳过）。**这里不写"最近一次是哪个提交"**——分支每推一次它就变，写进文档同一次提交里就作废了；当前分支 HEAD 的徽章为 `passing`（复核见右）。本机没有 `gh`，但徽章与 Actions 接口对**公开仓都免认证**；要提交号再用 `/actions/runs`（匿名限 60 次/小时/IP，别拿它轮询） | `python -c "import urllib.request as u;b=u.urlopen(u.Request('https://github.com/Luz7818/testforge/workflows/CI/badge.svg',headers={'User-Agent':'Mozilla/5.0'}),timeout=30).read().decode();print('passing' in b)"` 应为 `True`；步骤读 `.github/workflows/ci.yml` |
 | 运行时依赖 | 3 项：`pytest>=8.0`、`coverage>=7.4`、`openai>=1.30`；`matplotlib>=3.8` 在可选组 `plots`（只被 `experiments/plots.py` 用，出图才装） | 读 `pyproject.toml` 的 `[project] dependencies` 与 `[project.optional-dependencies]` |
-| 依赖安装位置 | 仓库根 `pyproject.toml`，无 `requirements.txt`；`testforge` 已以 editable 装进 `.venv`（0.2 起），从任意 cwd 都能 `python -m testforge.cli` | `.venv/Scripts/python.exe -m pip list`（有 `testforge 0.2.0` 条目） |
+| 依赖安装位置 | 仓库根 `pyproject.toml`，无 `requirements.txt`；`testforge` 已以 editable 装进 `.venv`（0.5 起），从任意 cwd 都能 `python -m testforge.cli`（editable 元数据落后源码的 `0.6.0` 一版，重装即同步） | `.venv/Scripts/python.exe -m pip list`（有 `testforge 0.5.0` 条目） |
 | prompt 缓存 | `llm_cache/` 根部 = 默认缓存；其下五个子目录 `27b_full`、`27b_full_rep`、`27b_rq2_rep`、`rq2_rep`、`rq2full_rep` = 历次真实网格的独立采样缓存（2026-10-05 从根部散目录收拢，采样间隔离）；缓存键含 `TESTFORGE_EXTRA_BODY`（0.3 起），不同请求体设置不互串 | `python -c "import pathlib;print(len(list(pathlib.Path('llm_cache/27b_full').glob('*.json'))))"` |
 
 ## 已知坑（省下一次的调查时间）
@@ -120,10 +120,10 @@
   `--preset published` / `--preset published-b5` 固化；v0.1–v0.3 的 8B 网格归档在 tag v0.3.0。
 - `results/exp_mock_full/analysis.md` 是旧脚本产物（缺两节），重算版在同目录 `analysis_v2.md`；
   重算版把 v0.1 占位单价算出的美元列按"未定价"处理。
-- `results/` 下只有 `exp_*` 的 JSON/MD/PNG 被跟踪；`demo/`、`api_smoke/`、`*.log` 是本机残留，
-  新克隆没有。`docs/example-report.md` 来自 `results/api_smoke/` 渲染，克隆后无法重跑该核对。
+- `results/` 下只有 `exp_*` 的 JSON/MD/PNG 被跟踪；`demo/`、`api_smoke/` 已删除，`*.log` 不会入库。
+  `docs/example-report.md` 来自已跟踪的 `results/exp_api27b_smoke/`（`results.json` + `summary.md`）渲染。
 - `docs/report.md` 末尾"36 个自测"与 `docs/interview.md` 的"全管线 36 个自测通过"是旧数字
-  （现为 83）。这两份按要求保持原样，引用测试数以本文件为准。
+  （现为 91）。这两份按要求保持原样，引用测试数以本文件为准。
 - `.ruff_cache/` 是外部 ruff 运行留下的；本仓能跑的静态检查是 pyflakes。
 - `--out` 参数以仓库根为基准拼接，不是当前工作目录；`--module` 这类用户文件路径仍按 cwd 解析。
 - `plots.py` 标题取自 `cost.model`，mock 网格会写 `LLM: deepseek-chat`——跑 mock 网格显式传

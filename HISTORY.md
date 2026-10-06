@@ -227,3 +227,16 @@ command.
   保留全部数字与复核命令）。
 - `CHANGELOG.md` 并入本文件（上方 v0.1.0–v0.6.0 条目逐条保留、原文未改写），原文件删除。
 - 变更缘由：落位《项目整体规范.md》九件必建。
+
+## 2026-10-06 · 文档核查修复（0.6 交付物回写 + 旧值清零）
+
+- **包说明对齐 0.6.0**：testforge/README 顶层 `.py` 7→12（补 batch/budget/diff_targets/
+  pr_gate/presets 五行，标注 0.6 新增）、版本 0.1.0→0.6.0、cli 子命令 3→5（ci/batch）。
+- **旧值清零**：AGENTS editable 条目 0.2.0→0.5.0（并注明元数据落后源码一版）、
+  「现为 83」→91；tests/README 引用 AGENTS「83 个测试」→91；GET-START 两处
+  `49 passed`→91；ARCHITECTURE 与 AGENTS 的 example-report 来源 api_smoke→
+  `results/exp_api27b_smoke/`（api_smoke 已删）。
+- **杂项**：benchmarks/README 登记 numeric.py 的第 4 个函数 `demo_gate_probe`
+  （未进 manifest、零引用，留待决断）；experiments/README 用途行去掉 `<脚本>` 占位；
+  GET-START 示例 `--target <新 id>` 改真实 id `numeric.clamp`；TODO「正在做」更新；
+  目录说明补 `action.yml`（此前漏登的 GitHub Action 入口）。
