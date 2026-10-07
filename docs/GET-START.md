@@ -224,7 +224,7 @@ plots -> ..\tf_smoke\plots
 想复现已发表的那三张 90 格网格，用 `--preset published`（16 变异体 / 每轮 3 候选 / 2 轮反馈 /
 门禁重跑 ×3，即旧版要手写 `--max-mutants 16 --candidates 3 --rounds 2 --flaky-runs 3` 的那组）；
 B5 消融网格对应 `--preset published-b5`（24 / 4 / 4）。显式旗标 > 预设 > 默认值，启动时打印的
-首行就是本次生效参数。全部命令与逐步判据见仓库根 [REPRODUCE.md](../REPRODUCE.md)。
+首行就是本次生效参数。全部命令与逐步判据见同目录 [REPRODUCE.md](REPRODUCE.md)。
 
 ## 7. 想改它
 

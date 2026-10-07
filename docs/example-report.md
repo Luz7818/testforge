@@ -1,6 +1,6 @@
 <!-- Rendered from results/exp_api27b_smoke/results.json (in version control): a
      one-cell real-endpoint run (SEU campus gateway, model qwen3.8-27b, 2026-09-29).
-     Re-render with:  python - <<'EOF'  (see REPRODUCE.md) or testforge.cli report
+     Re-render with:  python - <<'EOF'  (see docs/REPRODUCE.md) or testforge.cli report
      after extracting the row. Token counts are exact; no price was configured
      for this self-hosted endpoint, so no USD figure is claimed. -->
 

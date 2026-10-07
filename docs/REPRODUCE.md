@@ -1,6 +1,6 @@
 # Reproducing the published results
 
-Everything numbered in [README.md](README.md) and [docs/report.md](docs/report.md)
+Everything numbered in [README.md](../README.md) and [docs/report.md](report.md)
 comes from grids archived under `results/exp_*`. This file turns "trust me" into
 "run it yourself": four steps from a fresh clone to the published numbers, no
 network needed for the offline path.

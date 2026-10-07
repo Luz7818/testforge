@@ -8,7 +8,7 @@
 [![Python](https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12-blue)](https://github.com/Luz7818/testforge)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Tests](https://img.shields.io/badge/tests-91%20passed-brightgreen)](#本地验证)
-[![Reproducible](https://img.shields.io/badge/mock%20grid-bit--identical-informational)](REPRODUCE.md)
+[![Reproducible](https://img.shields.io/badge/mock%20grid-bit--identical-informational)](docs/REPRODUCE.md)
 
 </div>
 
@@ -53,7 +53,7 @@ numeric.integer_sqrt                     B3  MS(all)= 76.2%  MS(cov)= 76.2%  gen
 - **可选引擎升级（0.5 起，默认关闭、不影响已发表网格）**：变异体优先级采样、增量变异执行、
   property-based Mock 生成（`--mutant-priority` / `--incremental` / `--property`）。
 - **诚实的成本账目**：token 数恒精确；美元数只在配置了带来源的单价时出现，否则显示 n/a 而非假的 $0。
-- **复现包**：`--preset published` 一条命令固化已发表网格参数，见 [REPRODUCE.md](REPRODUCE.md)。
+- **复现包**：`--preset published` 一条命令固化已发表网格参数，见 [REPRODUCE.md](docs/REPRODUCE.md)。
 - **落地外壳（0.6）**：仓库即 GitHub Action（PR 变异分数注解 + 建议测试评论，采纳靠人合并）；
   `testforge ci` diff 门禁与 `testforge batch` 整仓批量；墙钟/token 硬预算为一等公民（预算耗尽仍出已完成部分的分数）。
 
@@ -97,7 +97,7 @@ numeric.integer_sqrt                     B3  MS(all)= 76.2%  MS(cov)= 76.2%  gen
 |---|---|---|
 | 单元测试 | `python -m pytest` 全绿 | CI 四格矩阵 + 本地 |
 | 单格运行（Mock） | 同命令重跑，JSON 除 `wall_sec` 外逐字段相同 | `cli run` 跑两遍比较 |
-| 完整网格（Mock） | `--preset published` 重跑，指纹与均分复现已发表档案 | [REPRODUCE.md](REPRODUCE.md) 四步 |
+| 完整网格（Mock） | `--preset published` 重跑，指纹与均分复现已发表档案 | [REPRODUCE.md](docs/REPRODUCE.md) 四步 |
 | 真实 LLM 网格 | 方向、显著性、效应量可复现；单格分数受采样随机性影响 | 清缓存独立采样重跑 |
 
 变异采样与 Mock 采样全部种子化（`zlib.crc32`，规避 `PYTHONHASHSEED`）；prompt 缓存命中时逐位重放，清空即得独立采样。
@@ -115,7 +115,7 @@ results/exp_*        实验产物（JSON/MD/PNG），只读不改
 | 文档 | 内容 |
 |---|---|
 | [docs/report.md](docs/report.md) | 技术报告：方法、实验、统计、有效性威胁、后续工作 |
-| [REPRODUCE.md](REPRODUCE.md) | 从 clone 到复现已发表数字的四步判据 |
+| [REPRODUCE.md](docs/REPRODUCE.md) | 从 clone 到复现已发表数字的四步判据 |
 | [docs/GET-START.md](docs/GET-START.md) | 上手手册：命令、参数、故障对照 |
 | [HISTORY.md](HISTORY.md) / [AGENTS.md](AGENTS.md) | 版本变更 ／ 事实与约束（给贡献者与 AI 助手） |
 
@@ -142,7 +142,7 @@ python experiments/run_experiment.py --mode mock --preset published --out result
 
 ## 贡献与许可
 
-改动前请读 [AGENTS.md](AGENTS.md)（事实口径）与 [REPRODUCE.md](REPRODUCE.md)（验收判据）。
+改动前请读 [AGENTS.md](AGENTS.md)（事实口径）与 [REPRODUCE.md](docs/REPRODUCE.md)（验收判据）。
 任何改动都要过三条门禁：`pytest` 全绿、`pyflakes` 0 项、`--preset published` Mock 网格指纹不变。
 欢迎 issue / PR。许可证 [MIT](LICENSE)。
 

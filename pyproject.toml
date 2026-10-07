@@ -65,7 +65,7 @@ Homepage = "https://github.com/Luz7818/testforge"
 Repository = "https://github.com/Luz7818/testforge"
 Issues = "https://github.com/Luz7818/testforge/issues"
 Changelog = "https://github.com/Luz7818/testforge/blob/main/CHANGELOG.md"
-Reproducing = "https://github.com/Luz7818/testforge/blob/main/REPRODUCE.md"
+Reproducing = "https://github.com/Luz7818/testforge/blob/main/docs/REPRODUCE.md"
 
 [tool.setuptools.packages.find]
 include = ["testforge*"]

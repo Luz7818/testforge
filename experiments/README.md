@@ -83,7 +83,7 @@ matplotlib（可选依赖组 `plots`：`pip install -e .[plots]`，不装不影�
   `analysis.md`、`analysis.json`、`plots/*.png`、`compare.md`。要重算就先把网格目录拷到临时位置。
 - 不要用当前默认参数去“复现”已发表的三张 90 格网格：那三张用的是 16 变异体 / 每轮 3 候选 /
   2 轮 / 门禁重跑 ×3，与默认的 24 / 4 / 3 不同。0.2 起用 `--preset published` 固化（指纹与
-  数值见 `testforge/presets.py` 与仓库根 REPRODUCE.md；复核：读对应 `results.json` 里
+  数值见 `testforge/presets.py` 与 docs/REPRODUCE.md；复核：读对应 `results.json` 里
   `mutants_total` 与 `n_generated` 的最大值）。
 - 不要给 `analysis.json`、`compare.md` 加构建时间戳或本机绝对路径：它们进版本库，
   加了就会每次重跑都产生幻影 diff。
