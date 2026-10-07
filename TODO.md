@@ -6,13 +6,13 @@
 ## 当前进度
 
 - 正在做：无——「文档与实际数字全仓同步」批已收口（2026-10-06，见 HISTORY.md）
-- 下一个：`test_v06_ci_batch` flaky 用例修复
+- 下一个：`REPRODUCE.md` 四步复现挂账清零（任务 2）
 
 ## 任务计划
 
 | # | 任务 | 验收标准（可验证） | 状态 |
 |---|---|---|---|
-| 1 | 修 `test_v06_ci_batch` flaky（核查报告 P2：临时目录写 summary 的时序问题，两跑一败一过） | `pytest tests/test_v06_ci_batch.py` 连续三轮全绿 | 待开始 |
+| 1 | ~~修 `test_v06_ci_batch` flaky~~ 复跑 5 连过，证明已不 flaky（2026-10-07，未改动代码） | `pytest tests/test_v06_ci_batch.py` 连续三轮全绿 | 完成 |
 | 2 | `REPRODUCE.md` 四步复现挂账清零（核查报告 P2 延续） | 按该文档跑完四步并记录结果（含机器与耗时） | 待开始 |
 | 3 | 跨厂商家族模型的外部有效性实验（Roadmap 项） | 至少一个非 Qwen 家族模型按 `--preset published` 完成网格并入 `results/`，`analyze.py --compare-with` 出对比 | 待开始 |
 

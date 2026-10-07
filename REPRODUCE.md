@@ -23,8 +23,8 @@ pip install -e .[dev]
 `[dev]` includes `pyflakes`, so both repo gates work on a fresh machine:
 
 ```bash
-python -m pytest              # 49+ tests
-python -m pyflakes testforge experiments tests conftest.py
+python -m pytest              # 89 tests
+python -m pyflakes testforge experiments tests
 ```
 
 ## Step 2 — run the published grid (offline, zero cost)
