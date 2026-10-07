@@ -17,6 +17,7 @@ results/**
 !results/exp_*/plots/*.png
 !results/exp_*/analysis_v2.md
 !results/exp_*/analysis_v2.json
+!results/README.md
 
 # editable install artifact
 *.egg-info/

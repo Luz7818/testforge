@@ -2,7 +2,9 @@
 # 检查脚本内置已跳过 .venv、__pycache__、.pytest_cache、.ruff_cache、docs、build、dist 等。
 # 每行一个相对仓库根的路径，结尾斜杠可有可无。
 
-# 实验产物：跑一次就变，只有 exp_* 的 JSON/MD/PNG 进版本库（见 .gitignore 白名单）
+# 实验产物：跑一次就变，只有 exp_* 的 JSON/MD/PNG 与 results/README.md 进版本库（见
+# .gitignore 白名单）。手写的存档说明在 results/README.md；目录整体仍豁免，因为其余
+# .md 都是脚本生成的产物
 results/
 
 # LLM prompt 缓存总目录（2026-10-05 收拢：原先散在根部的 llm_cache_27b_* 四个目录与

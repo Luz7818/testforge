@@ -120,7 +120,7 @@
   `--preset published` / `--preset published-b5` 固化；v0.1–v0.3 的 8B 网格归档在 tag v0.3.0。
 - `results/exp_mock_full/analysis.md` 是旧脚本产物（缺两节），重算版在同目录 `analysis_v2.md`；
   重算版把 v0.1 占位单价算出的美元列按"未定价"处理。
-- `results/` 下只有 `exp_*` 的 JSON/MD/PNG 被跟踪；`demo/`、`api_smoke/` 已删除，`*.log` 不会入库。
+- `results/` 下只有 `exp_*` 的 JSON/MD/PNG 与 `results/README.md` 被跟踪；`demo/`、`api_smoke/` 已删除，`*.log` 不会入库。
   `docs/example-report.md` 来自已跟踪的 `results/exp_api27b_smoke/`（`results.json` + `summary.md`）渲染。
 - `docs/report.md` 末尾"36 个自测"与 `docs/interview.md` 的"全管线 36 个自测通过"是旧数字
   （现为 89）。这两份按要求保持原样，引用测试数以本文件为准。

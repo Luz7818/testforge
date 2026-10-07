@@ -14,7 +14,7 @@
 
 | 判定 | 规则 |
 |---|---|
-| 必须入库 | `testforge/`、`benchmarks/`、`experiments/`、`tests/`、`results/exp_*/`（白名单：JSON/MD/PNG）、`llm_cache/`（prompt 缓存，命中即免费重放）、`action.yml`、文档 |
+| 必须入库 | `testforge/`、`benchmarks/`、`experiments/`、`tests/`、`results/exp_*/`（白名单：JSON/MD/PNG）与 `results/README.md`、`llm_cache/`（prompt 缓存，命中即免费重放）、`action.yml`、文档 |
 | 禁止上传 | `.env`（含校园网关密钥；模板 `.env.example`）、`results/` 白名单外的本机残留（`demo/`、`*.log` 等）、`.ruff_cache/`、`__pycache__/` |
 | 缓存边界 | `llm_cache/` 文件名 = prompt 指纹，不要手改；独立采样走子目录，不混入已发表网格的缓存 |
 

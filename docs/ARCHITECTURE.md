@@ -34,7 +34,7 @@ Python CLI + 实验框架：给一个函数，LLM 生成候选单元测试，只
 | `benchmarks/` | 目标函数 + 每模块一份既有测试（B0） | `manifest.json` 是目标清单的唯一来源 |
 | `experiments/` | 网格、统计、图、跨网格比较 | `run_experiment.py` / `analyze.py` / `plots.py` / `compare_grids.py` |
 | `tests/` | 自身测试 | 13 个文件、89 项，见 `tests/README.md` |
-| `results/` | 实验产物 | 只读；`.gitignore` 白名单只放行 `results/exp_*` 的 JSON/MD/PNG |
+| `results/` | 实验产物存档（存档结构与批次对照见 results/README.md） | 只读；`.gitignore` 白名单只放行 `results/exp_*` 的 JSON/MD/PNG 与 `results/README.md` |
 | `action.yml` | 仓库即 GitHub Action（composite） | 任何仓库 `uses: Luz7818/testforge@v0.6.0` |
 
 ## 数据组织方式

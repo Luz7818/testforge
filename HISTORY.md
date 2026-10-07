@@ -253,3 +253,14 @@ command.
   `test_resolve_params_published_preset_matches_archive` 钉住。
 - 文档同步：AGENTS / README / ARCHITECTURE / GET-START / tests/README 的测试数
   91→89；tests/README 的 test_presets 条目改 6 项。
+
+## 2026-10-07 · results/ 存档说明补齐（results/README.md）
+
+- 新增 `results/README.md`（`.gitignore` 白名单加一行入库）：交代命名前缀与历史批次的
+  对应（`exp_api27b_*` = v0.4.0 起 qwen3.8-27B、`exp_v05_*` = v0.5.0 Mock 开关矩阵、
+  `exp_api_*` = v0.1–v0.3 的 8B 时期已档在 tag v0.3.0）、白名单入库的五个已发表协议
+  网格（27B 主网格与 B5 网格各两次采样 + `exp_mock_full`）、`exp_mock_full/analysis.md`
+  缺「LLM usage per variant」与「Per-target uplift」两节的时间差（重算版
+  `analysis_v2.md` 在同目录）；并登记 `exp_api_rq2full/` 为不入库的本机残留。
+- 数据文件零改动、零重命名；目录说明、docs/GIT.md、AGENTS、ARCHITECTURE、.docsignore
+  的入库边界描述同步。
