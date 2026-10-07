@@ -26,6 +26,7 @@ JSON/Markdown 和 `llm_cache/` 里的 prompt 缓存会留在磁盘上。
 | `diff_targets.py` | 把统一 diff 映射到被改动的函数——PR 门禁的目标发现 | 0.6 新增 |
 | `pr_gate.py` | PR 质量门禁：diff → 目标 → 预算内运行 → 汇总（`cli.py` 的 `ci` 子命令） | 0.6 新增 |
 | `batch.py` | 整包离线批量增强（B5 形态的工程壳，`cli.py` 的 `batch` 子命令） | 0.6 新增 |
+| `pricing.json` | 可选单价表（带来源与生效日期；默认空 = 不出美元数） | 包数据，随 wheel/sdist 分发（`pyproject.toml` 的 package-data）；`config._load_price_table()` 按 `PRICING_FILE` 解析，缺失/空/坏格式一律「未配置」 |
 
 ## 子目录
 
@@ -119,7 +120,7 @@ Mock 只记录 token 为 0，`CostLedger` 里的 `model` 仍是配置中的模�
 ## 和谁打交道
 
 - **上游**：`benchmarks/manifest.json`（目标清单）、`benchmarks/targets/*.py`（被测源码）、
-  `benchmarks/existing_tests/*.py`（B0）、`.env`（端点配置）。
+  `benchmarks/existing_tests/*.py`（B0）、`.env`（端点配置）、包内 `pricing.json`（可选单价表）。
 - **下游**：`--out` 目录里的 JSON 与 `summary__<变体>.md`、`llm_cache/` 里的 prompt 缓存、
   临时目录（跑完即删）。
 - **改这里之后要跑**：`.venv/Scripts/python.exe -m pytest`，再跑一遍

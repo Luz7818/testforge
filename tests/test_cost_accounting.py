@@ -88,7 +88,7 @@ def test_pricing_table_entry_sets_provenance(tmp_path, monkeypatch):
         ),
         encoding="utf-8",
     )
-    monkeypatch.setattr(cfg, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(cfg, "PRICING_FILE", tmp_path / "pricing.json")
     monkeypatch.setenv("TESTFORGE_MODEL", "test-model")
     c = cfg.ForgeConfig.from_env()
     assert c.price_input_per_m == 1.0
@@ -99,7 +99,7 @@ def test_pricing_table_entry_sets_provenance(tmp_path, monkeypatch):
 
 def test_pricing_table_without_matching_entry_stays_unpriced(tmp_path, monkeypatch):
     (tmp_path / "pricing.json").write_text(json.dumps({"prices": []}), encoding="utf-8")
-    monkeypatch.setattr(cfg, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(cfg, "PRICING_FILE", tmp_path / "pricing.json")
     c = cfg.ForgeConfig.from_env()
     assert c.price_input_per_m is None
     assert c.price_source == ""
@@ -108,7 +108,7 @@ def test_pricing_table_without_matching_entry_stays_unpriced(tmp_path, monkeypat
 def test_repo_pricing_json_is_valid_and_ships_unpriced():
     # The committed pricing.json is the schema documentation; it must parse and
     # must not silently reintroduce a price without provenance.
-    data = json.loads((cfg.PROJECT_ROOT / "pricing.json").read_text(encoding="utf-8"))
+    data = json.loads(cfg.PRICING_FILE.read_text(encoding="utf-8"))
     for entry in data["prices"]:
         assert {"model", "input_per_m", "output_per_m", "source", "effective"} <= set(entry)
 

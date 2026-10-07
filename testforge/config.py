@@ -9,6 +9,8 @@ from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 ENV_FILE = PROJECT_ROOT / ".env"
+# pricing.json 是包数据（随 wheel/sdist 分发），按模块位置解析，不依赖仓库根
+PRICING_FILE = Path(__file__).resolve().parent / "pricing.json"
 
 
 def _load_dotenv(env_file: Path | None = None) -> int:
@@ -59,9 +61,9 @@ def _default_workers() -> int:
 
 
 def _load_price_table() -> dict:
-    """Read pricing.json at the repo root -> {model: entry}. Missing, empty or
+    """Read pricing.json (package data) -> {model: entry}. Missing, empty or
     malformed file means "no prices configured", never an error."""
-    path = PROJECT_ROOT / "pricing.json"
+    path = PRICING_FILE
     try:
         data = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, ValueError):
@@ -136,7 +138,7 @@ class ForgeConfig:
     # Sources, in precedence order:
     #   1. TESTFORGE_PRICE_INPUT_PER_M / TESTFORGE_PRICE_OUTPUT_PER_M env
     #      (price_source records "env override")
-    #   2. a matching "model" entry in pricing.json at the repo root
+    #   2. a matching "model" entry in the packaged pricing.json
     #      (price_source records that entry's "source" and "effective" date)
     # v0.1 hard-coded placeholder prices here, which multiplied exact token
     # counts into seemingly-exact dollar figures — archived results from that

@@ -70,6 +70,9 @@ Reproducing = "https://github.com/Luz7818/testforge/blob/main/docs/REPRODUCE.md"
 [tool.setuptools.packages.find]
 include = ["testforge*"]
 
+[tool.setuptools.package-data]
+testforge = ["pricing.json"]
+
 # Single source of truth for the version is testforge/__init__.py.
 [tool.setuptools.dynamic]
 version = { attr = "testforge.__version__" }
