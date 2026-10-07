@@ -38,12 +38,3 @@ PRESET_FINGERPRINTS: dict[str, dict[str, int]] = {
     "published": {"mutants_total": 16, "n_generated": 6, "rounds_used": 2},
     "published-b5": {"mutants_total": 24, "n_generated": 16, "rounds_used": 4},
 }
-
-
-def apply_preset(cfg, name: str) -> None:
-    """Overwrite cfg fields with the named preset (flag overrides applied later)."""
-    values = PRESETS.get(name)
-    if values is None:
-        raise SystemExit(f"unknown preset {name!r}; choose from {sorted(PRESETS)}")
-    for attr, value in values.items():
-        setattr(cfg, attr, value)

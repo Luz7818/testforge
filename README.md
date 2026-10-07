@@ -108,7 +108,7 @@ numeric.integer_sqrt                     B3  MS(all)= 76.2%  MS(cov)= 76.2%  gen
 testforge/           包本体：analysis / mutation / gate / llm / agent / report / cli / presets
 benchmarks/          6 模块 × 18 目标函数 + 每模块刻意不完整的 B0 既有测试
 experiments/         run_experiment 网格 / analyze 统计 / plots 出图 / compare_grids
-tests/               91 个自身测试（13 个测试文件）
+tests/               89 个自身测试（13 个测试文件）
 results/exp_*        实验产物（JSON/MD/PNG），只读不改
 ```
 
@@ -122,7 +122,7 @@ results/exp_*        实验产物（JSON/MD/PNG），只读不改
 ## 本地验证
 
 ```bash
-python -m pytest                                              # 91 项测试
+python -m pytest                                              # 89 项测试
 python -m pyflakes testforge experiments tests    # 静态检查，0 项
 python experiments/run_experiment.py --mode mock --preset published --out results/exp_check
                                                               # 复现已发表 Mock 网格（约 1 小时）

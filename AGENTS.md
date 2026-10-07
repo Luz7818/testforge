@@ -95,8 +95,8 @@
 
 | 项 | 值 | 复核命令 |
 |---|---|---|
-| 测试数 | 91 个测试（全部收集成功） | `.venv/Scripts/python.exe -m pytest --collect-only`，末行 `91 tests collected` |
-| 测试全通过 | 91 项通过，退出码 0（0.6 新增 PR 门禁/批处理/预算测试） | `.venv/Scripts/python.exe -m pytest` |
+| 测试数 | 89 个测试（全部收集成功） | `.venv/Scripts/python.exe -m pytest --collect-only`，末行 `89 tests collected` |
+| 测试全通过 | 89 项通过，退出码 0（0.6 新增 PR 门禁/批处理/预算测试；2026-10-07 删 presets 死函数连带 2 项） | `.venv/Scripts/python.exe -m pytest` |
 | 静态检查 | pyflakes 0 项；它已在 `[project.optional-dependencies].dev` 里，`pip install -e .[dev]` 即恢复 | `.venv/Scripts/python.exe -m pyflakes testforge experiments tests` |
 | CLI 可用 | 退出码 0，五个子命令 `targets` / `run` / `report` / `ci` / `batch`；`pip install testforge` 后有 `testforge` 命令 | `.venv/Scripts/python.exe -m testforge.cli --help` |
 | 基准规模 | 18 个目标函数 / 6 个模块 | `.venv/Scripts/python.exe -m testforge.cli targets`（输出 18 行） |
@@ -123,7 +123,7 @@
 - `results/` 下只有 `exp_*` 的 JSON/MD/PNG 被跟踪；`demo/`、`api_smoke/` 已删除，`*.log` 不会入库。
   `docs/example-report.md` 来自已跟踪的 `results/exp_api27b_smoke/`（`results.json` + `summary.md`）渲染。
 - `docs/report.md` 末尾"36 个自测"与 `docs/interview.md` 的"全管线 36 个自测通过"是旧数字
-  （现为 91）。这两份按要求保持原样，引用测试数以本文件为准。
+  （现为 89）。这两份按要求保持原样，引用测试数以本文件为准。
 - `.ruff_cache/` 是外部 ruff 运行留下的；本仓能跑的静态检查是 pyflakes。
 - `--out` 参数以仓库根为基准拼接，不是当前工作目录；`--module` 这类用户文件路径仍按 cwd 解析。
 - `plots.py` 标题取自 `cost.model`，mock 网格会写 `LLM: deepseek-chat`——跑 mock 网格显式传

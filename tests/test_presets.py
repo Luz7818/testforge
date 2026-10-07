@@ -8,10 +8,7 @@ and tested here.
 
 from __future__ import annotations
 
-import pytest
-
-from testforge.config import ForgeConfig
-from testforge.presets import PRESETS, PRESET_FINGERPRINTS, apply_preset
+from testforge.presets import PRESETS, PRESET_FINGERPRINTS
 
 
 def test_published_preset_pins_documented_parameters():
@@ -37,20 +34,6 @@ def test_fingerprints_match_preset_arithmetic():
     for name, fp in PRESET_FINGERPRINTS.items():
         p = PRESETS[name]
         assert fp["n_generated"] == p["candidates_per_round"] * p["max_rounds"]
-
-
-def test_apply_preset_overwrites_config_fields():
-    cfg = ForgeConfig()
-    apply_preset(cfg, "published")
-    assert cfg.max_mutants == 16
-    assert cfg.candidates_per_round == 3
-    assert cfg.max_rounds == 2
-    assert cfg.flaky_runs == 3
-
-
-def test_unknown_preset_exits_with_choices():
-    with pytest.raises(SystemExit):
-        apply_preset(ForgeConfig(), "nope")
 
 
 def _runner_module():

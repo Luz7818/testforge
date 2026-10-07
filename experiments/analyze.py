@@ -13,6 +13,7 @@ import argparse
 import json
 import math
 import random
+import statistics
 import sys
 from pathlib import Path
 
@@ -30,22 +31,15 @@ RQ_MAP = {
 
 
 def _mean(xs):
-    return sum(xs) / len(xs) if xs else float("nan")
+    return statistics.fmean(xs) if xs else float("nan")
 
 
 def _median(xs):
-    s = sorted(xs)
-    n = len(s)
-    if not n:
-        return float("nan")
-    return s[n // 2] if n % 2 else (s[n // 2 - 1] + s[n // 2]) / 2
+    return statistics.median(xs) if xs else float("nan")
 
 
 def _stdev(xs):
-    if len(xs) < 2:
-        return 0.0
-    m = _mean(xs)
-    return math.sqrt(sum((x - m) ** 2 for x in xs) / (len(xs) - 1))
+    return statistics.stdev(xs) if len(xs) >= 2 else 0.0
 
 
 def _ranks(xs):

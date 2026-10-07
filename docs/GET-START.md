@@ -283,7 +283,7 @@ B5 消融网格对应 `--preset published-b5`（24 / 4 / 4）。显式旗标 > �
 | `unknown variant 'B7'`（`run_experiment.py`） | `--variants` 里有未定义的变体 | 变体定义在 `testforge/variants.py` |
 | 跑完 `gen=0`、`acc=0`，`MS(all)` 与既有套件一致 | 用的是 `--variant B0`：它只给既有套件打分，一次 LLM 调用都不发 | 换 `B1`/`B2`/`B3` |
 | 真实端点跑完 `acc=0` 且 `rejection_reasons` 里全是 `falsifiable` | 模型给的候选都能跑、但杀不死任何存活变异体 | 正常结论（说明没有可证明的增量）。要提升就换更强模型或加大 `--rounds` |
-| `.venv/Scripts/python.exe -m pytest -q` 只输出一行圆点，看不到通过数 | `pyproject.toml` 的 `addopts` 已经带 `-q`，再 `-q` 就成了 `-qq` | 用 `.venv/Scripts/python.exe -m pytest`，末行是 `91 passed in ...` |
+| `.venv/Scripts/python.exe -m pytest -q` 只输出一行圆点，看不到通过数 | `pyproject.toml` 的 `addopts` 已经带 `-q`，再 `-q` 就成了 `-qq` | 用 `.venv/Scripts/python.exe -m pytest`，末行是 `89 passed in ...` |
 | 报错信息里的中文路径显示成一串方块与乱码（ASCII 段正常） | 项目路径含中文，控制台按 GBK 解码 Python 写出的 UTF-8 字节 | 先 `set PYTHONIOENCODING=utf-8` 再跑（实测有效）。子进程里的测试执行不受影响：`testforge/utils.py` 已强制 UTF-8 |
 | `ModuleNotFoundError: No module named 'testforge'` | 不在仓库根执行，或用了没装依赖的外部解释器 | `cd` 到仓库根，用 `.venv/Scripts/python.exe` |
 
@@ -309,5 +309,5 @@ B5 消融网格对应 `--preset published-b5`（24 / 4 / 4）。显式旗标 > �
 .venv/Scripts/python.exe -m pytest
 ```
 
-退出码 0、末行 `91 passed in ...`（本机两次实测 46.5 秒与 45.7 秒；同时跑别的任务会拉长）。再跑一次第 3 节的离线单格，看 `MS(all)`、
+退出码 0、末行 `89 passed in ...`（本机两次实测 46.5 秒与 45.7 秒；同时跑别的任务会拉长）。再跑一次第 3 节的离线单格，看 `MS(all)`、
 `gen`、`acc` 有没有意外漂移。每条门禁命令管什么的说明在仓库根的 [AGENTS.md](../AGENTS.md)。

@@ -33,7 +33,7 @@ Python CLI + 实验框架：给一个函数，LLM 生成候选单元测试，只
 | `testforge/utils.py` | 临时工作区、子进程、diff、JSON | `workspace()` 退出即删；`run_cmd()` 超时返回 -9 |
 | `benchmarks/` | 目标函数 + 每模块一份既有测试（B0） | `manifest.json` 是目标清单的唯一来源 |
 | `experiments/` | 网格、统计、图、跨网格比较 | `run_experiment.py` / `analyze.py` / `plots.py` / `compare_grids.py` |
-| `tests/` | 自身测试 | 13 个文件、91 项，见 `tests/README.md` |
+| `tests/` | 自身测试 | 13 个文件、89 项，见 `tests/README.md` |
 | `results/` | 实验产物 | 只读；`.gitignore` 白名单只放行 `results/exp_*` 的 JSON/MD/PNG |
 | `action.yml` | 仓库即 GitHub Action（composite） | 任何仓库 `uses: Luz7818/testforge@v0.6.0` |
 
@@ -46,7 +46,7 @@ Python CLI + 实验框架：给一个函数，LLM 生成候选单元测试，只
   的独立采样缓存（2026-10-05 从根部散目录收拢）。缓存键含 `TESTFORGE_EXTRA_BODY`。命中即
   零 API 消耗、逐位重放；独立采样 = 缓存目录指到空目录。Mock 后端不读写缓存。
 - **实验产物的数字口径**："36 个单元"/"pooled n=36" 指实验格数（18 目标 × 2 轮网格），
-  不是测试数（91）；两处不要互相引用。
+  不是测试数（89）；两处不要互相引用。
 - `results/exp_mock_full/analysis.md` 是旧脚本产物，重算版在同目录 `analysis_v2.md`；
   `docs/example-report.md` 来自已跟踪的 `results/exp_api27b_smoke/` 渲染（`results.json` + `summary.md`）。
 

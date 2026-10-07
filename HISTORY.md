@@ -240,3 +240,16 @@ command.
   （未进 manifest、零引用，留待决断）；experiments/README 用途行去掉 `<脚本>` 占位；
   GET-START 示例 `--target <新 id>` 改真实 id `numeric.clamp`；TODO「正在做」更新；
   目录说明补 `action.yml`（此前漏登的 GitHub Action 入口）。
+
+## 2026-10-07 · 复杂度收尾（statistics 换手写统计 + 删 presets 死函数）
+
+- `experiments/analyze.py` 手写的 `_mean/_median/_stdev` 换 `statistics` 标准库
+  （fmean/median/stdev，空列表护栏行为保留）。等价性实测：16 个已发表网格 + 2 组
+  compare 对用改前/改后代码各重算一遍，analysis.md / analysis.json / compare.md
+  全部字节一致。
+- 删 `testforge/presets.py` 的 `apply_preset`：全仓零生产调用——网格侧由
+  `run_experiment.resolve_params` 自行实现「旗标 > 预设 > 默认」，CLI 无 `--preset`
+  入口；连带删其 2 项专项测试（91→89）。preset→参数映射仍有
+  `test_resolve_params_published_preset_matches_archive` 钉住。
+- 文档同步：AGENTS / README / ARCHITECTURE / GET-START / tests/README 的测试数
+  91→89；tests/README 的 test_presets 条目改 6 项。
