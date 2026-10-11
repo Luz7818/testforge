@@ -30,6 +30,26 @@ def workspace(module_source: str, module_name: str, test_files: dict[str, str]):
         shutil.rmtree(root, ignore_errors=True)
 
 
+def find_existing_tests(module_path: Path, stem: str, root: Path) -> str | None:
+    """Locate an existing pytest file for a module: next to it, under
+    ``<root>/tests``, or across the enclosing package — one level above the
+    module's own directory, never above ``root``. First hit wins. Shared by
+    the PR gate (root = repo) and batch (root = the scanned package)."""
+    candidates = [module_path.parent / f"test_{stem}.py"]
+    tests_dir = root / "tests"
+    if tests_dir.is_dir():
+        candidates += sorted(tests_dir.rglob(f"test_{stem}.py"))
+    parent = module_path.parent
+    up = parent.parent
+    scope = up if (up == root or root in up.parents) else parent
+    if scope.is_dir():
+        candidates += sorted(scope.rglob(f"test_{stem}.py"))
+    for cand in candidates:
+        if cand.is_file():
+            return str(cand)
+    return None
+
+
 def run_cmd(
     args: list[str],
     cwd: Path,

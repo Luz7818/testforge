@@ -30,7 +30,7 @@ from .budget import Budget
 from .config import ForgeConfig
 from .llm import make_client
 from .types import CostLedger, TargetSpec, VariantResult
-from .utils import write_json
+from .utils import find_existing_tests, write_json
 from .variants import get_variant
 
 
@@ -43,20 +43,6 @@ def _existing_test_functions(path: Path) -> int:
         1 for node in ast.walk(tree)
         if isinstance(node, ast.FunctionDef) and node.name.startswith("test_")
     )
-
-
-def _find_existing_tests(module_path: Path, stem: str, root: Path) -> str | None:
-    candidates = [module_path.parent / f"test_{stem}.py"]
-    tests_dir = root / "tests"
-    if tests_dir.is_dir():
-        candidates += sorted(tests_dir.rglob(f"test_{stem}.py"))
-    parent = module_path.parent
-    if parent.is_dir():
-        candidates += sorted(p for p in parent.rglob(f"test_{stem}.py") if p != candidates[0])
-    for cand in candidates:
-        if cand.is_file():
-            return str(cand)
-    return None
 
 
 def discover_targets(package_dir: Path) -> list[TargetSpec]:
@@ -82,7 +68,7 @@ def discover_targets(package_dir: Path) -> list[TargetSpec]:
             if target_id in seen:
                 continue
             seen.add(target_id)
-            tests_path = _find_existing_tests(py, stem, package_dir)
+            tests_path = find_existing_tests(py, stem, package_dir)
             n_tests = _existing_test_functions(Path(tests_path)) if tests_path else 0
             specs.append(
                 (

@@ -29,7 +29,7 @@ from .config import ForgeConfig
 from .diff_targets import ChangedFunction, changed_functions
 from .llm import make_client
 from .types import CostLedger, TargetSpec, VariantResult
-from .utils import write_json
+from .utils import find_existing_tests, write_json
 from .variants import get_variant
 
 
@@ -45,22 +45,6 @@ def auto_diff(root: Path, base_ref: str) -> str:
         cwd=root, capture_output=True, text=True, check=False,
     )
     return proc.stdout
-
-
-def _find_existing_tests(module_path: Path, module_stem: str, root: Path) -> str | None:
-    """Locate an existing pytest file for a module: next to it, in a sibling
-    ``existing_tests``-style dir, or under <root>/tests. First hit wins."""
-    candidates = [module_path.parent / f"test_{module_stem}.py"]
-    tests_dir = root / "tests"
-    if tests_dir.is_dir():
-        candidates += sorted(tests_dir.rglob(f"test_{module_stem}.py"))
-    parent = module_path.parent.parent
-    if parent.is_dir():
-        candidates += sorted(parent.rglob(f"test_{module_stem}.py"))
-    for cand in candidates:
-        if cand.is_file():
-            return str(cand)
-    return None
 
 
 def changed_to_targets(changed: list[ChangedFunction], root: Path) -> list[TargetSpec]:
@@ -81,7 +65,7 @@ def changed_to_targets(changed: list[ChangedFunction], root: Path) -> list[Targe
                 module_path=str(module_path),
                 module_name=stem,
                 function_name=c.function.name,
-                existing_test_path=_find_existing_tests(module_path, stem, root),
+                existing_test_path=find_existing_tests(module_path, stem, root),
             )
         )
     return specs

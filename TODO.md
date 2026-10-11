@@ -16,7 +16,7 @@
 | 2 | ~~`docs/REPRODUCE.md` 四步复现挂账清零~~（2026-10-12 完成：90 格 0 错误、指纹过、84/90 格位级一致、6 格漂移根因查明，见 HISTORY.md） | 按该文档跑完四步并记录结果（含机器与耗时） | 完成 |
 | 3 | 跨厂商家族模型的外部有效性实验（Roadmap 项） | 至少一个非 Qwen 家族模型按 `--preset published` 完成网格并入 `results/`，`analyze.py --compare-with` 出对比 | 待开始 |
 | 4 | audit 小清理（2026-10-12 ponytail-audit 挂账，全部零行为变化）：删 `Candidate` 死字段 `llm_calls/tokens_in/tokens_out/cost_usd`（types.py，全仓无人写）；`_payload_from` 两份逐字相同（batch.py/pr_gate.py）合并进 benchmarks.py；`_mutant_job` 去掉两处调用方都丢弃的 duration；`_maybe_repair` 去掉调用方未用的 `did_repair`；内联单行包装 `_fmt`（client.py）；模块级 `split_candidates` 包装只有测试在用，测试改用 `LLMResponse(...).split_candidates()` 后删除；`analyze.py` 的 `agg["ms_all"]` 去掉包 list 再解包；`new_work_root` 内联进 `workspace`；`cli.py` 的 `__import__(...)` 改函数内常规导入 | 每行改动可追溯到本清单；pytest 89 过 + pyflakes 0 + 离线单格 MS 76.2%/gen 12/acc 2 不漂移；净行数为负 | 完成（2026-10-12，净 -14 行） |
-| 5 | `_find_existing_tests` 双份去重裁决（batch.py 与 pr_gate.py 近似重复但父目录遍历语义不同：batch 找 `module_path.parent`，pr_gate 找 `parent.parent`，合并会改其中一侧行为） | 先出方案说明（统一成哪个口径、影响面），再合并，pytest/pyflakes 过 | 待开始 |
+| 5 | ~~`_find_existing_tests` 双份去重裁决~~（2026-10-12 完成：统一口径 = 上两层目录且不越 root，batch 嵌套模块扩为包级超集、pr_gate 根级文件收敛不越仓，见 HISTORY.md） | 先出方案说明（统一成哪个口径、影响面），再合并，pytest/pyflakes 过 | 完成 |
 | 6 | `demo_gate_probe` 去留裁决（2026-10-06 登记「留待决断」；2026-10-12 复现核验确认它使 numeric 两目标 6 个已发表格位经 mock 种子漂移） | 二选一并执行：移除（函数自述 Safe to remove，恢复已发表网格逐格位级复现，连带更新 GET-START/AGENTS 单格期望与 benchmarks/README 登记）或保留（AGENTS 已知坑的说明即为最终口径） | 待开始 |
 
 状态取值：待开始 / 进行中 / 待确认 / 完成。

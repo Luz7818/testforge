@@ -301,3 +301,19 @@ command.
   `new_work_root` 内联进 `workspace`；cli.py 的 `__import__(...)` lambda 改函数内常规导入
   （`_cmd_ci`/`_cmd_batch`）。
 - 门禁：pytest 89 过、pyflakes 0、离线单格 MS 76.2%/gen 12/acc 2 不漂移。
+
+## 2026-10-12 · `_find_existing_tests` 双份合并为 `utils.find_existing_tests`（任务 5）
+
+- **方案说明**：两份拷贝的搜索顺序相同（模块旁 → `<root>/tests` → 包层 rglob），差别只在
+  第三段——batch 从 `module_path.parent` 起 rglob，pr_gate 从 `parent.parent` 起 rglob
+  （batch 另有对 candidates[0] 的去重，纯装饰：首中即胜使重复候选无害）。合并口径：
+  第三段取「模块上两层目录，但绝不越过 root」——`parent.parent` 在 root 内（等于 root
+  或是其子孙）则搜它（rglob 向下覆盖模块自身目录，是 batch 原第三段的严格超集），
+  否则退回 `parent`（batch 顶层模块行为逐字节保留）。
+- **行为变化（仅两处，均为超集或有界化）**：batch 的嵌套模块（pkg/sub/mod.py）搜索范围
+  从 pkg/sub 扩到整个 pkg——只增不减；pr_gate 的仓库根级文件原本会 rglob 到仓库之外
+  （root 的父目录），现收敛为 root 之内。其余情形候选集合与优先级不变。
+- **测试**：合并前两份拷贝均无直接单测；兄弟文件命中路径由
+  `test_batch_discovery_orders_by_existing_coverage_then_name` 与
+  `test_ci_runs_changed_targets_and_writes_summary` 间接覆盖，覆盖水平与合并前一致。
+- 门禁：pytest 89 过、pyflakes 0。
