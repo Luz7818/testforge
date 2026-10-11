@@ -40,7 +40,10 @@ python experiments/run_experiment.py --mode mock --preset published --out result
 ```
 
 The runner echoes the effective parameters on the first line; if you use any
-other flags, that line is what your run actually did.
+other flags, that line is what your run actually did. Re-running against an
+existing `--out` skips already-completed cells (that is the resume-after-
+interrupt mechanism) — for an independent reproduction, use a fresh
+directory.
 
 ## Step 3 — check the fingerprints against the archive
 
@@ -66,11 +69,14 @@ EOF
 ## Step 4 — analyze and compare the numbers
 
 ```bash
-python experiments/analyze.py --exp results/repro_mock_published
-python experiments/plots.py   --exp results/repro_mock_published --label "mock repro"
+python experiments/analyze.py --exp results/exp_mock_published_repro
+python experiments/plots.py   --exp results/exp_mock_published_repro --label "mock repro"
 ```
 
-Expected (from `results/exp_mock_full/analysis.md`, committed):
+`plots.py` needs the optional `plots` dependency group (`pip install -e .[dev,plots]`);
+`analyze.py` runs on `[dev]` alone. Expected (from
+`results/exp_mock_full/analysis_v2.md`, committed — the recomputed, authoritative
+version; the older `analysis.md` in the same directory agrees on these numbers):
 
 | Variant | mean MS(all) | median | mean tests accepted |
 |---|---|---|---|
