@@ -264,3 +264,27 @@ command.
   `analysis_v2.md` 在同目录）；并登记 `exp_api_rq2full/` 为不入库的本机残留。
 - 数据文件零改动、零重命名；目录说明、docs/GIT.md、AGENTS、ARCHITECTURE、.docsignore
   的入库边界描述同步。
+
+## 2026-10-12 · REPRODUCE.md 四步复现核验（任务 2 挂账清零）+ 复现文档修正
+
+- **四步端到端跑通（离线，零网络）**：fresh `--out`（`../tf_repro_mock_published`，仓库外）
+  90/90 格 ok、0 错误、总耗时 3104 秒（Windows 11、Python 3.12.0、20 核、机器重载）。
+  指纹 (16, 6, 2, 90) 在 fresh 网格、归档 `exp_mock_full`、已入库的
+  `exp_mock_published_repro` 三处一致。
+- **位级复现范围查明**：B0 全部 18 格位级一致；90 格中 84 格位级一致。漂移的 6 格
+  （numeric.integer_sqrt B1/B2、numeric.moving_average B1–B4）根因 = v0.1 归档之后
+  fd98f6f 给 `benchmarks/targets/numeric.py` 末尾追加 `demo_gate_probe`（2026-10-06 已
+  登记「留待决断」），mock 种子含 `len(module_source)` → 该模块 mock 候选全部换样。
+  当前代码确定性已复核：同格重跑 JSON 除 wall_sec 逐字节一致。已发表统计结论在 fresh
+  网格复现：RQ1 +6.5pp（归档 +7.8pp）、8/10/0（9/9/0）、Wilcoxon p=0.0115（0.0076）、
+  CI [+3.0,+10.2]（[+4.0,+11.8]）。
+- **单格默认参数复测**：MS 76.2%、acc 2 不变，gen 8→12（同一机制）；AGENTS「当前状态」
+  与 GET-START §3 的期望输出同步更新。
+- **REPRODUCE.md 修正**：除本批前已提交的三处断链（Step 4 目录对齐、plots 可选组说明、
+  数字出处改引 analysis_v2.md）外，「Mock 网格位级一致」表行补范围（同代码 + 未改动的
+  目标模块文件）、Step 4 增 2026-10-12 核验记录（含 `git checkout bfe4161 --
+  benchmarks/targets` 可逐格位级复现归档）、单格注释 gen 8→12；AGENTS「已知坑」新增
+  mock 种子条目。
+- **TODO 收口**：任务 2 完成；任务 6（`demo_gate_probe` 去留裁决）挂账；
+  ponytail-audit 清理另挂任务 4/5（18565e2）。
+- 数据文件零改动：`results/` 已提交产物、`llm_cache/` 均未触碰。

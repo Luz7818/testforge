@@ -44,14 +44,16 @@ numeric.integer_sqrt                     module=numeric
 .venv/Scripts/python.exe -m testforge.cli run --target numeric.integer_sqrt --variant B3 --mode mock
 ```
 
-本机真实输出（49 秒，退出码 0）：
+本机真实输出（2026-10-12 复测，退出码 0；耗时随机器负载波动，重载约 3 分钟、空闲约 1 分钟）：
 
 ```text
-numeric.integer_sqrt                     B3  MS(all)= 76.2%  MS(cov)= 76.2%  gen=8   acc=2        49s
+numeric.integer_sqrt                     B3  MS(all)= 76.2%  MS(cov)= 76.2%  gen=12  acc=2       195s
 ```
 
 四个字段：`MS(all)` 是最终套件的变异分数（被杀死的变异体 / 全部变异体），`MS(cov)` 只把被执行到的
-变异体算进分母，`gen` 是生成的候选数，`acc` 是被验收进套件的候选数。
+变异体算进分母，`gen` 是生成的候选数，`acc` 是被验收进套件的候选数。`gen` 的期望值只对未改动过的
+模块文件成立：mock 候选的种子包含模块源码长度，改动 `benchmarks/targets/` 里任何字节都会让该模块的
+候选重新采样（见 [REPRODUCE.md](REPRODUCE.md) Step 4 的核验记录）。
 
 这一条命令背后按顺序发生了六件事，逐段对应代码：
 

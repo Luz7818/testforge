@@ -9,7 +9,7 @@ Two levels of reproduction are claimed, and they mean different things:
 
 | Level | What repeats | What may differ |
 |---|---|---|
-| **Mock grid (offline)** | JSON output is bit-identical across runs | only `wall_sec` |
+| **Mock grid (offline)** | JSON output is bit-identical across runs of the same code on unchanged target-module files | only `wall_sec` — but any byte change to a benchmark module file (even appending an unrelated function) re-samples that module's mock candidates, because the mock seed includes the module source length (see the Step 4 note) |
 | **Real-LLM grid** | the *statistics*: direction, significance, effect size class | exact per-cell scores (LLM sampling) |
 
 ## Step 1 — clone and install
@@ -87,6 +87,18 @@ version; the older `analysis.md` in the same directory agrees on these numbers):
 And RQ1 (B1 − B0, paired on 18 targets): mean uplift **+7.8pp**, 9 wins / 9 ties
 / 0 losses, Wilcoxon p = 0.0076, bootstrap 95% CI [+4.0, +11.8].
 
+**Verified 2026-10-12** (Windows 11, Python 3.12.0, 20 cores; 90 cells in
+3104 s, 0 errors, fresh `--out`): the fingerprint passes; B0 is bit-identical
+on all 18 targets and 84/90 cells reproduce bit-for-bit. The 6 drifted cells
+(`numeric.integer_sqrt` B1/B2, `numeric.moving_average` B1–B4) trace to
+`demo_gate_probe` appended to `benchmarks/targets/numeric.py` after the v0.1
+archive — the mock seed includes the module source length, so that edit
+re-sampled the module's mock candidates. The published claims reproduce:
+RQ1 uplift +6.5pp, 8/10/0 win/tie/loss, Wilcoxon p = 0.0115, bootstrap CI
+[+3.0, +10.2]. For a bit-exact per-cell match of the archived grid, check out
+the benchmark files at the archive's commit
+(`git checkout bfe4161 -- benchmarks/targets`).
+
 The published *real-LLM* grids are reproduced the same way: the archived
 `results/exp_api27b_full` and `exp_api27b_replicate` (two independent samplings
 on qwen3.8-27B) carry the same fingerprint, and their pooled RQ1 is in
@@ -96,8 +108,9 @@ For a single-cell sanity check (~1 min, offline):
 
 ```bash
 python -m testforge.cli run --target numeric.integer_sqrt --variant B3 --mode mock
-# expected: MS(all) = 76.2%  gen=8  acc=2  (defaults: 24 mutants; the published
-# grid value for the same target at 16 mutants is 75.0% — different cap, different sample)
+# expected: MS(all) = 76.2%  gen=12  acc=2  (defaults: 24 mutants; the published
+# grid value for the same target at 16 mutants is 75.0% — different cap, different
+# sample. gen re-samples when the module file changes; see the Step 4 note.)
 ```
 
 ## Reproducing the real-LLM grids
