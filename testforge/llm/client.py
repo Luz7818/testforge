@@ -80,10 +80,6 @@ class LLMResponse:
         return [p.strip() for p in parts[1:] if p.strip()]
 
 
-def split_candidates(text: str) -> list[str]:
-    return LLMResponse(text=text).split_candidates()
-
-
 class OpenAICompatClient:
     """OpenAI-compatible chat client (DeepSeek etc.) with disk cache."""
 
@@ -494,7 +490,7 @@ class MockLLMClient:
         return out
 
     def _probe(self, func, fname: str, module: str, args: dict) -> str | None:
-        call = f"{fname}({', '.join(self._fmt(v) for v in args.values())})"
+        call = f"{fname}({', '.join(repr(v) for v in args.values())})"
         try:
             result = func(*args.values())
         except Exception as exc:  # noqa: BLE001
@@ -517,10 +513,6 @@ class MockLLMClient:
             body = f"    assert {call} == {result!r}\n"
         tag = zlib.crc32(f"{call}{repr_result}".encode()) % 100000
         return f"def test_{fname}_{tag}():\n{body}"
-
-    @staticmethod
-    def _fmt(v) -> str:
-        return repr(v)
 
 
 def make_client(config: ForgeConfig, project_root: Path) -> OpenAICompatClient | MockLLMClient:

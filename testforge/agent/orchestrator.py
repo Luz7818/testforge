@@ -194,7 +194,7 @@ class ForgeAgent:
                     reasons["empty"] += 1
                     continue
                 if not _parses(code):
-                    fixed, did_repair = self._maybe_repair(code)
+                    fixed = self._maybe_repair(code)
                     if fixed is None:
                         reasons["syntax_error"] += 1
                         continue
@@ -351,11 +351,11 @@ class ForgeAgent:
         return res
 
     # ------------------------------------------------------------- repair
-    def _maybe_repair(self, bad_code: str) -> tuple[str | None, bool]:
+    def _maybe_repair(self, bad_code: str) -> str | None:
         """One repair attempt for a syntactically broken candidate (API mode
         only — the mock always emits parseable files)."""
         if self.cfg.mode != "api":
-            return None, False
+            return None
         try:
             compile(bad_code, "<candidate>", "exec")
             error = "unknown"
@@ -365,15 +365,15 @@ class ForgeAgent:
         try:
             resp = self.client.generate(_system_prompt(), prompt, purpose="repair")
         except RuntimeError:
-            return None, True
+            return None
         text = resp.text.strip()
         # strip a possible markdown fence
         if text.startswith("```"):
             text = text.strip("`")
             text = text.removeprefix("python")
         if _parses(text):
-            return text, True
-        return None, True
+            return text
+        return None
 
 
 def _parses(code: str) -> bool:

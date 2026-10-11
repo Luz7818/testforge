@@ -18,7 +18,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from testforge.agent import ForgeAgent
-from testforge.benchmarks import PROJECT_ROOT, load_targets, result_to_dict
+from testforge.benchmarks import PROJECT_ROOT, load_targets, result_payload
 from testforge.config import ForgeConfig
 from testforge.llm import make_client
 from testforge.presets import PRESETS
@@ -153,8 +153,7 @@ def main() -> None:
             client = make_client(cfg, PROJECT_ROOT)
             try:
                 res = ForgeAgent(cfg, client, ledger).run_target(spec, variant)
-                row = result_to_dict(res)
-                row["cost"] = ledger.summary()
+                row = result_payload(res, ledger)
                 status = "ok"
                 err = ""
             except Exception as exc:  # noqa: BLE001 - record and continue

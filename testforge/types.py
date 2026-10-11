@@ -90,10 +90,6 @@ class Candidate:
     kills: set[str] = field(default_factory=set)       # all mutants it kills
     new_kills: set[str] = field(default_factory=set)   # kills nobody had yet
     covered_lines: set[int] = field(default_factory=set)
-    llm_calls: int = 0
-    tokens_in: int = 0
-    tokens_out: int = 0
-    cost_usd: float = 0.0
 
 
 @dataclass

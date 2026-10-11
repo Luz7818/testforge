@@ -288,3 +288,16 @@ command.
 - **TODO 收口**：任务 2 完成；任务 6（`demo_gate_probe` 去留裁决）挂账；
   ponytail-audit 清理另挂任务 4/5（18565e2）。
 - 数据文件零改动：`results/` 已提交产物、`llm_cache/` 均未触碰。
+
+## 2026-10-12 · audit 小清理（任务 4，九项零行为变化）
+
+- 按 2026-10-12 ponytail-audit 挂账执行，净 -14 行，零行为变化：删 `Candidate` 死字段
+  `llm_calls/tokens_in/tokens_out/cost_usd`（全仓无人写、不序列化）；`_payload_from` 双份
+  （batch.py/pr_gate.py）合并为 `benchmarks.result_payload`（cli 与 run_experiment 的同款
+  两行一并复用，共四处）；`_mutant_job` 去掉调用方都丢弃的 duration（连带删 runner.py 的
+  `import time`）；`_maybe_repair` 去掉调用方未用的 `did_repair`；内联单行包装 `_fmt`；
+  删模块级 `split_candidates` 包装（test_mock_client 改用 `LLMResponse(...).split_candidates()`）；
+  analyze.py 的 `agg["ms_all"]` 去掉包 list 再解包（analysis.json 输出字节不变）；
+  `new_work_root` 内联进 `workspace`；cli.py 的 `__import__(...)` lambda 改函数内常规导入
+  （`_cmd_ci`/`_cmd_batch`）。
+- 门禁：pytest 89 过、pyflakes 0、离线单格 MS 76.2%/gen 12/acc 2 不漂移。

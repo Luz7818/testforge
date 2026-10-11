@@ -42,3 +42,11 @@ def result_to_dict(res) -> dict:
     data["ms_all"] = round(res.ms_all, 4)
     data["ms_covered"] = round(res.ms_covered, 4)
     return data
+
+
+def result_payload(res, ledger) -> dict:
+    """result_to_dict plus the cost ledger summary — the per-cell payload
+    written by the CLI, the grid runner, the PR gate and batch."""
+    data = result_to_dict(res)
+    data["cost"] = ledger.summary()
+    return data

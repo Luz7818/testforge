@@ -9,7 +9,6 @@ convention.
 
 from __future__ import annotations
 
-import time
 from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
 
@@ -31,14 +30,12 @@ def classify_rc(rc: int) -> Outcome:
     return Outcome.ERROR
 
 
-def _mutant_job(job: dict) -> tuple[str, str, float]:
-    t0 = time.perf_counter()
+def _mutant_job(job: dict) -> tuple[str, str]:
     with workspace(
         job["module_source"], job["module_name"], job["test_files"]
     ) as wd:
         rc, _out = run_cmd_pytest(wd, list(job["test_files"].keys()), job["timeout"])
-    outcome = classify_rc(rc)
-    return job["mid"], outcome.value, time.perf_counter() - t0
+    return job["mid"], classify_rc(rc).value
 
 
 def run_cmd_pytest(wd: Path, test_files: list[str], timeout: float):
@@ -85,10 +82,10 @@ def evaluate_mutants(
     n_workers = max(1, min(workers, len(jobs)))
     if n_workers == 1:
         for job in jobs:
-            mid, outcome, _ = _mutant_job(job)
+            mid, outcome = _mutant_job(job)
             results[mid] = Outcome(outcome)
         return results
     with ProcessPoolExecutor(max_workers=n_workers) as ex:
-        for mid, outcome, _ in ex.map(_mutant_job, jobs, chunksize=1):
+        for mid, outcome in ex.map(_mutant_job, jobs, chunksize=1):
             results[mid] = Outcome(outcome)
     return results

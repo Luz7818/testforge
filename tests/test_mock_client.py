@@ -5,7 +5,7 @@ import sys
 import tempfile
 from pathlib import Path
 
-from testforge.llm.client import MockLLMClient, split_candidates
+from testforge.llm.client import LLMResponse, MockLLMClient
 
 MODULE = '''\
 def add(a: int, b: int) -> int:
@@ -50,7 +50,7 @@ def test_mock_is_deterministic():
 def test_mock_generated_tests_pass_on_original():
     """The characterization tests must pass against the code they captured."""
     resp = MockLLMClient().generate("sys", PROMPT)
-    cands = split_candidates(resp.text)
+    cands = LLMResponse(text=resp.text).split_candidates()
     with tempfile.TemporaryDirectory() as td:
         td = Path(td)
         (td / "fake_mod.py").write_text(MODULE, encoding="utf-8")

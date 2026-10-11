@@ -25,6 +25,7 @@ import time
 from pathlib import Path
 
 from .agent import ForgeAgent
+from .benchmarks import result_payload
 from .budget import Budget
 from .config import ForgeConfig
 from .llm import make_client
@@ -175,7 +176,7 @@ def run_batch(args: argparse.Namespace) -> int:
         try:
             agent = ForgeAgent(cfg, client, ledger, budget=budget)
             res: VariantResult = agent.run_target(spec, variant)
-            payload = _payload_from(res, ledger)
+            payload = result_payload(res, ledger)
             status = "ok"
         except Exception as exc:  # noqa: BLE001 - per-target isolation
             payload = {"target_id": spec.target_id, "variant": variant.name, "error": str(exc)[:400]}
@@ -193,14 +194,6 @@ def run_batch(args: argparse.Namespace) -> int:
     (out_dir / "batch-summary.md").write_text(render_batch_summary(rows, budget), encoding="utf-8")
     print(f"summary -> {out_dir / 'batch-summary.md'}")
     return 0
-
-
-def _payload_from(res: VariantResult, ledger: CostLedger) -> dict:
-    from .benchmarks import result_to_dict
-
-    payload = result_to_dict(res)
-    payload["cost"] = ledger.summary()
-    return payload
 
 
 def main(argv=None) -> int:  # pragma: no cover

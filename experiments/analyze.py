@@ -239,7 +239,7 @@ def analyze(rows: list[dict], out_dir: Path, compare_rows: list[dict] | None = N
         rs = [r for r in rows if r.get("variant") == v and "error" not in r]
         prs = priced(rs)
         agg[v] = {
-            "ms_all": [_mean([r["ms_all"] for r in rs])],
+            "ms_all": _mean([r["ms_all"] for r in rs]),
             "ms_covered": _mean([r["ms_covered"] for r in rs]),
             "ms_all_median": _median([r["ms_all"] for r in rs]),
             "cov": _mean([r["coverage_pct"] for r in rs]),
@@ -304,7 +304,7 @@ def analyze(rows: list[dict], out_dir: Path, compare_rows: list[dict] | None = N
 
     # ---- research questions ----------------------------------------------
     lines.append("## Research questions\n")
-    analysis = {"aggregate": {v: {k: (val[0] if isinstance(val, list) else val) for k, val in d.items()} for v, d in agg.items()}}
+    analysis = {"aggregate": agg}
     for rq, (base, treat, question) in RQ_MAP.items():
         if base not in variants or treat not in variants:
             continue

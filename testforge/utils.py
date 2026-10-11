@@ -13,17 +13,12 @@ from difflib import unified_diff
 from pathlib import Path
 
 
-def new_work_root(prefix: str = "tf") -> Path:
-    root = Path(tempfile.gettempdir()) / f"{prefix}_{uuid.uuid4().hex[:10]}"
-    root.mkdir(parents=True, exist_ok=True)
-    return root
-
-
 @contextlib.contextmanager
 def workspace(module_source: str, module_name: str, test_files: dict[str, str]):
     """A throwaway directory where ``module_name.py`` plus the given test
     files are importable together. Removed on exit."""
-    root = new_work_root()
+    root = Path(tempfile.gettempdir()) / f"tf_{uuid.uuid4().hex[:10]}"
+    root.mkdir(parents=True, exist_ok=True)
     try:
         (root / f"{module_name}.py").write_text(
             module_source, encoding="utf-8"

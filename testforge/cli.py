@@ -14,7 +14,7 @@ import sys
 from pathlib import Path
 
 from .agent import ForgeAgent
-from .benchmarks import PROJECT_ROOT, get_target, load_targets, result_to_dict
+from .benchmarks import PROJECT_ROOT, get_target, load_targets, result_payload
 from .config import ForgeConfig
 from .llm import make_client
 from .report import render_summary, render_target_report
@@ -85,8 +85,7 @@ def _cmd_run(args) -> None:
         client = make_client(cfg, PROJECT_ROOT)
         agent = ForgeAgent(cfg, client, ledger)
         res = agent.run_target(spec, variant)
-        payload = result_to_dict(res)
-        payload["cost"] = ledger.summary()
+        payload = result_payload(res, ledger)
         path = out_dir / f"{spec.target_id}__{variant.name}.json"
         write_json(path, payload)
         rows.append(res)
@@ -111,6 +110,18 @@ def _cmd_report(args) -> None:
     report = render_target_report(res, data.get("cost"))
     Path(args.out).write_text(report, encoding="utf-8")
     print(f"report written to {args.out}")
+
+
+def _cmd_ci(args):
+    from .pr_gate import run_ci
+
+    return run_ci(args)
+
+
+def _cmd_batch(args):
+    from .batch import run_batch
+
+    return run_batch(args)
 
 
 def main(argv=None) -> None:
@@ -161,7 +172,7 @@ def main(argv=None) -> None:
     p_ci.add_argument("--budget-sec", type=float, default=0.0)
     p_ci.add_argument("--budget-tokens", type=int, default=0)
     p_ci.add_argument("--out", default="results/ci_gate")
-    p_ci.set_defaults(func=lambda a: sys.exit(__import__("testforge.pr_gate", fromlist=["run_ci"]).run_ci(a)))
+    p_ci.set_defaults(func=_cmd_ci)
 
     p_batch = sub.add_parser("batch", help="whole-package offline batch enhancement")
     p_batch.add_argument("--package", required=True, help="package dir to scan (recursive)")
@@ -171,7 +182,7 @@ def main(argv=None) -> None:
     p_batch.add_argument("--budget-sec", type=float, default=0.0)
     p_batch.add_argument("--budget-tokens", type=int, default=0)
     p_batch.add_argument("--out", default="results/batch")
-    p_batch.set_defaults(func=lambda a: __import__("testforge.batch", fromlist=["run_batch"]).run_batch(a) or 0)
+    p_batch.set_defaults(func=_cmd_batch)
 
     args = parser.parse_args(argv)
     rc = args.func(args)
