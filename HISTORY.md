@@ -317,3 +317,20 @@ command.
   `test_batch_discovery_orders_by_existing_coverage_then_name` 与
   `test_ci_runs_changed_targets_and_writes_summary` 间接覆盖，覆盖水平与合并前一致。
 - 门禁：pytest 89 过、pyflakes 0。
+
+## 2026-10-12 · 移除 `demo_gate_probe`，恢复已发表网格逐格位级复现（任务 6）
+
+- **裁决：移除**。理由：函数自述 Safe to remove、全仓零代码引用、2026-10-06 起登记
+  「留待决断」，且它经 mock 种子（含 `len(module_source)`）破坏已发表网格的位级可复现——
+  可复现性是 v0.2 起的核心承诺；保留则 REPRODUCE/GET-START/AGENTS 三处永久背负漂移脚注。
+  `benchmarks/targets/numeric.py` 以 `git checkout bfe4161 --` 恢复 v0.1 字节（对归档
+  diff 为空）。
+- **复验**：六个漂移格（integer_sqrt B1/B2、moving_average B1–B4）重跑，现 schema 共同键
+  逐字段与归档全等，ms_all 回到 0.750 / 1.000；单格默认参数回到 MS 76.2% / gen 8 / acc 2。
+  两处不可比差异均为 schema 演进而非行为漂移：归档行多三个 v0.1 遗留字段
+  （`b0_killed_final`/`n_repaired`/`flaky_rejects`，现输出已无）；归档 B0 格 `cost_usd`
+  为 0.0（v0.2 起语义为未调用即 `null`）。
+- **文档同步**：benchmarks/README 撤销 demo 探针登记；GET-START / AGENTS 单格期望回到
+  gen 8；REPRODUCE.md 核验记录补 follow-up；AGENTS 已知坑保留机制警示并登记与归档的
+  对照口径（按共同键比）。
+- 门禁：pytest 89 过、pyflakes 0。

@@ -99,6 +99,16 @@ RQ1 uplift +6.5pp, 8/10/0 win/tie/loss, Wilcoxon p = 0.0115, bootstrap CI
 the benchmark files at the archive's commit
 (`git checkout bfe4161 -- benchmarks/targets`).
 
+**Follow-up (2026-10-12, TODO task 6):** the `demo_gate_probe` function was
+removed — `benchmarks/targets/numeric.py` restored to its v0.1 bytes — and the
+six drifted cells were re-run: every current-schema field matches the archive
+again (`ms_all` back to 0.750 / 1.000), so the whole 90-cell grid is
+bit-reproducible at HEAD. Two differences are schema evolution, not drift:
+archive rows carry three v0.1-era fields (`b0_killed_final`, `n_repaired`,
+`flaky_rejects`) that no current output emits, and archived B0 rows record
+`cost_usd: 0.0` where v0.2+ semantics write `null` (no LLM call, no cost
+fact). Compare archives against fresh runs on the common keys.
+
 The published *real-LLM* grids are reproduced the same way: the archived
 `results/exp_api27b_full` and `exp_api27b_replicate` (two independent samplings
 on qwen3.8-27B) carry the same fingerprint, and their pooled RQ1 is in
@@ -108,7 +118,7 @@ For a single-cell sanity check (~1 min, offline):
 
 ```bash
 python -m testforge.cli run --target numeric.integer_sqrt --variant B3 --mode mock
-# expected: MS(all) = 76.2%  gen=12  acc=2  (defaults: 24 mutants; the published
+# expected: MS(all) = 76.2%  gen=8  acc=2  (defaults: 24 mutants; the published
 # grid value for the same target at 16 mutants is 75.0% — different cap, different
 # sample. gen re-samples when the module file changes; see the Step 4 note.)
 ```

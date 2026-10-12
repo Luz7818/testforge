@@ -102,7 +102,7 @@
 | CLI 可用 | 退出码 0，五个子命令 `targets` / `run` / `report` / `ci` / `batch`；`pip install testforge` 后有 `testforge` 命令 | `.venv/Scripts/python.exe -m testforge.cli --help` |
 | 基准规模 | 18 个目标函数 / 6 个模块 | `.venv/Scripts/python.exe -m testforge.cli targets`（输出 18 行） |
 | 变异体候选总数 | 197 个（未加上限时的全量） | `.venv/Scripts/python.exe -c "from testforge.benchmarks import load_targets; from testforge.analysis import inspect_target; from testforge.mutation import generate_mutants; print(sum(len(generate_mutants(inspect_target(s).module_source, s.function_name, max_mutants=10**6)) for s in load_targets()))"` |
-| 离线单格 | `numeric.integer_sqrt` B3：MS 76.2%、acc 2 不变，gen 8→12（2026-10-12 复测，重载 195 秒；漂移原因见「已知坑」的 mock 种子条目） | `.venv/Scripts/python.exe -m testforge.cli run --target numeric.integer_sqrt --variant B3 --mode mock` |
+| 离线单格 | `numeric.integer_sqrt` B3：MS 76.2%、gen 8、acc 2（2026-10-12 复测，91 秒；demo 探针移除后恢复 v0.1 口径，机制警示见「已知坑」mock 种子条目） | `.venv/Scripts/python.exe -m testforge.cli run --target numeric.integer_sqrt --variant B3 --mode mock` |
 | Mock 可复现 | 同命令跑两遍，JSON 仅 `wall_sec` 不同 | 跑两遍到两个 `--out` 目录后逐字段比较 |
 | CI | 5 个 job：4 格测试矩阵（ubuntu 3.10/3.11/3.12 + windows 3.12，`pip install -e .[dev]` + pytest + CLI 冒烟）、`mutation-loop-smoke`（pyflakes + 一格 Mock 全链路冒烟 + 结果断言）、`api-smoke`（仅手动触发，无密钥自动跳过）。**这里不写"最近一次是哪个提交"**——分支每推一次它就变，写进文档同一次提交里就作废了；当前分支 HEAD 的徽章为 `passing`（复核见右）。本机没有 `gh`，但徽章与 Actions 接口对**公开仓都免认证**；要提交号再用 `/actions/runs`（匿名限 60 次/小时/IP，别拿它轮询） | `python -c "import urllib.request as u;b=u.urlopen(u.Request('https://github.com/Luz7818/testforge/workflows/CI/badge.svg',headers={'User-Agent':'Mozilla/5.0'}),timeout=30).read().decode();print('passing' in b)"` 应为 `True`；步骤读 `.github/workflows/ci.yml` |
 | 运行时依赖 | 3 项：`pytest>=8.0`、`coverage>=7.4`、`openai>=1.30`；`matplotlib>=3.8` 在可选组 `plots`（只被 `experiments/plots.py` 用，出图才装） | 读 `pyproject.toml` 的 `[project] dependencies` 与 `[project.optional-dependencies]` |
@@ -133,7 +133,9 @@
   门禁或把 `coverage_delta` 设为默认强制；不要把 `zlib.crc32` 换成内建 `hash()`；不要在
   README 与手册里另写一套数字；不要往 CI 加打包/发布流水线。
 - `benchmarks/targets/` 模块文件的任何字节改动（哪怕在末尾追加无关函数）都会经 mock 种子里的
-  `len(module_source)` 换掉该模块的全部 mock 候选：2026-10-12 复现核验确认，v0.1 归档后追加的
-  `demo_gate_probe` 使 numeric 两目标的 6 个已发表格位漂移（B0 与其余 84 格位级不变，当前代码
-  确定性已复核）。要逐格位级复现已发表网格，checkout 归档对应提交的 `benchmarks/targets`；
-  统计结论（RQ1 方向/显著性/零负例）不受影响。该探针的去留是 TODO 任务 6 的裁决项。
+  `len(module_source)` 换掉该模块的全部 mock 候选：2026-10-12 复现核验时，v0.1 归档后追加的
+  `demo_gate_probe` 曾使 numeric 两目标的 6 个已发表格位漂移；同日任务 6 裁决移除该探针
+  （numeric.py 恢复 v0.1 字节），六格逐字段回到归档值，位级复现恢复。警示保留：改基准模块
+  文件 = 换该模块的 mock 候选样本。与归档 results.json 逐字段对照时按共同键比：归档行多三个
+  v0.1 遗留字段（`b0_killed_final`/`n_repaired`/`flaky_rejects`，现输出已无），归档 B0 格
+  `cost_usd` 为 0.0（v0.2 起语义是未调用即 `null`）。
