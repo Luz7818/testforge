@@ -24,3 +24,6 @@ results/**
 
 # build artifacts (attached to GitHub Releases instead)
 dist/
+
+# 本机 AI 工作备忘(不入库;发现记录已转 AGENTS/HISTORY)
+.workbuddy/

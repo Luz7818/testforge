@@ -153,6 +153,16 @@ class VariantResult:
             else 0.0
         )
 
+    @property
+    def is_suspect(self) -> bool:
+        """TF-01 invariant: a mutant is only killed by a run that executes
+        its mutated line, so kills with zero target coverage contradict the
+        coverage record. That combination is the signature of concurrent-run
+        pollution (ERROR/TIMEOUT counted as kills under load, .workbuddy
+        2026-10-21) — flagged for review, never zeroed silently.
+        """
+        return self.mutants_total > 0 and self.killed_final > 0 and self.coverage_pct == 0.0
+
 
 @dataclass
 class CostLedger:

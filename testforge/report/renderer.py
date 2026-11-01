@@ -8,6 +8,13 @@ from ..types import VariantResult
 def render_target_report(res: VariantResult, cost_summary: dict | None = None) -> str:
     lines: list[str] = []
     lines.append(f"# TestForge report — `{res.target_id}` (variant {res.variant})\n")
+    if res.is_suspect:
+        lines.append(
+            "> **SUSPECT (TF-01):** mutants were recorded killed while the target shows 0% "
+            "coverage. A kill requires executing the mutated line, so this combination only "
+            "arises when ERROR/TIMEOUT runs are counted as kills — e.g. pytest and a cell "
+            "running concurrently on one machine. Re-run serially before trusting this score.\n"
+        )
     lines.append("## Headline\n")
     lines.append("| Metric | Value |")
     lines.append("|---|---|")
@@ -74,8 +81,9 @@ def render_summary(rows: list[VariantResult]) -> str:
     lines.append("|---|---|---|---|---|---|---|---|")
     for r in rows:
         cost = "n/a" if r.cost_usd is None else f"{r.cost_usd:.4f}"
+        flag = " (SUSPECT)" if r.is_suspect else ""
         lines.append(
-            f"| {r.target_id} | {r.variant} | {r.ms_all:.1%} | {r.ms_covered:.1%} "
+            f"| {r.target_id}{flag} | {r.variant} | {r.ms_all:.1%} | {r.ms_covered:.1%} "
             f"| {r.coverage_pct:.0f} | {r.n_generated} | {r.n_accepted} | {cost} |"
         )
     lines.append("")

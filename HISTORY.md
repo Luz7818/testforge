@@ -334,3 +334,25 @@ command.
   gen 8；REPRODUCE.md 核验记录补 follow-up；AGENTS 已知坑保留机制警示并登记与归档的
   对照口径（按共同键比）。
 - 门禁：pytest 89 过、pyflakes 0。
+
+## 2026-11-02 · TF-01 并行污染假满分：suspect 不变量 + 渲染告警 + 串行前提登记
+
+- **问题**（.workbuddy 2026-10-21 审查发现，2026-11-01 体检列 P1）：同机并行跑 pytest 与
+  mock 单格会互相污染，单格可退化为 gen=0/acc=0/coverage 0% 却 killed_final=21/21、
+  ms_all=1.0 的假满分。机制：`Outcome.killed_mutant` 把 ERROR/TIMEOUT 一律记杀（PIT 惯例），
+  并发争用使变异体子进程 ERROR。串行不触发。
+- **设计取舍**：三案比较——(a) ERROR/TIMEOUT 分桶计数要动杀伤矩阵与 payload 契约，改动大；
+  (b) 被记杀变体补执行时长记录需逐格计时，同样大；(c) 结果级不变量最省：被杀变异体必经
+  执行其所在行，killed>0 而 coverage=0 在串行下是矛盾签名，误报仅剩「coverage 子进程失败
+  而杀伤矩阵正常」这一本身也该人工复核的异常。选 (c)，不改变任何结果值，只加标记。
+- **实现**：`VariantResult.is_suspect` 属性；`result_to_dict` 落 `suspect` 字段（可审计）；
+  `renderer.render_target_report` 顶部告警、`render_summary` 行内 `(SUSPECT)` 标记。
+  `cli report` 从 JSON 重建时未知键被过滤，归档结果不受影响。
+- **测试**：新增 `tests/test_suspect_invariant.py` 3 项：污染签名必标且两处渲染均告警、
+  payload 带 suspect；强 B0 全杀但 coverage>0 的合法满分不误报；空结果与普通部分杀伤不误报。
+  既有 89 项结果不变。
+- **登记**：AGENTS 已知坑补「同机并行互相污染，门禁与单格/网格请串行」条目；`.workbuddy/`
+  入 .gitignore（同 zhishuxing 处置；其发现已转录至本文件与 AGENTS）。
+- **文档同步**：测试数 89→92（AGENTS「当前状态」、README 正文与徽章、TESTING、REPRODUCE、
+  tests/README）；徽章 91→92 一并归正（即体检 TF-02）。
+- 门禁：pytest 92 过、pyflakes 0、check_docs testforge 通过。

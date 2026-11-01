@@ -41,6 +41,7 @@ def result_to_dict(res) -> dict:
     data = asdict(res)
     data["ms_all"] = round(res.ms_all, 4)
     data["ms_covered"] = round(res.ms_covered, 4)
+    data["suspect"] = res.is_suspect
     return data
 
 

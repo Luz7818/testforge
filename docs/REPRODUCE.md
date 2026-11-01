@@ -23,7 +23,7 @@ pip install -e .[dev]
 `[dev]` includes `pyflakes`, so both repo gates work on a fresh machine:
 
 ```bash
-python -m pytest              # 89 tests
+python -m pytest              # 92 tests
 python -m pyflakes testforge experiments tests
 ```
 

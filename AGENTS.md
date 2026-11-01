@@ -96,8 +96,8 @@
 
 | 项 | 值 | 复核命令 |
 |---|---|---|
-| 测试数 | 89 个测试（全部收集成功） | `.venv/Scripts/python.exe -m pytest --collect-only`，末行 `89 tests collected` |
-| 测试全通过 | 89 项通过，退出码 0（0.6 新增 PR 门禁/批处理/预算测试；2026-10-07 删 presets 死函数连带 2 项） | `.venv/Scripts/python.exe -m pytest` |
+| 测试数 | 92 个测试（全部收集成功） | `.venv/Scripts/python.exe -m pytest --collect-only`，末行 `92 tests collected` |
+| 测试全通过 | 92 项通过，退出码 0（0.6 新增 PR 门禁/批处理/预算测试；2026-11-02 增 TF-01 suspect 不变量 3 项） | `.venv/Scripts/python.exe -m pytest` |
 | 静态检查 | pyflakes 0 项；它已在 `[project.optional-dependencies].dev` 里，`pip install -e .[dev]` 即恢复 | `.venv/Scripts/python.exe -m pyflakes testforge experiments tests` |
 | CLI 可用 | 退出码 0，五个子命令 `targets` / `run` / `report` / `ci` / `batch`；`pip install testforge` 后有 `testforge` 命令 | `.venv/Scripts/python.exe -m testforge.cli --help` |
 | 基准规模 | 18 个目标函数 / 6 个模块 | `.venv/Scripts/python.exe -m testforge.cli targets`（输出 18 行） |
@@ -111,6 +111,12 @@
 
 ## 已知坑（省下一次的调查时间）
 
+- **同机并行会互相污染，门禁与单格/网格请串行跑（TF-01）**：2026-10-21 代码审查实测，pytest
+  与 mock 单格并发时单格可退化为 gen=0/acc=0/coverage 0% 却 killed_final=21/21、ms_all=1.0
+  的假满分——机制是 `types.py` 的 `Outcome.killed_mutant` 把 ERROR/TIMEOUT 一律记杀（PIT 惯例），
+  并发争用使子进程 ERROR。防线（0.6.0 后追加，不改变结果值）：`VariantResult.is_suspect`
+  不变量（killed>0 而 coverage=0 的矛盾签名）→ 结果 payload 带 `suspect` 字段，
+  `report/renderer.py` 在单格报告与汇总表渲染处告警；`tests/test_suspect_invariant.py` 钉住。
 - 本地 `.env` 配置 SEU 校园网关（不入库；换机器重配或只跑 Mock）。`DEEPSEEK_API_KEY` 为空时
   `--mode api` 在建客户端之前就退出（退出码 1），设计行为。
 - 该网关两层拦截（都实测过）：(a) WAF 对 openai SDK 的 httpx2 返回 HTML 拦截页，curl/urllib
@@ -124,7 +130,7 @@
 - `results/` 下只有 `exp_*` 的 JSON/MD/PNG 与 `results/README.md` 被跟踪；`demo/`、`api_smoke/` 已删除，`*.log` 不会入库。
   `docs/example-report.md` 来自已跟踪的 `results/exp_api27b_smoke/`（`results.json` + `summary.md`）渲染。
 - `docs/report.md` 末尾"36 个自测"与 `docs/interview.md` 的"全管线 36 个自测通过"是旧数字
-  （现为 89）。这两份按要求保持原样，引用测试数以本文件为准。
+  （现为 92）。这两份按要求保持原样，引用测试数以本文件为准。
 - `.ruff_cache/` 是外部 ruff 运行留下的；本仓能跑的静态检查是 pyflakes。
 - `--out` 参数以仓库根为基准拼接，不是当前工作目录；`--module` 这类用户文件路径仍按 cwd 解析。
 - `plots.py` 标题取自 `cost.model`，mock 网格会写 `LLM: deepseek-chat`——跑 mock 网格显式传
