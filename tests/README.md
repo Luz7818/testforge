@@ -1,12 +1,12 @@
 # tests/ —— 自身的测试
 
-> 用途：说明这 92 个测试各自盯住哪条行为、哪些断言是故意和具体数字绑在一起的、加测试该照哪个文件写。
+> 用途：说明这 94 个测试各自盯住哪条行为、哪些断言是故意和具体数字绑在一起的、加测试该照哪个文件写。
 > 全部测试离线运行：不发网络请求，也不需要 API key。
 
 运行方式（在仓库根）：
 
 ```bash
-.venv/Scripts/python.exe -m pytest              # 92 项，末行给出通过数
+.venv/Scripts/python.exe -m pytest              # 94 项，末行给出通过数
 .venv/Scripts/python.exe -m pytest tests/test_gate.py
 ```
 
@@ -32,8 +32,9 @@
 | `test_presets.py` | 6 | 已发表参数固化：两个 preset 的数值与档案指纹一致（`n_generated` = 候选 × 轮数）；`run_experiment.resolve_params` 的 旗标 > 预设 > 默认 三层优先级 |
 | `test_cost_accounting.py` | 16 | 成本口径诚实：无价时 `cost_usd` 为 None 且 token 恒精确、env 价目覆盖带来源、`pricing.json` 条目来源进 `price_source`、仓内 `pricing.json` 每条都有 schema 必填字段、客户端 `_cost` 的 None/计算两路、汇总表未定价显示 `n/a`；0.3 另钉住：缓存键随 `TESTFORGE_EXTRA_BODY` 变化、节流在间隔未满时休眠、urllib 传输的线格式解析与 HTTP 错误路径、`TESTFORGE_LLM_RETRIES` 覆盖 |
 | `test_suspect_invariant.py` | 3 | TF-01 并行污染防线：killed>0 而 coverage=0 的矛盾签名（假满分）标 `suspect`、单格报告与汇总表渲染处告警并进结果 payload；强 B0 全杀但 coverage>0 的合法满分与空结果不误报 |
+| `test_analyze.py` | 2 | TF4-1 analyze 冒烟：最小 2×2 网格 `analyze()` 跑通且聚合表按标量均值渲染（`| B0 | 60.0% |…`，钉死 290592f 把 `agg["ms_all"]` 从列表改标量后漏改 `[0]` 下标的回归）、analysis.json aggregate 为标量；全错误网格渲染错误表不炸 |
 
-复核项数：`.venv/Scripts/python.exe -m pytest --collect-only`，末行 `92 tests collected`。
+复核项数：`.venv/Scripts/python.exe -m pytest --collect-only`，末行 `94 tests collected`。
 
 ## 慢在哪
 
@@ -61,14 +62,15 @@
   复核（在仓库根，无输出即没有任何网络引用；`--include` 不能省，否则这条命令会匹配到本说明自己）：
   `grep -rEn "requests|urllib|http" tests --include='*.py'`。
 - **下游**：本套件是全仓库唯一的自动化门禁——CI 在 push/PR 时跑 `python -m pytest tests/ -q`
-  （见 `.github/workflows/ci.yml`，另有 `mutation-loop-smoke` 跑一格 Mock 全链路），仓库根 `AGENTS.md` 的「92 个测试」也取自这里的收集数。
+  （见 `.github/workflows/ci.yml`，另有 `mutation-loop-smoke` 跑一格 Mock 全链路），仓库根 `AGENTS.md` 的「94 个测试」也取自这里的收集数。
 - **改这里之后要跑**（全部在仓库根执行）：
   - 改 `testforge/gate/**` → `.venv/Scripts/python.exe -m pytest tests/test_gate.py`（5 项）
   - 改 `testforge/mutation/**` → `.venv/Scripts/python.exe -m pytest tests/test_operators.py tests/test_engine.py tests/test_matrix.py`（17 项）
   - 改 `testforge/agent/**` 或 `testforge/llm/**` → `.venv/Scripts/python.exe -m pytest tests/test_e2e.py tests/test_mock_client.py`（5 项）
   - 改 `testforge/config.py` / 成本口径 / LLM 传输 → `.venv/Scripts/python.exe -m pytest tests/test_dotenv.py tests/test_config_client.py tests/test_cost_accounting.py`（31 项）
   - 改 `experiments/run_experiment.py` 参数解析 → `.venv/Scripts/python.exe -m pytest tests/test_presets.py`（8 项）
-  - 改 `testforge/**` 其余文件或不确定波及面 → 全量 `.venv/Scripts/python.exe -m pytest`（92 项，
+  - 改 `experiments/analyze.py` → `.venv/Scripts/python.exe -m pytest tests/test_analyze.py`（2 项）+ REPRODUCE 第 4 步 `python experiments/analyze.py --exp results/exp_mock_published_repro`
+  - 改 `testforge/**` 其余文件或不确定波及面 → 全量 `.venv/Scripts/python.exe -m pytest`（94 项，
     通过数与耗时看末行；别在命令尾再加 `-q`，会成 `-qq` 吞掉数字行）
 
 改 `benchmarks/`（增删目标函数）会让 `test_inspector.py::test_all_manifest_targets_resolve` 当场失败，

@@ -7,7 +7,7 @@
 [![CI](https://github.com/Luz7818/testforge/actions/workflows/ci.yml/badge.svg)](https://github.com/Luz7818/testforge/actions/workflows/ci.yml)
 [![Python](https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12-blue)](https://github.com/Luz7818/testforge)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-[![Tests](https://img.shields.io/badge/tests-92%20passed-brightgreen)](#本地验证)
+[![Tests](https://img.shields.io/badge/tests-94%20passed-brightgreen)](#本地验证)
 [![Reproducible](https://img.shields.io/badge/mock%20grid-bit--identical-informational)](docs/REPRODUCE.md)
 
 </div>
@@ -108,7 +108,7 @@ numeric.integer_sqrt                     B3  MS(all)= 76.2%  MS(cov)= 76.2%  gen
 testforge/           包本体：analysis / mutation / gate / llm / agent / report / cli / presets
 benchmarks/          6 模块 × 18 目标函数 + 每模块刻意不完整的 B0 既有测试
 experiments/         run_experiment 网格 / analyze 统计 / plots 出图 / compare_grids
-tests/               92 个自身测试（14 个测试文件）
+tests/               94 个自身测试（15 个测试文件）
 results/exp_*        实验产物（JSON/MD/PNG），只读不改
 ```
 
@@ -122,7 +122,7 @@ results/exp_*        实验产物（JSON/MD/PNG），只读不改
 ## 本地验证
 
 ```bash
-python -m pytest                                              # 92 项测试
+python -m pytest                                              # 94 项测试
 python -m pyflakes testforge experiments tests    # 静态检查，0 项
 python experiments/run_experiment.py --mode mock --preset published --out results/exp_check
                                                               # 复现已发表 Mock 网格（约 1 小时）

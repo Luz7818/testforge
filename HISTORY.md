@@ -356,3 +356,24 @@ command.
 - **文档同步**：测试数 89→92（AGENTS「当前状态」、README 正文与徽章、TESTING、REPRODUCE、
   tests/README）；徽章 91→92 一并归正（即体检 TF-02）。
 - 门禁：pytest 92 过、pyflakes 0、check_docs testforge 通过。
+
+## 2026-11-11 · TF4-1 analyze.py 聚合表一行崩溃修复：`[0]` 下标去除 + analyze 首个冒烟测试
+
+- **问题**（2026-11-11 体检列 P1，REPRODUCE 第 4 步 100% 复现）：任何非空网格跑
+  `experiments/analyze.py` 必炸——`analyze.py:252` 聚合表渲染 `fmt_pct(agg[v]['ms_all'][0])`
+  对 float 下标，`TypeError: 'float' object is not subscriptable`，REPRODUCE 第 4 步、
+  GET-START §6、experiments/README 冒烟链、TESTING experiments 行全部不可用。
+- **根因**：290592f（2026-10-12「audit 小清理九项(任务 4)……净 -14 行零行为变化」）把
+  `agg["ms_all"]` 从 `[_mean(...)]` 改为标量并同步了 analysis.json 消费侧，但漏改 markdown
+  聚合表的 `[0]` 消费者——「零行为变化」声明与事实不符，属该提交引入的回归。tests/ 对
+  experiments/analyze.py 零覆盖，三条门禁全绿也拦不住（崩溃未被发现的原因）。
+- **修复**：`analyze.py:252` 去掉 `[0]`（一行）。REPRODUCE 第 4 步复跑通过（退出码 0），
+  重生成的 `results/exp_mock_published_repro/analysis.md` 与提交的回归前版本逐字节一致
+  （git status 对该文件零 diff），数字与 REPRODUCE.md 期望表全符：B0 77.6%/80.6%、
+  B1 85.5%/90.3%/2.50、B2/B3/B4 85.5%/90.3%/0.56；RQ1 +7.8% 9/9/0 p=0.0076 CI [+4.0, +11.8]。
+- **测试**：新增 `tests/test_analyze.py` 2 项（analyze 的首批测试）：最小 2×2 网格冒烟
+  （聚合表按标量均值渲染、analysis.json aggregate 为标量、RQ1 块存在）与全错误网格冒烟
+  （错误表渲染不炸）。已验证对未修复代码必红（复现 TypeError 于 analyze.py:252）。
+- **文档同步**：测试数 92→94、文件数 14→15（AGENTS「当前状态」与「已知坑」、README 正文
+  与徽章、TESTING、REPRODUCE、tests/README 含文件清单与「改这里之后要跑」补 analyze 行）。
+- 门禁：pytest 94 过（196.48s）、pyflakes 0。check_docs 由主流程统一跑（本批执行员不跑）。

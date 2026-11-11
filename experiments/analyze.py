@@ -249,7 +249,7 @@ def analyze(rows: list[dict], out_dir: Path, compare_rows: list[dict] | None = N
         }
         cost_cell = f"{agg[v]['cost']:.4f}" if prs else "—"
         lines.append(
-            f"| {v} | {fmt_pct(agg[v]['ms_all'][0])} | {fmt_pct(agg[v]['ms_all_median'])} "
+            f"| {v} | {fmt_pct(agg[v]['ms_all'])} | {fmt_pct(agg[v]['ms_all_median'])} "
             f"| {fmt_pct(agg[v]['ms_covered'])} | {agg[v]['cov']:.1f} | {agg[v]['acc']:.2f} "
             f"| {cost_cell} |"
         )
