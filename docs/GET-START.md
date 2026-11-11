@@ -93,6 +93,7 @@ Mock 后端是种子化的，不掺随机：同一条 `run` 命令跑两遍，�
 | `DEEPSEEK_API_KEY` | 建连用的凭据字符串；不鉴权的内网端点填任意非空串 | `--mode api` 立刻以退出码 1 结束，不发请求 |
 | `TESTFORGE_MODEL` | 请求体里的模型名 | 用 `testforge/config.py` 的默认值 `deepseek-chat` |
 | `TESTFORGE_API_BASE` | 端点 base URL | 默认 `https://api.deepseek.com` |
+| `TESTFORGE_TRANSPORT` | HTTP 传输实现：`sdk`（默认，openai 包）或 `urllib`（零依赖 POST，线格式相同） | 默认 `sdk`；校园网关 WAF 拦截 openai SDK 的 httpx 栈（返回 HTML 拦截页、curl/urllib 却放行）时设 `urllib`——见第 8 节故障表（`testforge/llm/client.py:92` 读取） |
 | `TESTFORGE_EXTRA_BODY` | 一段 JSON，合并进每次请求体（服务端私有开关） | 不附加任何参数 |
 | `TESTFORGE_MAX_TOKENS` | 单次响应长度上限；一次响应要装下 K 个候选 | 默认 2048，候选数一多尾部候选会被截断 |
 | `TESTFORGE_CACHE_DIR` | prompt 缓存目录 | 默认写到仓库根 `llm_cache/` |
@@ -285,7 +286,8 @@ B5 消融网格对应 `--preset published-b5`（24 / 4 / 4）。显式旗标 > �
 | `unknown variant 'B7'`（`run_experiment.py`） | `--variants` 里有未定义的变体 | 变体定义在 `testforge/variants.py` |
 | 跑完 `gen=0`、`acc=0`，`MS(all)` 与既有套件一致 | 用的是 `--variant B0`：它只给既有套件打分，一次 LLM 调用都不发 | 换 `B1`/`B2`/`B3` |
 | 真实端点跑完 `acc=0` 且 `rejection_reasons` 里全是 `falsifiable` | 模型给的候选都能跑、但杀不死任何存活变异体 | 正常结论（说明没有可证明的增量）。要提升就换更强模型或加大 `--rounds` |
-| `.venv/Scripts/python.exe -m pytest -q` 只输出一行圆点，看不到通过数 | `pyproject.toml` 的 `addopts` 已经带 `-q`，再 `-q` 就成了 `-qq` | 用 `.venv/Scripts/python.exe -m pytest`，末行是 `89 passed in ...` |
+| `mode=api` 第一个请求就失败，报错体是一段 HTML 拦截页（`<html>`/`Access Denied`/interstitial 之类，不是 JSON） | 校园网关 WAF 拦截 openai SDK 的 httpx 栈，curl/urllib 却放行（SEU 网关实测过；AGENTS「已知坑」与 `ci.yml` 的 `api-smoke` 注释都登记了这一条） | 设 `TESTFORGE_TRANSPORT=urllib` 换零依赖传输（第 4 节环境变量表）；仍被拦就换网络出口或换本地端点 |
+| `.venv/Scripts/python.exe -m pytest -q` 只输出一行圆点，看不到通过数 | `pyproject.toml` 的 `addopts` 已经带 `-q`，再 `-q` 就成了 `-qq` | 用 `.venv/Scripts/python.exe -m pytest`，末行是 `94 passed in ...` |
 | 报错信息里的中文路径显示成一串方块与乱码（ASCII 段正常） | 项目路径含中文，控制台按 GBK 解码 Python 写出的 UTF-8 字节 | 先 `set PYTHONIOENCODING=utf-8` 再跑（实测有效）。子进程里的测试执行不受影响：`testforge/utils.py` 已强制 UTF-8 |
 | `ModuleNotFoundError: No module named 'testforge'` | 不在仓库根执行，或用了没装依赖的外部解释器 | `cd` 到仓库根，用 `.venv/Scripts/python.exe` |
 
@@ -311,5 +313,5 @@ B5 消融网格对应 `--preset published-b5`（24 / 4 / 4）。显式旗标 > �
 .venv/Scripts/python.exe -m pytest
 ```
 
-退出码 0、末行 `89 passed in ...`（本机两次实测 46.5 秒与 45.7 秒；同时跑别的任务会拉长）。再跑一次第 3 节的离线单格，看 `MS(all)`、
+退出码 0、末行 `94 passed in ...`（2026-11-12 本机实测 322.78 秒，约 5 分半；耗时随机器负载波动大——历史实测 216.68 秒（11-11 轮）与 447.6 秒（11-01 轮）都有过；同时跑别的任务会拉长）。再跑一次第 3 节的离线单格，看 `MS(all)`、
 `gen`、`acc` 有没有意外漂移。每条门禁命令管什么的说明在仓库根的 [AGENTS.md](../AGENTS.md)。

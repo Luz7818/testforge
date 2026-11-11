@@ -9,12 +9,12 @@
 | 自身单元/集成 | CLI、回路、门禁、预算、diff 解析 | `tests/test_*.py`（15 个文件） | 94 项 |
 | 静态检查 | pyflakes | `testforge experiments tests` | 0 项 |
 | 冒烟 | 离线单格全链路 | `cli run --mode mock` | 1 格 |
-| CI | 4 格测试矩阵 + mutation-loop-smoke + api-smoke（手动） | `.github/workflows/ci.yml` | 5 job |
+| CI | 3 个 job 定义：4 格测试矩阵 + mutation-loop-smoke + api-smoke（手动） | `.github/workflows/ci.yml` | push 跑 5 实例 / 手动 6 |
 
 ## 运行命令
 
 ```bash
-.venv/Scripts/python.exe -m pytest                            # 94 项，约 3 分钟
+.venv/Scripts/python.exe -m pytest                            # 94 项，约 3–5 分半（2026-11-12 实测 322.78 秒，随负载波动）
 .venv/Scripts/python.exe -m pyflakes testforge experiments tests    # 0 项
 .venv/Scripts/python.exe -m testforge.cli run --target numeric.integer_sqrt --variant B3 --mode mock
 ```

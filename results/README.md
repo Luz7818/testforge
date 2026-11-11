@@ -5,7 +5,7 @@
 
 ## 文件清单
 
-15 个入库目录、75 个文件。`.gitignore` 白名单只放行 `results/exp_*/` 下的 results.json /
+16 个入库目录（`exp_*`）、75 个数据文件 + 本说明 = 76 个文件。`.gitignore` 白名单只放行 `results/exp_*/` 下的 results.json /
 analysis.md / analysis.json / summary.md / compare.md / analysis_v2.md / analysis_v2.json /
 plots/*.png，外加本说明；目录里其余文件（errors.json、日志等）不入库。命名前缀对应的历史批次：
 

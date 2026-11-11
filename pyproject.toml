@@ -64,7 +64,7 @@ testforge = "testforge.cli:main"
 Homepage = "https://github.com/Luz7818/testforge"
 Repository = "https://github.com/Luz7818/testforge"
 Issues = "https://github.com/Luz7818/testforge/issues"
-Changelog = "https://github.com/Luz7818/testforge/blob/main/CHANGELOG.md"
+Changelog = "https://github.com/Luz7818/testforge/blob/main/HISTORY.md"
 Reproducing = "https://github.com/Luz7818/testforge/blob/main/docs/REPRODUCE.md"
 
 [tool.setuptools.packages.find]

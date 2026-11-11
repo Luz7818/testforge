@@ -34,10 +34,10 @@ python -m testforge.cli targets                                          # 列�
 python -m testforge.cli run --target numeric.integer_sqrt --variant B3 --mode mock
 ```
 
-真实输出（`--mode mock` 是确定性离线后端，全程不发网络请求；本机实测约 49 秒）：
+真实输出（`--mode mock` 是确定性离线后端，全程不发网络请求；本机实测 100 秒，2026-11-12）：
 
 ```text
-numeric.integer_sqrt                     B3  MS(all)= 76.2%  MS(cov)= 76.2%  gen=8   acc=2        49s
+numeric.integer_sqrt                     B3  MS(all)= 76.2%  MS(cov)= 76.2%  gen=8   acc=2       100s
 ```
 
 `MS(all)` 为最终套件的变异分数，`MS(cov)` 只统计被执行到的变异体，`gen`/`acc` 为生成数与被验收数；

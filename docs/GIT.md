@@ -4,7 +4,8 @@
 
 ## 分支与提交策略
 
-- 单 `main` 分支，推 `main` 触发 CI（5 job：4 格测试矩阵 + mutation-loop-smoke + api-smoke）。
+- 单 `main` 分支，推 `main` 触发 CI（ci.yml 共 3 个 job 定义：`test` 4 格测试矩阵 +
+  `mutation-loop-smoke` + `api-smoke`；push 时跑 5 个运行实例——api-smoke 仅手动触发，手动时 6 个）。
 - **一批一提交**；提交前门禁：pytest 全绿 + pyflakes 0 项 + `--preset published` Mock 网格
   指纹不变（整理/精简类改动，见 README「贡献与许可」）。
 - 已发表数字相关改动的铁律：**不要改 `results/` 已提交产物来"让数字对得上"**——重跑实验到
@@ -14,8 +15,8 @@
 
 | 判定 | 规则 |
 |---|---|
-| 必须入库 | `testforge/`、`benchmarks/`、`experiments/`、`tests/`、`results/exp_*/`（白名单：JSON/MD/PNG）与 `results/README.md`、`llm_cache/`（prompt 缓存，命中即免费重放）、`action.yml`、文档 |
-| 禁止上传 | `.env`（含校园网关密钥；模板 `.env.example`）、`results/` 白名单外的本机残留（`demo/`、`*.log` 等）、`.ruff_cache/`、`__pycache__/` |
+| 必须入库 | `testforge/`、`benchmarks/`、`experiments/`、`tests/`、`results/exp_*/`（白名单：JSON/MD/PNG）与 `results/README.md`、`action.yml`、文档 |
+| 禁止上传 | `.env`（含校园网关密钥；模板 `.env.example`）、`llm_cache/`（prompt 缓存，`.gitignore` 已忽略的本机资产，命中即免费重放；历次网格的采样缓存只留本机）、`results/` 白名单外的本机残留（`demo/`、`*.log` 等）、`.ruff_cache/`、`__pycache__/` |
 | 缓存边界 | `llm_cache/` 文件名 = prompt 指纹，不要手改；独立采样走子目录，不混入已发表网格的缓存 |
 
 ## CI

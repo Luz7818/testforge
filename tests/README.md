@@ -10,7 +10,7 @@
 .venv/Scripts/python.exe -m pytest tests/test_gate.py
 ```
 
-仓库根的 `conftest.py` 把仓库根插进 `sys.path`；0.2 起本包也已 editable 安装（`pip install -e .[dev]`），两种方式都能收集。
+收集靠本包的 editable 安装（`pip install -e .[dev]`）；仓库根没有 `conftest.py`——早期用它把仓库根插进 `sys.path`，f9370de 起已删除，editable 安装即可收集。
 `pyproject.toml` 里 `testpaths = ["tests"]`、`addopts = "-q"`：命令行再补一个 `-q` 就成 `-qq`，
 只剩一行圆点、看不到通过数。
 
@@ -32,15 +32,18 @@
 | `test_presets.py` | 6 | 已发表参数固化：两个 preset 的数值与档案指纹一致（`n_generated` = 候选 × 轮数）；`run_experiment.resolve_params` 的 旗标 > 预设 > 默认 三层优先级 |
 | `test_cost_accounting.py` | 16 | 成本口径诚实：无价时 `cost_usd` 为 None 且 token 恒精确、env 价目覆盖带来源、`pricing.json` 条目来源进 `price_source`、仓内 `pricing.json` 每条都有 schema 必填字段、客户端 `_cost` 的 None/计算两路、汇总表未定价显示 `n/a`；0.3 另钉住：缓存键随 `TESTFORGE_EXTRA_BODY` 变化、节流在间隔未满时休眠、urllib 传输的线格式解析与 HTTP 错误路径、`TESTFORGE_LLM_RETRIES` 覆盖 |
 | `test_suspect_invariant.py` | 3 | TF-01 并行污染防线：killed>0 而 coverage=0 的矛盾签名（假满分）标 `suspect`、单格报告与汇总表渲染处告警并进结果 payload；强 B0 全杀但 coverage>0 的合法满分与空结果不误报 |
-| `test_analyze.py` | 2 | TF4-1 analyze 冒烟：最小 2×2 网格 `analyze()` 跑通且聚合表按标量均值渲染（`| B0 | 60.0% |…`，钉死 290592f 把 `agg["ms_all"]` 从列表改标量后漏改 `[0]` 下标的回归）、analysis.json aggregate 为标量；全错误网格渲染错误表不炸 |
+| `test_analyze.py` | 2 | TF4-1 analyze 冒烟：最小 2×2 网格 `analyze()` 跑通且聚合表按标量均值渲染（`\| B0 \| 60.0% \|…`，钉死 290592f 把 `agg["ms_all"]` 从列表改标量后漏改 `[0]` 下标的回归）、analysis.json aggregate 为标量；全错误网格渲染错误表不炸 |
 
 复核项数：`.venv/Scripts/python.exe -m pytest --collect-only`，末行 `94 tests collected`。
 
 ## 慢在哪
 
-耗时几乎全在 `test_e2e.py`：两条完整回路各约 20–25 秒，占了全套约 1 分钟里的大头
-（复核：`.venv/Scripts/python.exe -m pytest --durations=6`）。其次是起子进程跑真 pytest 的
-`test_matrix.py`（1.1 秒与 0.9 秒）和 `test_mock_client.py` 的第三条（0.4 秒）。纯逻辑的
+耗时集中在真跑子进程 pytest 的几条（复核：`.venv/Scripts/python.exe -m pytest --durations=10`，
+2026-11-12 实测）：最大头是 `test_v06_ci_batch.py` 的 batch 端到端一条（110.16 秒），其次
+`test_e2e.py` 两条完整回路 53.11 秒与 46.73 秒（文件共约 100 秒）、`test_v05_features.py` 的
+property 测试一条（45.79 秒）——全套实测 322.78 秒（约 5 分半；耗时随机器负载波动大，历史实测
+216.68 秒（11-11 轮）与 447.6 秒（11-01 轮）都有过）。其次是同样起子进程跑真 pytest 的
+`test_matrix.py`（2.37 秒与 2.17 秒）和 `test_mock_client.py` 的第三条（1.07 秒）。纯逻辑的
 `test_gate.py` 五条不到 0.1 秒（复核：`.venv/Scripts/python.exe -m pytest tests/test_gate.py`）。
 改门禁逻辑时先跑快的那个文件。
 

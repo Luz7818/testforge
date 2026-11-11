@@ -22,7 +22,7 @@ JSON/Markdown 和 `llm_cache/` 里的 prompt 缓存会留在磁盘上。
 | `benchmarks.py` | 读 `benchmarks/manifest.json` 拼出 18 个 `TargetSpec` | `load_targets()` / `get_target()` / `result_to_dict()` |
 | `utils.py` | `workspace()` 临时工作区、`run_cmd()` 子进程、`mini_diff()`、`write_json()` | `run_cmd()` 超时返回 -9，被杀伤矩阵与门禁共用 |
 | `presets.py` | 命名网格参数集（`PRESETS`），已发表数字免记旗标即可复现 | 0.6 新增；键名即 `--preset` 取值 |
-| `budget.py` | 智能体运行的硬预算上限（调用数/花费），CI 与 batch 的一等控制 | 0.6 新增 |
+| `budget.py` | 智能体运行的硬预算上限（墙钟秒 + token 数两个上限），CI 与 batch 的一等控制 | 0.6 新增 |
 | `diff_targets.py` | 把统一 diff 映射到被改动的函数——PR 门禁的目标发现 | 0.6 新增 |
 | `pr_gate.py` | PR 质量门禁：diff → 目标 → 预算内运行 → 汇总（`cli.py` 的 `ci` 子命令） | 0.6 新增 |
 | `batch.py` | 整包离线批量增强（B5 形态的工程壳，`cli.py` 的 `batch` 子命令） | 0.6 新增 |
@@ -47,7 +47,7 @@ JSON/Markdown 和 `llm_cache/` 里的 prompt 缓存会留在磁盘上。
 |---|---|---|
 | `__init__.py` | 包说明与 `__version__ = "0.6.0"` | CLI 的 `--version` 读它 |
 | `cli.py` | 五个子命令：`targets` / `run` / `report` / `ci` / `batch` | `run` 的顺序是读配置 → 取变体 → 解析目标 → 跑 → 落盘；`--variant` 默认 `B3`，`--mode` 默认 `mock`，`--out` 默认 `results/runs`（相对仓库根解析） |
-| `config.py` | 全部旋钮 + 零依赖 `.env` 读取 | `_load_dotenv()` 在模块顶层被调用；`from_env()` 在 `mode=api` 且 key 为空时 `SystemExit`；`workers` 默认 `max(2, min(8, cpus-2))`；两个 `price_*` 是占位单价 |
+| `config.py` | 全部旋钮 + 零依赖 `.env` 读取 | `_load_dotenv()` 在模块顶层被调用；`from_env()` 在 `mode=api` 且 key 为空时 `SystemExit`；`workers` 默认 `max(2, min(8, cpus-2))`；两个 `price_*` 默认 `None`：未配价 → 不出美元数（v0.1 的占位单价已废除，与上表 `pricing.json` 一行同口径） |
 | `types.py` | 共享数据结构 | `Outcome`（pass/fail/error/timeout，非 pass 即杀死）、`TargetSpec`、`TargetInfo`、`Mutant`、`Candidate`、`GateVerdict`、`VariantSpec`、`VariantResult`（`ms_all`/`ms_covered` 是派生属性）、`CostLedger` |
 | `variants.py` | 实验条件 B0–B5 的唯一定义 | `VARIANTS` + `get_variant()`；`--variant` 与 `run_experiment.py --variants` 都读这张表 |
 | `benchmarks.py` | 读 `benchmarks/manifest.json` 拼出 `TargetSpec` | `load_targets()` / `get_target()` / `result_to_dict()`；模块路径与 B0 路径按约定拼，不在 manifest 里写 |
