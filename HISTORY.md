@@ -377,3 +377,27 @@ command.
 - **文档同步**：测试数 92→94、文件数 14→15（AGENTS「当前状态」与「已知坑」、README 正文
   与徽章、TESTING、REPRODUCE、tests/README 含文件清单与「改这里之后要跑」补 analyze 行）。
 - 门禁：pytest 94 过（196.48s）、pyflakes 0。check_docs 由主流程统一跑（本批执行员不跑）。
+
+## 2026-11-15 · 文档核对修复（全文档对照代码实测）
+
+- **逐项实测复核，全部通过**：pytest 94 过（201.80s，退出码 0）、pyflakes 0、
+  `check_docs.py testforge` 通过（0 阻断 0 提醒）、离线单格 MS 76.2%/gen 8/acc 2 不漂移
+  （63s）、`cli targets` 18 行、变异体候选 197、CLI 五子命令与 `--version` 0.6.0、
+  results/ 跟踪文件 76 个（16 个 exp_* 目录 + README）逐一对上、B0 既有测试 34 个函数、
+  `pyproject.toml` 运行时依赖 3 项与 dev/property/plots 三可选组一致、editable 元数据
+  仍为 0.5.0（落后源码一版，与 AGENTS 登记一致）。
+- **修正四处旧值/断链（无代码改动）**：
+  - AGENTS「已知坑」：`docs/report.md` 末尾旧数字由"36 个自测"更正为"75 个自测"
+    （报告原文未动，复核：`grep -n "个自测" docs/report.md`）；单格复测日期刷新
+    （2026-11-15，63 秒，历史 91 秒/100 秒保留为对照）。
+  - 目录说明：顶层结构补漏登的 `.github/`（ci.yml + quality-gate.yml，tracked）；其
+    「改完跑什么」的门禁出处由 AGENTS「改动后的验证」（该节 2026-10-05 已移入 TESTING）
+    改指 docs/TESTING.md。
+  - tests/README：上游"testforge/** 9 个文件直接 import"更正为 19（0.6 新增
+    batch/budget/diff_targets/pr_gate/presets 等被引入所致，复核命令随文），上游补
+    `experiments/`（test_analyze.py 直接 import analyze.py、test_presets.py 动态加载
+    run_experiment.py）；「改这里之后要跑」config/cost/LLM 传输 31 项→37、
+    test_presets 8 项→6（按 `pytest --collect-only` 实测）。
+  - TODO：当前进度与完成记录补 2026-11-02/11-11/11-12 三批收口（此前停在 2026-10-12）。
+- 数据文件零改动：`results/`、`llm_cache/` 均未触碰；门禁 pytest/pyflakes/check_docs
+  在修改后复跑全绿。

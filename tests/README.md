@@ -60,9 +60,12 @@ property 测试一条（45.79 秒）——全套实测 322.78 秒（约 5 分半
 
 ## 和谁打交道
 
-- **上游**：被测的就两样——`testforge/**`（9 个文件从各文件顶部直接 `import`）与 `benchmarks/`
-  （经 `test_inspector.py` 与 `test_e2e.py` 的回路间接覆盖）。第三方只有 pytest，全套件离线。
-  复核（在仓库根，无输出即没有任何网络引用；`--include` 不能省，否则这条命令会匹配到本说明自己）：
+- **上游**：被测的就三样——`testforge/**`（19 个文件从各文件顶部直接 `import`）、
+  `experiments/`（`test_analyze.py` 直接 import `analyze.py`；`run_experiment.py` 由
+  `test_presets.py` 动态加载）与 `benchmarks/`（经 `test_inspector.py` 与 `test_e2e.py` 的回路
+  间接覆盖）。第三方只有 pytest，全套件离线。
+  复核（在仓库根）：`grep -rhoE "^(from|import) testforge[a-z_.]*" tests --include='*.py' | sort -u | wc -l` 输出 19；
+  无网络引用复核（`--include` 不能省，否则这条命令会匹配到本说明自己）：
   `grep -rEn "requests|urllib|http" tests --include='*.py'`。
 - **下游**：本套件是全仓库唯一的自动化门禁——CI 在 push/PR 时跑 `python -m pytest tests/ -q`
   （见 `.github/workflows/ci.yml`，另有 `mutation-loop-smoke` 跑一格 Mock 全链路），仓库根 `AGENTS.md` 的「94 个测试」也取自这里的收集数。
@@ -70,8 +73,8 @@ property 测试一条（45.79 秒）——全套实测 322.78 秒（约 5 分半
   - 改 `testforge/gate/**` → `.venv/Scripts/python.exe -m pytest tests/test_gate.py`（5 项）
   - 改 `testforge/mutation/**` → `.venv/Scripts/python.exe -m pytest tests/test_operators.py tests/test_engine.py tests/test_matrix.py`（17 项）
   - 改 `testforge/agent/**` 或 `testforge/llm/**` → `.venv/Scripts/python.exe -m pytest tests/test_e2e.py tests/test_mock_client.py`（5 项）
-  - 改 `testforge/config.py` / 成本口径 / LLM 传输 → `.venv/Scripts/python.exe -m pytest tests/test_dotenv.py tests/test_config_client.py tests/test_cost_accounting.py`（31 项）
-  - 改 `experiments/run_experiment.py` 参数解析 → `.venv/Scripts/python.exe -m pytest tests/test_presets.py`（8 项）
+  - 改 `testforge/config.py` / 成本口径 / LLM 传输 → `.venv/Scripts/python.exe -m pytest tests/test_dotenv.py tests/test_config_client.py tests/test_cost_accounting.py`（37 项）
+  - 改 `experiments/run_experiment.py` 参数解析 → `.venv/Scripts/python.exe -m pytest tests/test_presets.py`（6 项）
   - 改 `experiments/analyze.py` → `.venv/Scripts/python.exe -m pytest tests/test_analyze.py`（2 项）+ REPRODUCE 第 4 步 `python experiments/analyze.py --exp results/exp_mock_published_repro`
   - 改 `testforge/**` 其余文件或不确定波及面 → 全量 `.venv/Scripts/python.exe -m pytest`（94 项，
     通过数与耗时看末行；别在命令尾再加 `-q`，会成 `-qq` 吞掉数字行）

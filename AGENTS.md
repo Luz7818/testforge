@@ -102,7 +102,7 @@
 | CLI 可用 | 退出码 0，五个子命令 `targets` / `run` / `report` / `ci` / `batch`；`pip install testforge` 后有 `testforge` 命令 | `.venv/Scripts/python.exe -m testforge.cli --help` |
 | 基准规模 | 18 个目标函数 / 6 个模块 | `.venv/Scripts/python.exe -m testforge.cli targets`（输出 18 行） |
 | 变异体候选总数 | 197 个（未加上限时的全量） | `.venv/Scripts/python.exe -c "from testforge.benchmarks import load_targets; from testforge.analysis import inspect_target; from testforge.mutation import generate_mutants; print(sum(len(generate_mutants(inspect_target(s).module_source, s.function_name, max_mutants=10**6)) for s in load_targets()))"` |
-| 离线单格 | `numeric.integer_sqrt` B3：MS 76.2%、gen 8、acc 2（2026-10-12 复测，91 秒；demo 探针移除后恢复 v0.1 口径，机制警示见「已知坑」mock 种子条目） | `.venv/Scripts/python.exe -m testforge.cli run --target numeric.integer_sqrt --variant B3 --mode mock` |
+| 离线单格 | `numeric.integer_sqrt` B3：MS 76.2%、gen 8、acc 2（2026-11-15 复测 63 秒；历史实测 91 秒（10-12）与 100 秒（11-12），耗时随负载波动别当判据；demo 探针移除后恢复 v0.1 口径，机制警示见「已知坑」mock 种子条目） | `.venv/Scripts/python.exe -m testforge.cli run --target numeric.integer_sqrt --variant B3 --mode mock` |
 | Mock 可复现 | 同命令跑两遍，JSON 仅 `wall_sec` 不同 | 跑两遍到两个 `--out` 目录后逐字段比较 |
 | CI | 3 个 job 定义 / push 跑 5 个运行实例：4 格测试矩阵（ubuntu 3.10/3.11/3.12 + windows 3.12，`pip install -e .[dev]` + pytest + CLI 冒烟）+ `mutation-loop-smoke`（pyflakes + 一格 Mock 全链路冒烟 + 结果断言）+ `api-smoke`（仅手动触发，无密钥自动跳过；手动触发时共 6 个运行实例）。**这里不写"最近一次是哪个提交"**——分支每推一次它就变，写进文档同一次提交里就作废了；当前分支 HEAD 的徽章为 `passing`（复核见右）。本机没有 `gh`，但徽章与 Actions 接口对**公开仓都免认证**；要提交号再用 `/actions/runs`（匿名限 60 次/小时/IP，别拿它轮询） | `python -c "import urllib.request as u;b=u.urlopen(u.Request('https://github.com/Luz7818/testforge/workflows/CI/badge.svg',headers={'User-Agent':'Mozilla/5.0'}),timeout=30).read().decode();print('passing' in b)"` 应为 `True`；步骤读 `.github/workflows/ci.yml` |
 | 运行时依赖 | 3 项：`pytest>=8.0`、`coverage>=7.4`、`openai>=1.30`；`matplotlib>=3.8` 在可选组 `plots`（只被 `experiments/plots.py` 用，出图才装） | 读 `pyproject.toml` 的 `[project] dependencies` 与 `[project.optional-dependencies]` |
@@ -129,8 +129,9 @@
   重算版把 v0.1 占位单价算出的美元列按"未定价"处理。
 - `results/` 下只有 `exp_*` 的 JSON/MD/PNG 与 `results/README.md` 被跟踪；`demo/`、`api_smoke/` 已删除，`*.log` 不会入库。
   `docs/example-report.md` 来自已跟踪的 `results/exp_api27b_smoke/`（`results.json` + `summary.md`）渲染。
-- `docs/report.md` 末尾"36 个自测"与 `docs/interview.md` 的"全管线 36 个自测通过"是旧数字
-  （现为 94）。这两份按要求保持原样，引用测试数以本文件为准。
+- `docs/report.md` 末尾"75 个自测"（复核：`grep -n "个自测" docs/report.md`）与
+  `docs/interview.md` 的"全管线 36 个自测通过"是旧数字（现为 94）。这两份按要求保持原样，
+  引用测试数以本文件为准。
 - `.ruff_cache/` 是外部 ruff 运行留下的；本仓能跑的静态检查是 pyflakes。
 - `--out` 参数以仓库根为基准拼接，不是当前工作目录；`--module` 这类用户文件路径仍按 cwd 解析。
 - `plots.py` 标题取自 `cost.model`，mock 网格会写 `LLM: deepseek-chat`——跑 mock 网格显式传

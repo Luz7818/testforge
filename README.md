@@ -34,7 +34,7 @@ python -m testforge.cli targets                                          # 列�
 python -m testforge.cli run --target numeric.integer_sqrt --variant B3 --mode mock
 ```
 
-真实输出（`--mode mock` 是确定性离线后端，全程不发网络请求；本机实测 100 秒，2026-11-12）：
+真实输出（`--mode mock` 是确定性离线后端，全程不发网络请求；本机实测 100 秒，2026-11-12，另一次复测 63 秒——耗时随机器负载波动，别当判据）：
 
 ```text
 numeric.integer_sqrt                     B3  MS(all)= 76.2%  MS(cov)= 76.2%  gen=8   acc=2       100s
